@@ -12,33 +12,52 @@ if shiftwidth() == 8
     setlocal shiftwidth=4
 endif
 
-function! todo#SetCheckbox (pspace, checkbox, text)
-    " <pspace> <checkbox> <bspace> <text>
-    let l:cb_len = strdisplaywidth(a:checkbox)
-    let l:bspace = &softtabstop - (l:cb_len % &softtabstop)
-    call setline('.', a:pspace . a:checkbox . repeat(' ', l:bspace) . a:text)
+
+function! TrimLeft (text)
+    return substitute(a:text, '^\s*', '', '')
 endfunction
+
+
+function! StartsWith (text, pattern)
+    return a:text[:(strlen(a:pattern) - 1)] ==# a:pattern
+endfunction
+
+
+function! todo#SetCheckbox (pspace, checkbox, text)
+    " <pspace> <checkbox> <text>
+    " <pspace> <checkbox> <bspace> <ttext>
+    let l:cb_len = strdisplaywidth(a:checkbox)
+    let l:ttext  = TrimLeft(a:text)
+    let l:bspace = repeat(' ', &softtabstop - (l:cb_len % &softtabstop))
+    call setline('.', a:pspace . a:checkbox . l:bspace . l:ttext)
+endfunction
+
 
 function! todo#SwitchCheckbox (...)
     " check if we need to use user assigned check box
     let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
 
-    let l:cln = getline('.')
-    let l:pspace = matchstr(l:cln, '^ *')
+    " current line content
+    let l:clc = getline('.')
+    let l:pspace = matchstr(l:clc, '^ *')
+    " trimed clc
+    let l:tclc = TrimLeft(l:clc)
     for i in range(len(g:todo_checkboxes))
-        if l:cln =~# '^ *\V'. g:todo_checkboxes[l:i]
+        " iterate through predefined checkboxes to match string
+        let l:pattern_len = strlen(g:todo_checkboxes[l:i])
+        if StartsWith(l:tclc, g:todo_checkboxes[l:i])
             " found a checkbox, switch it to next checkbox
-            let l:text = matchstr(l:cln, '\(^ *\V'. g:todo_checkboxes[l:i] .'\m *\)\@<=\m[^ ].*$')
+            let l:text = l:tclc[(l:pattern_len):]
             let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[(l:i + 1) % len(g:todo_checkboxes)])
             call todo#SetCheckbox(l:pspace, l:checkbox, l:text)
             return
         endif
     endfor
 
-    let l:text = matchstr(l:cln, '\(^ *\)\@<=\v[^ ].*$')
     let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[0])
-    call todo#SetCheckbox(l:pspace, l:checkbox, l:text)
+    call todo#SetCheckbox(l:pspace, l:checkbox, l:tclc)
 endfunction
+
 
 " ---------------------
 " set default variables
