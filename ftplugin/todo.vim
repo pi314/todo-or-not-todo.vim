@@ -13,48 +13,59 @@ if shiftwidth() == 8
 endif
 
 
-function! TrimLeft (text)
+function! s:TrimLeft (text)
     return substitute(a:text, '^\s*', '', '')
 endfunction
 
 
-function! StartsWith (text, pattern)
+function! s:StartsWith (text, pattern)
     return a:text[:(strlen(a:pattern) - 1)] ==# a:pattern
 endfunction
 
 
-function! todo#SetCheckbox (pspace, checkbox, text)
+function! s:KindsOfCheckbox ()
+    if s:kinds_of_checkbox == -2
+        let s:kinds_of_checkbox = index(g:todo_checkboxes, '')
+        if s:kinds_of_checkbox == -1
+            let s:kinds_of_checkbox = len(g:todo_checkboxes)
+        endif
+    endif
+    return s:kinds_of_checkbox
+endfunction
+
+
+function! s:SetCheckbox (pspace, checkbox, text)
     " <pspace> <checkbox> <text>
     " <pspace> <checkbox> <bspace> <ttext>
     let l:cb_len = strdisplaywidth(a:checkbox)
-    let l:ttext  = TrimLeft(a:text)
+    let l:ttext  = s:TrimLeft(a:text)
     let l:bspace = repeat(' ', &softtabstop - (l:cb_len % &softtabstop))
     call setline('.', a:pspace . a:checkbox . l:bspace . l:ttext)
 endfunction
 
 
-function! todo#SwitchCheckbox (...)
+function! TodoSwitchCheckbox (...)
     " check if we need to use user assigned check box
-    let l:uacb = (a:0 == 1) && (index(g:todo#checkboxes, a:1) >= 0)
+    let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
 
     " current line content
     let l:clc = getline('.')
     let l:pspace = matchstr(l:clc, '^ *')
-    let l:tclc = TrimLeft(l:clc)
-    for i in range(len(g:todo#checkboxes))
+    let l:tclc = s:TrimLeft(l:clc)
+    for i in range(s:KindsOfCheckbox())
         " iterate through predefined checkboxes to match string
-        let l:pattern_len = strlen(g:todo#checkboxes[l:i])
-        if StartsWith(l:tclc, g:todo#checkboxes[l:i])
+        let l:pattern_len = strlen(g:todo_checkboxes[l:i])
+        if s:StartsWith(l:tclc, g:todo_checkboxes[l:i])
             " found a checkbox, switch it to next checkbox
             let l:text = l:tclc[(l:pattern_len):]
-            let l:checkbox = (l:uacb) ? (a:1) : (g:todo#checkboxes[(l:i + 1) % len(g:todo#checkboxes)])
-            call todo#SetCheckbox(l:pspace, l:checkbox, l:text)
+            let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[(l:i + 1) % s:KindsOfCheckbox()])
+            call s:SetCheckbox(l:pspace, l:checkbox, l:text)
             return
         endif
     endfor
 
-    let l:checkbox = (l:uacb) ? (a:1) : (g:todo#checkboxes[0])
-    call todo#SetCheckbox(l:pspace, l:checkbox, l:tclc)
+    let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[0])
+    call s:SetCheckbox(l:pspace, l:checkbox, l:tclc)
 endfunction
 
 
@@ -62,10 +73,26 @@ endfunction
 " set default variables
 " ---------------------
 
-if !exists('todo#checkboxes')
-    let todo#checkboxes = ['[ ]', '[v]', '[i]', '[?]', '[!]', '[x]']
+function! s:IsNotStringArray (ary)
+    if type(a:ary) != type([])
+        return 0
+    endif
+    for i in a:ary
+        if type(l:i) != type('')
+            return 0
+        endif
+    endfor
+
+    return 1
+endfunction
+
+
+if !exists('g:todo_checkboxes') || s:IsNotStringArray(g:todo_checkboxes)
+    let g:todo_checkboxes = ['[ ]', '[v]', '[x]', '', '[i]', '[?]', '[!]']
 endif
 
-if !exists('todo#bulleted_items')
-    let todo#bulleted_items = ['>']
+let s:kinds_of_checkbox = -2
+
+if !exists('g:todo_bulleted_items') || s:IsNotStringArray(g:todo_bulleted_items)
+    let g:todo_bulleted_items = ['>']
 endif
