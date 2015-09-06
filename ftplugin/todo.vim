@@ -1,3 +1,7 @@
+" -----------------------------------
+" extract and set tab related options
+" -----------------------------------
+
 if &softtabstop == 0
     " user not setting &softtabstop, set it to 4
     setlocal softtabstop=4
@@ -18,6 +22,7 @@ endfunction
 function! todo#SwitchCheckbox (...)
     " check if we need to use user assigned check box
     let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
+
     let l:cln = getline('.')
     let l:pspace = matchstr(l:cln, '^ *')
     for i in range(len(g:todo_checkboxes))
@@ -29,10 +34,15 @@ function! todo#SwitchCheckbox (...)
             return
         endif
     endfor
+
     let l:text = matchstr(l:cln, '\(^ *\)\@<=\v[^ ].*$')
     let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[0])
     call todo#SetCheckbox(l:pspace, l:checkbox, l:text)
 endfunction
+
+" ---------------------
+" set default variables
+" ---------------------
 
 if !exists('g:todo_checkboxes')
     let g:todo_checkboxes = ['[ ]', '[v]', '[i]', '[?]', '[!]', '[x]']
