@@ -40,7 +40,6 @@ function! todo#SwitchCheckbox (...)
     " current line content
     let l:clc = getline('.')
     let l:pspace = matchstr(l:clc, '^ *')
-    " trimed clc
     let l:tclc = TrimLeft(l:clc)
     for i in range(len(g:todo_checkboxes))
         " iterate through predefined checkboxes to match string

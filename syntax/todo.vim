@@ -1,10 +1,13 @@
-syn match   custom_checkbox         "\[.\]"
-syn match   empty_checkbox          "\[ \]"
-syn match   checked_checkbox        "\[v\]"
-syn match   canceled_checkbox       "\[x\]"
-syn match   doing_checkbox          "\[i\]"
-syn match   question_checkbox       "\[?\]"
-syn match   exclamation_checkbox    "\[!\]"
+syn match   custom_checkbox         '\[.\]'
+syn match   empty_checkbox          '\[ \]'
+syn match   empty_checkbox          '☐'
+syn match   checked_checkbox        '\[v\]'
+syn match   checked_checkbox        '☑'
+syn match   canceled_checkbox       '\[x\]'
+syn match   canceled_checkbox       '☒'
+syn match   doing_checkbox          '\[i\]'
+syn match   question_checkbox       '\[?\]'
+syn match   exclamation_checkbox    '\[!\]'
 hi def      empty_checkbox          cterm=bold ctermfg=white
 hi def      custom_checkbox         cterm=bold ctermfg=white
 hi def      checked_checkbox        cterm=bold ctermfg=green
