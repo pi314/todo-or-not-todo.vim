@@ -1,6 +1,6 @@
-" -----------------------------------
-" extract and set tab related options
-" -----------------------------------
+" ----------------------------------- "
+" extract and set tab related options "
+" ----------------------------------- "
 
 if &softtabstop == 0
     " user not setting &softtabstop, set it to 4
@@ -78,9 +78,40 @@ function! TodoSwitchCheckbox (...)
 endfunction
 
 
-" ---------------------
-" set default variables
-" ---------------------
+function! IncreaseIndent ()
+    let l:clc = getline('.')
+    let l:pspace_len = strlen(matchstr(l:clc, '^ *'))
+    let l:prepend_len = l:pspace_len % shiftwidth()
+    let l:prepend_len = shiftwidth() - ((l:prepend_len == 0) ? 0 : (l:prepend_len))
+    call setline('.', repeat(' ', l:prepend_len) . l:clc)
+endfunction
+
+
+function! DecreaseIndent ()
+    let l:clc = getline('.')
+    let l:pspace_len = strlen(matchstr(l:clc, '^ *'))
+    if l:pspace_len == 0
+        return
+    endif
+    let l:trim_len = (l:pspace_len % shiftwidth())
+    if l:trim_len == 0
+        let l:trim_len = shiftwidth()
+    endif
+    call setline('.', l:clc[(l:trim_len):])
+endfunction
+
+" -------- "
+" mappings "
+" -------- "
+
+nnoremap > :call IncreaseIndent()<CR>
+nnoremap < :call DecreaseIndent()<CR>
+vnoremap > :call IncreaseIndent()<CR>gv
+vnoremap < :call DecreaseIndent()<CR>gv
+
+" --------------------- "
+" set default variables "
+" --------------------- "
 
 function! s:IsNotStringArray (ary)
     if type(a:ary) != type([])
