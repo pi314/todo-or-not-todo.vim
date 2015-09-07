@@ -34,6 +34,15 @@ function! s:KindsOfCheckbox ()
 endfunction
 
 
+function! s:NextCheckbox (i)
+    let l:l = s:KindsOfCheckbox()
+    if a:i >= l:l
+        return g:todo_checkboxes[0]
+    endif
+    return g:todo_checkboxes[(a:i + 1) % (l:l)]
+endfunction
+
+
 function! s:SetCheckbox (pspace, checkbox, text)
     " <pspace> <checkbox> <text>
     " <pspace> <checkbox> <bspace> <ttext>
@@ -52,13 +61,13 @@ function! TodoSwitchCheckbox (...)
     let l:clc = getline('.')
     let l:pspace = matchstr(l:clc, '^ *')
     let l:tclc = s:TrimLeft(l:clc)
-    for i in range(s:KindsOfCheckbox())
+    for i in range(len(g:todo_checkboxes))
         " iterate through predefined checkboxes to match string
         let l:pattern_len = strlen(g:todo_checkboxes[l:i])
         if s:StartsWith(l:tclc, g:todo_checkboxes[l:i])
             " found a checkbox, switch it to next checkbox
             let l:text = l:tclc[(l:pattern_len):]
-            let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[(l:i + 1) % s:KindsOfCheckbox()])
+            let l:checkbox = (l:uacb) ? (a:1) : (s:NextCheckbox(l:i))
             call s:SetCheckbox(l:pspace, l:checkbox, l:text)
             return
         endif
