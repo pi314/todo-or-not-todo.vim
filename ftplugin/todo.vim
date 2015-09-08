@@ -140,15 +140,15 @@ nnoremap <buffer> <silent> o :call OpenNewLine()<CR>A
 
 function! s:IsNotStringArray (ary) " {{{
     if type(a:ary) != type([])
-        return 0
+        return 1
     endif
     for i in a:ary
         if type(l:i) != type('')
-            return 0
+            return 1
         endif
     endfor
 
-    return 1
+    return 0
 endfunction " }}}
 
 if !exists('g:todo_checkboxes') || s:IsNotStringArray(g:todo_checkboxes)
