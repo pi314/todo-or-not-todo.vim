@@ -15,3 +15,13 @@ hi def      canceled_checkbox       cterm=bold ctermfg=red
 hi def      doing_checkbox          cterm=bold ctermfg=yellow
 hi def      question_checkbox       cterm=bold ctermfg=yellow
 hi def      exclamation_checkbox    cterm=bold ctermfg=red
+
+" ------------------------------------------- "
+" dynamically generate bullet coloring syntax "
+" ------------------------------------------- "
+
+for b in g:todo_bulleted_items
+    execute 'syn match todo_bulleted_item /\(^ *\)\@<=\V'. b .'/'
+endfor
+
+execute 'hi def todo_bulleted_item ctermfg='. g:todo_bullet_color

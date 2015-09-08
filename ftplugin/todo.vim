@@ -100,7 +100,7 @@ function! DecreaseIndent () " {{{
     call setline('.', l:clc[(l:trim_len):])
 endfunction " }}}
 
-function! CreateBullet ()
+function! CreateBullet () " {{{
     let l:clc = getline('.')
     let l:pspace = matchstr(l:clc, '^ *')
     if strlen(l:pspace) == 0
@@ -109,16 +109,16 @@ function! CreateBullet ()
     let l:bspace = repeat(' ', &softtabstop - strdisplaywidth(g:todo_bulleted_items[0]))
     call setline('.', l:pspace . g:todo_bulleted_items[0] . l:bspace . s:TrimLeft(l:clc))
     call cursor(line('.'), col('.') + strdisplaywidth(g:todo_bulleted_items[0] . l:bspace))
-endfunction
+endfunction " }}}
 
-function! OpenNewLine ()
+function! OpenNewLine () " {{{
     let l:row = line('.')
     let l:col = col('.')
     call append(l:row, '')
     let l:row = l:row + 1
     call cursor(l:row, l:col)
     call CreateBullet()
-endfunction
+endfunction " }}}
 
 " -------- "
 " mappings "
@@ -159,4 +159,8 @@ let s:kinds_of_checkbox = -2
 
 if !exists('g:todo_bulleted_items') || s:IsNotStringArray(g:todo_bulleted_items)
     let g:todo_bulleted_items = ['>']
+endif
+
+if !exists('g:todo_bullet_color') || type(g:todo_bullet_color) != type('')
+    let g:todo_bullet_color = 'cyan'
 endif
