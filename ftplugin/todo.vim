@@ -75,6 +75,8 @@ function! TodoSwitchCheckbox (...)
 
     let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[0])
     call s:SetCheckbox(l:pspace, l:checkbox, l:tclc)
+    let l:nclc = getline('.')
+    call cursor(line('.'), col('.') + strlen(l:nclc) - strlen(l:clc))
 endfunction
 
 
@@ -84,6 +86,7 @@ function! IncreaseIndent ()
     let l:prepend_len = l:pspace_len % shiftwidth()
     let l:prepend_len = shiftwidth() - ((l:prepend_len == 0) ? 0 : (l:prepend_len))
     call setline('.', repeat(' ', l:prepend_len) . l:clc)
+    call cursor(line('.'), col('.') + &shiftwidth)
 endfunction
 
 
@@ -97,6 +100,7 @@ function! DecreaseIndent ()
     if l:trim_len == 0
         let l:trim_len = shiftwidth()
     endif
+    call cursor(line('.'), col('.') - &shiftwidth)
     call setline('.', l:clc[(l:trim_len):])
 endfunction
 
@@ -104,10 +108,13 @@ endfunction
 " mappings "
 " -------- "
 
-nnoremap > :call IncreaseIndent()<CR>
-nnoremap < :call DecreaseIndent()<CR>
-vnoremap > :call IncreaseIndent()<CR>gv
-vnoremap < :call DecreaseIndent()<CR>gv
+nnoremap <buffer> <silent> <C-c> :call TodoSwitchCheckbox()<CR>
+inoremap <buffer> <silent> <C-c> <C-o>:call TodoSwitchCheckbox()<CR>
+
+nnoremap <buffer> <silent> > :call IncreaseIndent()<CR>
+nnoremap <buffer> <silent> < :call DecreaseIndent()<CR>
+vnoremap <buffer> <silent> > :call IncreaseIndent()<CR>gv
+vnoremap <buffer> <silent> < :call DecreaseIndent()<CR>gv
 
 " --------------------- "
 " set default variables "
