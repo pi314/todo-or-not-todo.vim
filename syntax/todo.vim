@@ -20,7 +20,7 @@ hi def      exclamation_checkbox    cterm=bold ctermfg=red
 " dynamically generate bullet coloring syntax "
 " ------------------------------------------- "
 
-for b in g:todo_bulleted_items
+for b in g:todo_bullets
     execute 'syn match todo_bulleted_item /\(^ *\)\@<=\V'. b .'/'
 endfor
 
