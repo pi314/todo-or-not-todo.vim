@@ -12,18 +12,19 @@ if shiftwidth() == 8
     setlocal shiftwidth=4
 endif
 
+" --------- "
+" functions "
+" --------- "
 
-function! s:TrimLeft (text)
+function! s:TrimLeft (text) " {{{
     return substitute(a:text, '^\s*', '', '')
-endfunction
+endfunction " }}}
 
-
-function! s:StartsWith (text, pattern)
+function! s:StartsWith (text, pattern) " {{{
     return a:text[:(strlen(a:pattern) - 1)] ==# a:pattern
-endfunction
+endfunction " }}}
 
-
-function! s:KindsOfCheckbox ()
+function! s:KindsOfCheckbox () " {{{
     if s:kinds_of_checkbox == -2
         let s:kinds_of_checkbox = index(g:todo_checkboxes, '')
         if s:kinds_of_checkbox == -1
@@ -31,29 +32,26 @@ function! s:KindsOfCheckbox ()
         endif
     endif
     return s:kinds_of_checkbox
-endfunction
+endfunction " }}}
 
-
-function! s:NextCheckbox (i)
+function! s:NextCheckbox (i) " {{{
     let l:l = s:KindsOfCheckbox()
     if a:i >= l:l
         return g:todo_checkboxes[0]
     endif
     return g:todo_checkboxes[(a:i + 1) % (l:l)]
-endfunction
+endfunction " }}}
 
-
-function! s:SetCheckbox (pspace, checkbox, text)
+function! s:SetCheckbox (pspace, checkbox, text) " {{{
     " <pspace> <checkbox> <text>
     " <pspace> <checkbox> <bspace> <ttext>
     let l:cb_len = strdisplaywidth(a:checkbox)
     let l:ttext  = s:TrimLeft(a:text)
     let l:bspace = repeat(' ', &softtabstop - (l:cb_len % &softtabstop))
     call setline('.', a:pspace . a:checkbox . l:bspace . l:ttext)
-endfunction
+endfunction " }}}
 
-
-function! TodoSwitchCheckbox (...)
+function! TodoSwitchCheckbox (...) " {{{
     " check if we need to use user assigned check box
     let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
 
@@ -77,20 +75,18 @@ function! TodoSwitchCheckbox (...)
     call s:SetCheckbox(l:pspace, l:checkbox, l:tclc)
     let l:nclc = getline('.')
     call cursor(line('.'), col('.') + strlen(l:nclc) - strlen(l:clc))
-endfunction
+endfunction " }}}
 
-
-function! IncreaseIndent ()
+function! IncreaseIndent () " {{{
     let l:clc = getline('.')
     let l:pspace_len = strlen(matchstr(l:clc, '^ *'))
     let l:prepend_len = l:pspace_len % shiftwidth()
     let l:prepend_len = shiftwidth() - ((l:prepend_len == 0) ? 0 : (l:prepend_len))
     call setline('.', repeat(' ', l:prepend_len) . l:clc)
     call cursor(line('.'), col('.') + &shiftwidth)
-endfunction
+endfunction " }}}
 
-
-function! DecreaseIndent ()
+function! DecreaseIndent () " {{{
     let l:clc = getline('.')
     let l:pspace_len = strlen(matchstr(l:clc, '^ *'))
     if l:pspace_len == 0
@@ -102,7 +98,7 @@ function! DecreaseIndent ()
     endif
     call cursor(line('.'), col('.') - &shiftwidth)
     call setline('.', l:clc[(l:trim_len):])
-endfunction
+endfunction " }}}
 
 " -------- "
 " mappings "
@@ -120,7 +116,7 @@ vnoremap <buffer> <silent> < :call DecreaseIndent()<CR>gv
 " set default variables "
 " --------------------- "
 
-function! s:IsNotStringArray (ary)
+function! s:IsNotStringArray (ary) " {{{
     if type(a:ary) != type([])
         return 0
     endif
@@ -131,8 +127,7 @@ function! s:IsNotStringArray (ary)
     endfor
 
     return 1
-endfunction
-
+endfunction " }}}
 
 if !exists('g:todo_checkboxes') || s:IsNotStringArray(g:todo_checkboxes)
     let g:todo_checkboxes = ['[ ]', '[v]', '[x]', '', '[i]', '[?]', '[!]']
