@@ -47,8 +47,8 @@ function! todo#create_checkbox (...) " {{{
 
     for i in g:todo_bullets
         " iterate through predefined bullets to match string
-        let l:pattern_len = strlen(g:todo_bullets[l:i])
-        if s:StartsWith(l:tclc, g:todo_bullets[l:i])
+        let l:pattern_len = strlen(g:todo_bullets[(l:i)])
+        if s:StartsWith(l:tclc, g:todo_bullets[(l:i)])
             let l:text = l:tclc[(l:pattern_len):]
             call s:SetCheckbox(l:pspace, l:checkbox, l:text)
             return
@@ -70,8 +70,8 @@ function! todo#switch_checkbox (...) " {{{
     let l:tclc = s:TrimLeft(l:clc)
     for i in range(len(g:todo_checkboxes))
         " iterate through predefined checkboxes to match string
-        let l:pattern_len = strlen(g:todo_checkboxes[l:i])
-        if s:StartsWith(l:tclc, g:todo_checkboxes[l:i])
+        let l:pattern_len = strlen(g:todo_checkboxes[(l:i)])
+        if s:StartsWith(l:tclc, g:todo_checkboxes[(l:i)])
             " found a checkbox, switch it to next checkbox
             let l:text = l:tclc[(l:pattern_len):]
             let l:checkbox = (l:uacb) ? (a:1) : (s:NextCheckbox(l:i))
