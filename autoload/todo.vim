@@ -10,6 +10,46 @@ function! s:startswith (text, pattern) " {{{
     return a:text[:(strlen(a:pattern) - 1)] ==# a:pattern
 endfunction " }}}
 
+function! s:parse_line (lc) " {{{
+    " patterns:
+    " <pspace> <checkbox> <bspace> <text>
+    " <pspace> <bullet> <bspace> <text>
+    " <pspace> <text>
+
+    let l:ret = {}
+    let l:ret['text'] = ''
+    let l:ret['origin'] = a:lc
+    let l:ret['pspace'] = matchstr(a:lc, '^ *')
+    let l:tlc = s:trim_left(a:lc)
+
+    for c in g:todo_checkboxes
+        let l:pattern_len = strlen(l:c)
+        if s:startswith(l:tlc, l:c)
+            " got a checkbox
+            let l:ret['checkbox'] = l:c
+            let l:text_tmp = l:tlc[(l:pattern_len):]
+            let l:ret['bspace'] = matchstr(l:text_tmp, '^ *')
+            let l:ret['text'] = s:trim_left(l:text_tmp)
+            return l:ret
+        endif
+    endfor
+
+    for b in g:todo_bullets
+        let l:pattern_len = strlen(l:c)
+        if s:startswith(l:tlc, l:b)
+            " got a bullet
+            let l:ret['bullet'] = l:b
+            let l:text_tmp = l:tlc[(l:pattern_len):]
+            let l:ret['bspace'] = matchstr(l:text_tmp, '^ *')
+            let l:ret['text'] = s:trim_left(l:text_tmp)
+            return l:ret
+        endif
+    endfor
+
+    let l:ret['text'] = l:tlc
+    return l:ret
+endfunction " }}}
+
 function! s:get_kinds_of_checkbox () " {{{
     if s:kinds_of_checkbox == -2
         let s:kinds_of_checkbox = index(g:todo_checkboxes, '')
@@ -20,12 +60,13 @@ function! s:get_kinds_of_checkbox () " {{{
     return s:kinds_of_checkbox
 endfunction " }}}
 
-function! s:get_next_checkbox (i) " {{{
+function! s:get_next_checkbox (c) " {{{
     let l:l = s:get_kinds_of_checkbox()
-    if a:i >= l:l
+    let l:i = index(g:todo_checkboxes, a:c)
+    if l:i == -1 || l:i >= l:l
         return g:todo_checkboxes[0]
     endif
-    return g:todo_checkboxes[(a:i + 1) % (l:l)]
+    return g:todo_checkboxes[(l:i + 1) % (l:l)]
 endfunction " }}}
 
 function! s:set_checkbox (pspace, checkbox, text) " {{{
@@ -39,46 +80,24 @@ endfunction " }}}
 
 function! todo#create_checkbox (...) " {{{
     let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
-
-    let l:clc = getline('.')
-    let l:pspace = matchstr(l:clc, '^ *')
-    let l:tclc = s:trim_left(l:clc)
     let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[0])
-
-    for i in g:todo_bullets
-        " iterate through predefined bullets to match string
-        let l:pattern_len = strlen(g:todo_bullets[(l:i)])
-        if s:startswith(l:tclc, g:todo_bullets[(l:i)])
-            let l:text = l:tclc[(l:pattern_len):]
-            call s:set_checkbox(l:pspace, l:checkbox, l:text)
-            return
-        endif
-    endfor
-
-    call s:set_checkbox(l:pspace, l:checkbox, l:tclc)
+    let l:plc = s:parse_line(getline('.'))
+    call s:set_checkbox(l:plc['pspace'], l:checkbox, l:plc['text'])
     let l:nclc = getline('.')
-    call cursor(line('.'), col('.') + strlen(l:nclc) - strlen(l:clc))
+    call cursor(line('.'), col('.') + strlen(l:nclc) - strlen(l:plc['origin']))
 endfunction "}}}
 
 function! todo#switch_checkbox (...) " {{{
     " check if we need to use user assigned check box
     let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
 
-    " current line content
-    let l:clc = getline('.')
-    let l:pspace = matchstr(l:clc, '^ *')
-    let l:tclc = s:trim_left(l:clc)
-    for i in range(len(g:todo_checkboxes))
-        " iterate through predefined checkboxes to match string
-        let l:pattern_len = strlen(g:todo_checkboxes[(l:i)])
-        if s:startswith(l:tclc, g:todo_checkboxes[(l:i)])
-            " found a checkbox, switch it to next checkbox
-            let l:text = l:tclc[(l:pattern_len):]
-            let l:checkbox = (l:uacb) ? (a:1) : (s:get_next_checkbox(l:i))
-            call s:set_checkbox(l:pspace, l:checkbox, l:text)
-            return
-        endif
-    endfor
+    let l:plc = s:parse_line(getline('.'))
+    if has_key(l:plc, 'checkbox')
+        " found a checkbox, switch it to next checkbox
+        let l:checkbox = (l:uacb) ? (a:1) : (s:get_next_checkbox(l:plc['checkbox']))
+        call s:set_checkbox(l:plc['pspace'], l:checkbox, l:plc['text'])
+        return
+    endif
 
     if l:uacb
         call todo#create_checkbox(a:1)
