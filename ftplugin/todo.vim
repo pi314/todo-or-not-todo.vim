@@ -25,7 +25,7 @@ vnoremap <buffer> <silent> > :call todo#increase_indent()<CR>gv
 vnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>gv
 
 nnoremap <buffer> <silent> o :call todo#open_new_line()<CR>A
-inoremap <buffer> <silent> <CR> <CR><C-o>:call todo#create_bullet()<CR>
+inoremap <buffer> <silent> <CR> <CR><C-o>:call todo#set_bullet()<CR>
 
 " --------------------- "
 " set default variables "
