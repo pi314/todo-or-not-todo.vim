@@ -16,6 +16,9 @@ hi def      doing_checkbox          cterm=bold ctermfg=yellow
 hi def      question_checkbox       cterm=bold ctermfg=yellow
 hi def      exclamation_checkbox    cterm=bold ctermfg=red
 
+syn match   todo_string '\v"([^\\"]|\\.)*"'
+hi def      todo_string cterm=bold ctermfg=magenta
+
 " ------------------------------------------- "
 " dynamically generate bullet coloring syntax "
 " ------------------------------------------- "
