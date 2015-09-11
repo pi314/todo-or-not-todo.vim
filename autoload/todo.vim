@@ -71,7 +71,7 @@ function! s:get_next_checkbox (c) " {{{
     return g:todo_checkboxes[(l:i + 1) % (l:l)]
 endfunction " }}}
 
-function! todo#create_bullet () " {{{
+function! todo#set_bullet () " {{{
     let l:plc = s:parse_line(getline('.'))
     let l:pspace = l:plc['pspace']
     if strlen(l:pspace) == 0 && line('.') > 1
@@ -151,7 +151,7 @@ function! todo#open_new_line () " {{{
     call append(l:row, '')
     let l:row = l:row + 1
     call cursor(l:row, l:col)
-    call todo#create_bullet()
+    call todo#set_bullet()
 endfunction " }}}
 
 let s:kinds_of_checkbox = -2
