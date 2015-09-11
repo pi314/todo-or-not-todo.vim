@@ -27,6 +27,7 @@ function! s:parse_line (lc) " {{{
         if s:startswith(l:tlc, l:c)
             " got a checkbox
             let l:ret['checkbox'] = l:c
+            let l:ret['type'] = 'checkbox'
             let l:text_tmp = l:tlc[(l:pattern_len):]
             let l:ret['bspace'] = matchstr(l:text_tmp, '^ *')
             let l:ret['text'] = s:trim_left(l:text_tmp)
@@ -38,7 +39,8 @@ function! s:parse_line (lc) " {{{
         let l:pattern_len = strlen(l:c)
         if s:startswith(l:tlc, l:b)
             " got a bullet
-            let l:ret['bullet'] = l:b
+            let l:ret['checkbox'] = l:b
+            let l:ret['type'] = 'bullet'
             let l:text_tmp = l:tlc[(l:pattern_len):]
             let l:ret['bspace'] = matchstr(l:text_tmp, '^ *')
             let l:ret['text'] = s:trim_left(l:text_tmp)
@@ -92,7 +94,7 @@ function! todo#switch_checkbox (...) " {{{
     let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
 
     let l:plc = s:parse_line(getline('.'))
-    if has_key(l:plc, 'checkbox')
+    if has_key(l:plc, 'bspace') && l:plc['type'] == 'checkbox'
         " found a checkbox, switch it to next checkbox
         let l:checkbox = (l:uacb) ? (a:1) : (s:get_next_checkbox(l:plc['checkbox']))
         call s:set_checkbox(l:plc['pspace'], l:checkbox, l:plc['text'])
