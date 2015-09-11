@@ -109,26 +109,35 @@ function! todo#switch_checkbox (...) " {{{
 endfunction " }}}
 
 function! todo#increase_indent () " {{{
-    let l:clc = getline('.')
-    let l:pspace_len = strlen(matchstr(l:clc, '^ *'))
-    let l:prepend_len = l:pspace_len % shiftwidth()
-    let l:prepend_len = shiftwidth() - ((l:prepend_len == 0) ? 0 : (l:prepend_len))
-    call setline('.', repeat(' ', l:prepend_len) . l:clc)
-    call cursor(line('.'), col('.') + &shiftwidth)
+    let l:plc = s:parse_line(getline('.'))
+    let l:sw = shiftwidth()
+    let l:prepend_len = l:sw - (strlen(l:plc['pspace']) % l:sw)
+    call setline('.', repeat(' ', l:prepend_len) . l:plc['origin'])
+    call cursor(line('.'), col('.') + l:prepend_len)
 endfunction " }}}
 
 function! todo#decrease_indent () " {{{
-    let l:clc = getline('.')
-    let l:pspace_len = strlen(matchstr(l:clc, '^ *'))
+    let l:plc = s:parse_line(getline('.'))
+    let l:sw = shiftwidth()
+    let l:col = col('.')
+
+    let l:pspace_len = strlen(l:plc['pspace'])
     if l:pspace_len == 0
         return
     endif
-    let l:trim_len = (l:pspace_len % shiftwidth())
+
+    let l:trim_len = (l:pspace_len % l:sw)
     if l:trim_len == 0
-        let l:trim_len = shiftwidth()
+        let l:trim_len = l:sw
     endif
-    call cursor(line('.'), col('.') - &shiftwidth)
-    call setline('.', l:clc[(l:trim_len):])
+
+    if l:col < l:trim_len + 1
+        call cursor(line('.'), 1)
+    else
+        call cursor(line('.'), col('.') - l:trim_len)
+    endif
+
+    call setline('.', l:plc['origin'][(l:trim_len):])
 endfunction " }}}
 
 function! todo#create_bullet () " {{{
