@@ -83,11 +83,18 @@ function! todo#set_bullet () " {{{
 endfunction " }}}
 
 function! todo#set_checkbox (...) " {{{
-    " check if we need to use user assigned check box
-    let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
-    let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[0])
-
     let l:plc = s:parse_line(getline('.'))
+    if (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
+        " use user assigned check box
+        let l:checkbox = (a:1)
+    elseif has_key(l:plc, 'checkbox') && l:plc['type'] == 'checkbox'
+        " use original checkbox
+        let l:checkbox = l:plc['checkbox']
+    else
+        " set a new checkbox
+        let l:checkbox = g:todo_checkboxes[0]
+    endif
+
     let l:bspace = repeat(' ', &softtabstop - (strlen(l:plc['pspace'] . l:checkbox) % &softtabstop))
     call setline('.', l:plc['pspace'] . l:checkbox . l:bspace . l:plc['text'])
     let l:nclc = getline('.')
