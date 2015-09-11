@@ -71,20 +71,25 @@ function! s:get_next_checkbox (c) " {{{
     return g:todo_checkboxes[(l:i + 1) % (l:l)]
 endfunction " }}}
 
-function! s:set_checkbox (pspace, checkbox, text) " {{{
-    " <pspace> <checkbox> <text>
-    " <pspace> <checkbox> <bspace> <ttext>
-    let l:cb_len = strdisplaywidth(a:checkbox)
-    let l:ttext  = s:trim_left(a:text)
-    let l:bspace = repeat(' ', &softtabstop - (l:cb_len % &softtabstop))
-    call setline('.', a:pspace . a:checkbox . l:bspace . l:ttext)
+function! todo#create_bullet () " {{{
+    let l:plc = s:parse_line(getline('.'))
+    let l:pspace = l:plc['pspace']
+    if strlen(l:pspace) == 0 && line('.') > 1
+        let l:pspace = s:parse_line(getline(line('.') - 1))['pspace']
+    endif
+    let l:bspace = repeat(' ', &softtabstop - strdisplaywidth(g:todo_bullets[0]))
+    call setline('.', l:pspace . g:todo_bullets[0] . l:bspace . l:plc['text'])
+    call cursor(line('.'), col('.') + strdisplaywidth(g:todo_bullets[0] . l:bspace))
 endfunction " }}}
 
-function! todo#create_checkbox (...) " {{{
+function! todo#set_checkbox (...) " {{{
+    " check if we need to use user assigned check box
     let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
     let l:checkbox = (l:uacb) ? (a:1) : (g:todo_checkboxes[0])
+
     let l:plc = s:parse_line(getline('.'))
-    call s:set_checkbox(l:plc['pspace'], l:checkbox, l:plc['text'])
+    let l:bspace = repeat(' ', &softtabstop - (strlen(l:plc['pspace'] . l:checkbox) % &softtabstop))
+    call setline('.', l:plc['pspace'] . l:checkbox . l:bspace . l:plc['text'])
     let l:nclc = getline('.')
     call cursor(line('.'), col('.') + strlen(l:nclc) - strlen(l:plc['origin']))
 endfunction "}}}
@@ -97,14 +102,14 @@ function! todo#switch_checkbox (...) " {{{
     if has_key(l:plc, 'bspace') && l:plc['type'] == 'checkbox'
         " found a checkbox, switch it to next checkbox
         let l:checkbox = (l:uacb) ? (a:1) : (s:get_next_checkbox(l:plc['checkbox']))
-        call s:set_checkbox(l:plc['pspace'], l:checkbox, l:plc['text'])
+        call todo#set_checkbox(l:checkbox)
         return
     endif
 
     if l:uacb
-        call todo#create_checkbox(a:1)
+        call todo#set_checkbox(a:1)
     else
-        call todo#create_checkbox()
+        call todo#set_checkbox()
     endif
 endfunction " }}}
 
@@ -138,17 +143,6 @@ function! todo#decrease_indent () " {{{
     endif
 
     call setline('.', l:plc['origin'][(l:trim_len):])
-endfunction " }}}
-
-function! todo#create_bullet () " {{{
-    let l:clc = getline('.')
-    let l:pspace = matchstr(l:clc, '^ *')
-    if strlen(l:pspace) == 0
-        let l:pspace = matchstr(getline(line('.') - 1), '^ *')
-    endif
-    let l:bspace = repeat(' ', &softtabstop - strdisplaywidth(g:todo_bullets[0]))
-    call setline('.', l:pspace . g:todo_bullets[0] . l:bspace . s:trim_left(l:clc))
-    call cursor(line('.'), col('.') + strdisplaywidth(g:todo_bullets[0] . l:bspace))
 endfunction " }}}
 
 function! todo#open_new_line () " {{{
