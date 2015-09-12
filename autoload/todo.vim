@@ -102,8 +102,12 @@ function! todo#set_checkbox (...) " {{{
 
     let l:bspace = repeat(' ', &softtabstop - (strlen(l:plc['pspace'] . l:checkbox) % &softtabstop))
     call setline('.', l:plc['pspace'] . l:checkbox . l:bspace . l:plc['text'])
-    let l:nclc = getline('.')
-    call cursor(line('.'), col('.') + strlen(l:nclc) - strlen(l:plc['origin']))
+
+    let l:col = col('.')
+    if l:col >= strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
+        let l:nclc = getline('.')
+        call cursor(line('.'), l:col + strlen(l:nclc) - strlen(l:plc['origin']))
+    endif
 endfunction "}}}
 
 function! todo#switch_checkbox (...) " {{{
