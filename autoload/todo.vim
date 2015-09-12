@@ -135,6 +135,13 @@ function! todo#increase_indent () " {{{
     let l:prepend_len = l:sw - (strlen(l:plc['pspace']) % l:sw)
     call setline('.', repeat(' ', l:prepend_len) . l:plc['origin'])
     call cursor(line('.'), col('.') + l:prepend_len)
+    if has_key(l:plc, 'checkbox')
+        if l:plc['type'] == 'checkbox'
+            call todo#set_checkbox()
+        else
+            call todo#set_bullet()
+        endif
+    endif
 endfunction " }}}
 
 function! todo#decrease_indent () " {{{
@@ -159,6 +166,14 @@ function! todo#decrease_indent () " {{{
     endif
 
     call setline('.', l:plc['origin'][(l:trim_len):])
+
+    if has_key(l:plc, 'checkbox')
+        if l:plc['type'] == 'checkbox'
+            call todo#set_checkbox()
+        else
+            call todo#set_bullet()
+        endif
+    endif
 endfunction " }}}
 
 function! todo#open_new_line () " {{{
