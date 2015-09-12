@@ -207,4 +207,14 @@ function! todo#shift_tab() " {{{
     endif
 endfunction " }}}
 
+function! todo#move_cursor_to_line_start ()
+    let l:plc = s:parse_line(getline('.'))
+    let l:logic_line_start = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
+    if col('.') == l:logic_line_start
+        call cursor(line('.'), strlen(l:plc['pspace']) + 1)
+    else
+        call cursor(line('.'), l:logic_line_start)
+    endif
+endfunction
+
 let s:kinds_of_checkbox = -2
