@@ -36,7 +36,7 @@ function! s:parse_line (lc) " {{{
     endfor
 
     for b in g:todo_bullets
-        let l:pattern_len = strlen(l:c)
+        let l:pattern_len = strlen(l:b)
         if s:startswith(l:tlc, l:b)
             " got a bullet
             let l:ret['checkbox'] = l:b
