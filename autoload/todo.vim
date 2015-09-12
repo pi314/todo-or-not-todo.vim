@@ -77,9 +77,14 @@ function! todo#set_bullet () " {{{
     if strlen(l:pspace) == 0 && line('.') > 1
         let l:pspace = s:parse_line(getline(line('.') - 1))['pspace']
     endif
-    let l:bspace = repeat(' ', &softtabstop - strdisplaywidth(g:todo_bullets[0]))
+    let l:bspace = repeat(' ', &softtabstop - (strlen(l:plc['pspace'] . g:todo_bullets[0]) % &softtabstop))
     call setline('.', l:pspace . g:todo_bullets[0] . l:bspace . l:plc['text'])
-    call cursor(line('.'), col('.') + strdisplaywidth(g:todo_bullets[0] . l:bspace))
+
+    let l:col = col('.')
+    if l:col >= strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
+        let l:nclc = getline('.')
+        call cursor(line('.'), l:col + strlen(l:nclc) - strlen(l:plc['origin']))
+    endif
 endfunction " }}}
 
 function! todo#set_checkbox (...) " {{{
