@@ -30,8 +30,8 @@ These mappings should finally be customizable
 * [normal] ``I``: insert text at logical line start
 * [normal} ``^``: move cursor to line start smartly
 
-Default Settings
-----------------
+Customizable Settings
+---------------------
 
 * Checkboxes
 
@@ -42,7 +42,11 @@ Default Settings
 * Bullets
 
   - ``let g:todo_bullets = ['>']``
+
+* Colors
+
   - ``let g:todo_bullet_color = 'cyan'``
+  - ``let g:todo_url_color = 'cyan'``
 
 Screenshot
 ----------

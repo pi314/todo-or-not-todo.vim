@@ -25,6 +25,9 @@ hi def      todo_emphasis   cterm=bold ctermfg=white
 syn match   todo_strong_emphasis    '\v\*\*.*\*\*'
 hi def      todo_strong_emphasis    cterm=bold ctermfg=red
 
+syn match   todo_url    '\<[a-zA-Z+-.]*://[^ \[\]]*'
+hi def      todo_url    cterm=bold ctermfg=cyan
+
 " ------------------------------------------- "
 " dynamically generate bullet coloring syntax "
 " ------------------------------------------- "
