@@ -16,16 +16,16 @@ hi def      todo_doing_checkbox         ctermfg=LightYellow
 hi def      todo_question_checkbox      ctermfg=LightYellow
 hi def      todo_exclamation_checkbox   ctermfg=LightRed
 
-syn match   todo_string '\v"([^\\"]|\\.)*"'
+syn match   todo_string _\v"([^\\"]|\\.)*"_
 hi def      todo_string ctermfg=LightMagenta
 
-syn match   todo_emphasis   '\v\*[^*]*\*'
+syn match   todo_emphasis   _\v\*[^*]*\*_
 hi def      todo_emphasis   ctermfg=White
 
-syn match   todo_strong_emphasis    '\v\*\*.*\*\*'
+syn match   todo_strong_emphasis    _\v\*\*.*\*\*_
 hi def      todo_strong_emphasis    ctermfg=LightRed
 
-syn match   todo_url    '\<[a-zA-Z+-.]*://[^ \[\]]*'
+syn match   todo_url    _\<[a-zA-Z+-.]*://[^ \[\]]*_
 hi def      todo_url    ctermfg=LightCyan
 
 " ------------------------------------------- "
@@ -33,7 +33,7 @@ hi def      todo_url    ctermfg=LightCyan
 " ------------------------------------------- "
 
 for b in g:todo_bullets
-    execute 'syn match todo_bulleted_item /\(^ *\)\@<=\V'. b .'/'
+    execute 'syn match todo_bulleted_item _\v(^ *)@<=\V'. b .'_'
 endfor
 
 execute 'hi def todo_bulleted_item ctermfg='. g:todo_bullet_color
