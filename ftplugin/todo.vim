@@ -59,9 +59,9 @@ if !exists('g:todo_bullets') || s:IsNotStringArray(g:todo_bullets)
 endif
 
 if !exists('g:todo_bullet_color') || type(g:todo_bullet_color) != type('')
-    let g:todo_bullet_color = 'cyan'
+    let g:todo_bullet_color = 'LightCyan'
 endif
 
 if !exists('g:todo_url_color') || type(g:todo_url_color) != type('')
-    let g:todo_url_color = 'cyan'
+    let g:todo_url_color = 'LightCyan'
 endif

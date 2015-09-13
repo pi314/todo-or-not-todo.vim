@@ -45,8 +45,8 @@ Customizable Settings
 
 * Colors
 
-  - ``let g:todo_bullet_color = 'cyan'``
-  - ``let g:todo_url_color = 'cyan'``
+  - ``let g:todo_bullet_color = 'LightCyan'``
+  - ``let g:todo_url_color = 'LightCyan'``
 
 Screenshot
 ----------

@@ -1,32 +1,32 @@
-syn match   custom_checkbox         '\[.\]'
-syn match   empty_checkbox          '\[ \]'
-syn match   empty_checkbox          '☐'
-syn match   checked_checkbox        '\[v\]'
-syn match   checked_checkbox        '☑'
-syn match   canceled_checkbox       '\[x\]'
-syn match   canceled_checkbox       '☒'
-syn match   doing_checkbox          '\[i\]'
-syn match   question_checkbox       '\[?\]'
-syn match   exclamation_checkbox    '\[!\]'
-hi def      empty_checkbox          cterm=bold ctermfg=white
-hi def      custom_checkbox         cterm=bold ctermfg=white
-hi def      checked_checkbox        cterm=bold ctermfg=green
-hi def      canceled_checkbox       cterm=bold ctermfg=red
-hi def      doing_checkbox          cterm=bold ctermfg=yellow
-hi def      question_checkbox       cterm=bold ctermfg=yellow
-hi def      exclamation_checkbox    cterm=bold ctermfg=red
+syn match   todo_custom_checkbox        '\[.\]'
+syn match   todo_empty_checkbox         '\[ \]'
+syn match   todo_empty_checkbox         '☐'
+syn match   todo_checked_checkbox       '\[v\]'
+syn match   todo_checked_checkbox       '☑'
+syn match   todo_canceled_checkbox      '\[x\]'
+syn match   todo_canceled_checkbox      '☒'
+syn match   todo_doing_checkbox         '\[i\]'
+syn match   todo_question_checkbox      '\[?\]'
+syn match   todo_exclamation_checkbox   '\[!\]'
+hi def      todo_empty_checkbox         ctermfg=White
+hi def      todo_custom_checkbox        ctermfg=White
+hi def      todo_checked_checkbox       ctermfg=LightGreen
+hi def      todo_canceled_checkbox      ctermfg=LightRed
+hi def      todo_doing_checkbox         ctermfg=LightYellow
+hi def      todo_question_checkbox      ctermfg=LightYellow
+hi def      todo_exclamation_checkbox   ctermfg=LightRed
 
 syn match   todo_string '\v"([^\\"]|\\.)*"'
-hi def      todo_string cterm=bold ctermfg=magenta
+hi def      todo_string ctermfg=LightMagenta
 
 syn match   todo_emphasis   '\v\*[^*]*\*'
-hi def      todo_emphasis   cterm=bold ctermfg=white
+hi def      todo_emphasis   ctermfg=White
 
 syn match   todo_strong_emphasis    '\v\*\*.*\*\*'
-hi def      todo_strong_emphasis    cterm=bold ctermfg=red
+hi def      todo_strong_emphasis    ctermfg=LightRed
 
 syn match   todo_url    '\<[a-zA-Z+-.]*://[^ \[\]]*'
-hi def      todo_url    cterm=bold ctermfg=cyan
+hi def      todo_url    ctermfg=LightCyan
 
 " ------------------------------------------- "
 " dynamically generate bullet coloring syntax "
