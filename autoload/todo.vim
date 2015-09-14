@@ -185,28 +185,6 @@ function! todo#open_new_line () " {{{
     call todo#set_bullet()
 endfunction " }}}
 
-function! todo#tab () " {{{
-    " I implement this function in <expr> way due to &expandtab, &softtabstop, etc.
-    let l:plc = s:parse_line(getline('.'))
-    let l:col = col('.')
-    let l:indent_col = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
-    if l:col <= l:indent_col
-        return "\<C-o>:call cursor(line('.'), ". l:indent_col .")\<CR>\<C-o>:call todo#increase_indent()\<CR>"
-    else
-        return "\<TAB>"
-    endif
-endfunction " }}}
-
-function! todo#shift_tab() " {{{
-    let l:plc = s:parse_line(getline('.'))
-    let l:col = col('.')
-    let l:indent_col = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
-    if l:col <= l:indent_col
-        call cursor(line('.'), l:indent_col)
-        call todo#decrease_indent()
-    endif
-endfunction " }}}
-
 function! todo#join_two_lines ()
     let l:nln = line('.') + 1
     if l:nln <= line('$')

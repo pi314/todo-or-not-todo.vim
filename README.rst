@@ -6,7 +6,7 @@ A plugin for you to manage your TODOs, or NOT TODOs.
 
 This project is still at an early development stage, many features are not customizable yet.
 
-Ideas and many other things are appreciated!
+Ideas, issues and many other things are appreciated!
 
 Installation
 ------------
@@ -18,18 +18,18 @@ Use Vundle_
 Default Key Mappings
 --------------------
 
-These mappings should finally be customizable
+These mappings should finally be customizable.
 
 * [normal][insert] ``<C-c>``: switch between checkboxes
 * [normal] ``>`` ``<``: increase and decrease indent
 * [visual] ``>`` ``<``: increase and decrease indent of selected lines
 * [normal] ``o``: open a new line with bullet
 * [insert] ``<CR>``: create a new bulleted item in new line, same indent
-* [insert] ``<TAB>``: when pressed before text, increase indent, otherwise just ``<TAB>``
-* [insert] ``<S-TAB>``: when pressed before text, decrease indent, otherwise nothing happened
 * [normal] ``I``: insert text at logical line start
 * [normal] ``^``: move cursor to line start smartly
 * [normal] ``J``: join two lines, bullet or checkbox on next line will de destroyed
+
+If you want to decrease/increase indent in insert mode, use ``<C-d>`` or ``<C-t>``.  It's Vim's builtin motion command.
 
 Customizable Settings
 ---------------------
@@ -57,4 +57,4 @@ Screenshot
 License
 -------
 
-This project in released under WTFPL Version 2
+This project in released under WTFPL Version 2.

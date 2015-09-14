@@ -27,9 +27,6 @@ vnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>gv
 nnoremap <buffer> <silent> o :call todo#open_new_line()<CR>A
 inoremap <buffer> <silent> <CR> <CR><C-o>:call todo#set_bullet()<CR>
 
-inoremap <buffer> <silent> <expr> <TAB> todo#tab()
-inoremap <buffer> <silent> <S-TAB> <C-o>:call todo#shift_tab()<CR>
-
 nnoremap <buffer> <silent> I I<C-o>:call todo#move_cursor_to_line_start()<CR>
 nnoremap <buffer> <silent> ^ :call todo#move_cursor_to_line_start()<CR>
 
