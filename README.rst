@@ -28,7 +28,8 @@ These mappings should finally be customizable
 * [insert] ``<TAB>``: when pressed before text, increase indent, otherwise just ``<TAB>``
 * [insert] ``<S-TAB>``: when pressed before text, decrease indent, otherwise nothing happened
 * [normal] ``I``: insert text at logical line start
-* [normal} ``^``: move cursor to line start smartly
+* [normal] ``^``: move cursor to line start smartly
+* [normal] ``J``: join two lines, bullet or checkbox on next line will de destroyed
 
 Customizable Settings
 ---------------------

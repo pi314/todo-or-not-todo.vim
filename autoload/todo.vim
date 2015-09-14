@@ -207,6 +207,15 @@ function! todo#shift_tab() " {{{
     endif
 endfunction " }}}
 
+function! todo#join_two_lines ()
+    let l:nln = line('.') + 1
+    if l:nln <= line('$')
+        let l:plc = s:parse_line(getline(l:nln))
+        call setline(l:nln, l:plc['text'])
+        normal! J
+    endif
+endfunction
+
 function! todo#move_cursor_to_line_start ()
     let l:plc = s:parse_line(getline('.'))
     let l:logic_line_start = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
