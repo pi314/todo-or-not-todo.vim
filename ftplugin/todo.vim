@@ -36,7 +36,7 @@ nnoremap <buffer> <silent> J :call todo#join_two_lines()<CR>
 " set default variables "
 " --------------------- "
 
-function! s:IsNotStringArray (ary) " {{{
+function! s:not_string_array (ary) " {{{
     if type(a:ary) != type([])
         return 1
     endif
@@ -49,11 +49,11 @@ function! s:IsNotStringArray (ary) " {{{
     return 0
 endfunction " }}}
 
-if !exists('g:todo_checkboxes') || s:IsNotStringArray(g:todo_checkboxes)
+if !exists('g:todo_checkboxes') || s:not_string_array(g:todo_checkboxes)
     let g:todo_checkboxes = ['[ ]', '[v]', '[x]', '', '[i]', '[?]', '[!]']
 endif
 
-if !exists('g:todo_bullets') || s:IsNotStringArray(g:todo_bullets)
+if !exists('g:todo_bullets') || s:not_string_array(g:todo_bullets)
     let g:todo_bullets = ['>']
 endif
 

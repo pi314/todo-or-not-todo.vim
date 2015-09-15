@@ -185,16 +185,16 @@ function! todo#open_new_line () " {{{
     call todo#set_bullet()
 endfunction " }}}
 
-function! todo#join_two_lines ()
+function! todo#join_two_lines () " {{{
     let l:nln = line('.') + 1
     if l:nln <= line('$')
         let l:plc = s:parse_line(getline(l:nln))
         call setline(l:nln, l:plc['text'])
         normal! J
     endif
-endfunction
+endfunction " }}}
 
-function! todo#move_cursor_to_line_start ()
+function! todo#move_cursor_to_line_start () " {{{
     let l:plc = s:parse_line(getline('.'))
     let l:logic_line_start = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
     if col('.') == l:logic_line_start
@@ -202,6 +202,6 @@ function! todo#move_cursor_to_line_start ()
     else
         call cursor(line('.'), l:logic_line_start)
     endif
-endfunction
+endfunction " }}}
 
 let s:kinds_of_checkbox = -2
