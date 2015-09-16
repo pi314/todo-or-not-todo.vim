@@ -49,7 +49,7 @@ Customizable Settings
 
 * Bullets
 
-  - ``let g:todo_bullets = ['>']``
+  - ``let g:todo_bullet = '>'``
 
 * Colors
 

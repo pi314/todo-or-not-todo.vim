@@ -35,18 +35,16 @@ function! s:parse_line (lc) " {{{
         endif
     endfor
 
-    for b in g:todo_bullets
-        if s:startswith(l:tlc, l:b)
-            " got a bullet
-            let l:pattern_len = strlen(l:b)
-            let l:ret['checkbox'] = l:b
-            let l:ret['type'] = 'bullet'
-            let l:text_tmp = l:tlc[(l:pattern_len):]
-            let l:ret['bspace'] = matchstr(l:text_tmp, '^ *')
-            let l:ret['text'] = s:trim_left(l:text_tmp)
-            return l:ret
-        endif
-    endfor
+    if s:startswith(l:tlc, g:todo_bullet)
+        " got a bullet
+        let l:pattern_len = strlen(g:todo_bullet)
+        let l:ret['checkbox'] = g:todo_bullet
+        let l:ret['type'] = 'bullet'
+        let l:text_tmp = l:tlc[(l:pattern_len):]
+        let l:ret['bspace'] = matchstr(l:text_tmp, '^ *')
+        let l:ret['text'] = s:trim_left(l:text_tmp)
+        return l:ret
+    endif
 
     let l:ret['text'] = l:tlc
     return l:ret
@@ -71,8 +69,8 @@ function! todo#set_bullet () " {{{
     if strlen(l:pspace) == 0 && line('.') > 1
         let l:pspace = s:parse_line(getline(line('.') - 1))['pspace']
     endif
-    let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(l:plc['pspace'] . g:todo_bullets[0]) % &softtabstop))
-    call setline('.', l:pspace . g:todo_bullets[0] . l:bspace . l:plc['text'])
+    let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(l:plc['pspace'] . g:todo_bullet) % &softtabstop))
+    call setline('.', l:pspace . g:todo_bullet . l:bspace . l:plc['text'])
 
     let l:col = col('.')
     if l:col >= strdisplaywidth(l:plc['origin']) - strdisplaywidth(l:plc['text']) + 1

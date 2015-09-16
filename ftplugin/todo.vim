@@ -60,7 +60,7 @@ if !exists('g:_todo_checkbox_initialized')
 endif
 
 if !exists('g:todo_bullets') || s:not_string_array(g:todo_bullets)
-    let g:todo_bullets = ['>']
+    let g:todo_bullet = '>'
 endif
 
 if !exists('g:todo_bullet_color') || type(g:todo_bullet_color) != type('')
