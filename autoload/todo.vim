@@ -22,7 +22,7 @@ function! s:parse_line (lc) " {{{
     let l:ret['pspace'] = matchstr(a:lc, '^ *')
     let l:tlc = s:trim_left(a:lc)
 
-    for c in g:todo_checkboxes
+    for c in g:_todo_checkbox_total
         let l:pattern_len = strlen(l:c)
         if s:startswith(l:tlc, l:c)
             " got a checkbox
@@ -52,23 +52,17 @@ function! s:parse_line (lc) " {{{
     return l:ret
 endfunction " }}}
 
-function! s:get_kinds_of_checkbox () " {{{
-    if s:kinds_of_checkbox == -2
-        let s:kinds_of_checkbox = index(g:todo_checkboxes, '')
-        if s:kinds_of_checkbox == -1
-            let s:kinds_of_checkbox = len(g:todo_checkboxes)
-        endif
+function! s:get_next_checkbox (c) " {{{
+    let l:l = len(g:_todo_checkbox_loop)
+    let l:i = index(g:_todo_checkbox_total, a:c)
+    if l:i == -1 || l:i >= l:l
+        return g:_todo_checkbox_loop[0]
     endif
-    return s:kinds_of_checkbox
+    return g:_todo_checkbox_loop[(l:i + 1) % (l:l)]
 endfunction " }}}
 
-function! s:get_next_checkbox (c) " {{{
-    let l:l = s:get_kinds_of_checkbox()
-    let l:i = index(g:todo_checkboxes, a:c)
-    if l:i == -1 || l:i >= l:l
-        return g:todo_checkboxes[0]
-    endif
-    return g:todo_checkboxes[(l:i + 1) % (l:l)]
+function! s:valid_checkbox (c) " {{{
+    return index(g:_todo_checkbox_total, a:c) >= 0
 endfunction " }}}
 
 function! todo#set_bullet () " {{{
@@ -89,7 +83,7 @@ endfunction " }}}
 
 function! todo#set_checkbox (...) " {{{
     let l:plc = s:parse_line(getline('.'))
-    if (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
+    if (a:0 == 1) && s:valid_checkbox(a:1)
         " use user assigned check box
         let l:checkbox = (a:1)
     elseif has_key(l:plc, 'checkbox') && l:plc['type'] == 'checkbox'
@@ -97,7 +91,7 @@ function! todo#set_checkbox (...) " {{{
         let l:checkbox = l:plc['checkbox']
     else
         " set a new checkbox
-        let l:checkbox = g:todo_checkboxes[0]
+        let l:checkbox = g:_todo_checkbox_loop[0]
     endif
 
     let l:bspace = repeat(' ', &softtabstop - (strlen(l:plc['pspace'] . l:checkbox) % &softtabstop))
@@ -112,7 +106,7 @@ endfunction "}}}
 
 function! todo#switch_checkbox (...) " {{{
     " check if we need to use user assigned check box
-    let l:uacb = (a:0 == 1) && (index(g:todo_checkboxes, a:1) >= 0)
+    let l:uacb = (a:0 == 1) && s:valid_checkbox(a:1)
 
     let l:plc = s:parse_line(getline('.'))
     if has_key(l:plc, 'bspace') && l:plc['type'] == 'checkbox'

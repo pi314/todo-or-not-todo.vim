@@ -1,21 +1,3 @@
-syn match   todo_custom_checkbox        '\[.\]'
-syn match   todo_empty_checkbox         '\[ \]'
-syn match   todo_empty_checkbox         '☐'
-syn match   todo_checked_checkbox       '\[v\]'
-syn match   todo_checked_checkbox       '☑'
-syn match   todo_canceled_checkbox      '\[x\]'
-syn match   todo_canceled_checkbox      '☒'
-syn match   todo_doing_checkbox         '\[i\]'
-syn match   todo_question_checkbox      '\[?\]'
-syn match   todo_exclamation_checkbox   '\[!\]'
-hi def      todo_empty_checkbox         ctermfg=White
-hi def      todo_custom_checkbox        ctermfg=White
-hi def      todo_checked_checkbox       ctermfg=LightGreen
-hi def      todo_canceled_checkbox      ctermfg=LightRed
-hi def      todo_doing_checkbox         ctermfg=LightYellow
-hi def      todo_question_checkbox      ctermfg=LightYellow
-hi def      todo_exclamation_checkbox   ctermfg=LightRed
-
 syn match   todo_string _\v"([^\\"]|\\.)*"_
 hi def      todo_string ctermfg=LightMagenta
 
@@ -37,3 +19,12 @@ for b in g:todo_bullets
 endfor
 
 execute 'hi def todo_bulleted_item ctermfg='. g:todo_bullet_color
+
+let s:checkbox_flow_number = 1
+for c in keys(g:_todo_checkbox_color)
+    if c != ''
+        execute 'syn match checkbox'. s:checkbox_flow_number .' _\v^ *\V'. c .'_'
+        execute 'hi def    checkbox'. s:checkbox_flow_number .' ctermfg='. g:_todo_checkbox_color[c] .''
+        let s:checkbox_flow_number = s:checkbox_flow_number + 1
+    endif
+endfor

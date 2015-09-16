@@ -49,8 +49,14 @@ function! s:not_string_array (ary) " {{{
     return 0
 endfunction " }}}
 
-if !exists('g:todo_checkboxes') || s:not_string_array(g:todo_checkboxes)
-    let g:todo_checkboxes = ['[ ]', '[v]', '[x]', '', '[i]', '[?]', '[!]']
+if !exists('g:_todo_checkbox_initialized')
+    call todo#add#checkbox('[ ]', 'White')
+    call todo#add#checkbox('[v]', 'LightGreen')
+    call todo#add#checkbox('[x]', 'LightRed')
+    call todo#add#checkbox('[i]', 'LightYellow', 0)
+    call todo#add#checkbox('[?]', 'LightYellow', 0)
+    call todo#add#checkbox('[!]', 'LightRed', 0)
+    let g:_todo_checkbox_initialized = 1
 endif
 
 if !exists('g:todo_bullets') || s:not_string_array(g:todo_bullets)
