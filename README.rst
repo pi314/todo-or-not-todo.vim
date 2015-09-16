@@ -47,6 +47,12 @@ Customizable Settings
       call todo#add#checkbox('[?]', 'LightYellow', 0)
       call todo#add#checkbox('[!]', 'LightRed', 0)
 
+  - If you prefer to use unicode checkboxes ::
+
+      call todo#add#checkbox('☐', 'white')
+      call todo#add#checkbox('☑', 'green')
+      call todo#add#checkbox('☒', 'red')
+
 * Bullets
 
   - ``let g:todo_bullet = '>'``
