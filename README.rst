@@ -38,20 +38,24 @@ Customizable Settings
 
   - To add a checkbox, stick ``call todo#add#checkbox('[ ]', 'White')`` into your vimrc. This checkbox can be looped with ``<C-c>``.
   - To add a checkbox without participated in ``<C-c>`` loop, use ``call todo#add#checkbox('[ ]', 'White', 0)`` instead.
-  - Default settings ::
+  - Default settings
 
-      call todo#add#checkbox('[ ]', 'White')
-      call todo#add#checkbox('[v]', 'LightGreen')
-      call todo#add#checkbox('[x]', 'LightRed')
-      call todo#add#checkbox('[i]', 'LightYellow', 0)
-      call todo#add#checkbox('[?]', 'LightYellow', 0)
-      call todo#add#checkbox('[!]', 'LightRed', 0)
+    ..  code-block:: vim
 
-  - If you prefer to use unicode checkboxes ::
+        call todo#add#checkbox('[ ]', 'White')
+        call todo#add#checkbox('[v]', 'LightGreen')
+        call todo#add#checkbox('[x]', 'LightRed')
+        call todo#add#checkbox('[i]', 'LightYellow', 0)
+        call todo#add#checkbox('[?]', 'LightYellow', 0)
+        call todo#add#checkbox('[!]', 'LightRed', 0)
 
-      call todo#add#checkbox('☐', 'white')
-      call todo#add#checkbox('☑', 'green')
-      call todo#add#checkbox('☒', 'red')
+  - If you prefer to use unicode checkboxes
+
+    ..  code-block:: vim
+
+        call todo#add#checkbox('☐', 'white')
+        call todo#add#checkbox('☑', 'green')
+        call todo#add#checkbox('☒', 'red')
 
 * Bullets
 
