@@ -55,12 +55,19 @@ if !exists('g:todo_loop_checkbox') || type (g:todo_loop_checkbox) != type('') ||
     let g:todo_loop_checkbox = '<C-c>'
 endif
 
+if !exists('g:todo_set_bullet') || type (g:todo_set_bullet) != type('') || g:todo_set_bullet == ''
+    let g:todo_set_bullet = '<leader>b'
+endif
+
 " -------- "
 " mappings "
 " -------- "
 
 execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
 execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-o>:call todo#switch_checkbox()<CR>'
+
+execute 'nnoremap <buffer> <silent> '. g:todo_set_bullet .' :call todo#set_bullet()<CR>'
+execute 'inoremap <buffer> <silent> '. g:todo_set_bullet .' <C-o>:call todo#set_bullet()<CR>'
 
 nnoremap <buffer> <silent> > :call todo#increase_indent()<CR>
 nnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>

@@ -22,7 +22,13 @@ These mappings should finally be customizable.
 
 Customizable mappings:
 
-* [normal][insert] ``<C-c>``: switch between checkboxes, set with ``g:todo_loop_checkbox``
+* [normal][insert] ``<C-c>``: switch between checkboxes.
+
+  - Customize with ``g:todo_loop_checkbox``
+
+* [normal][insert] ``<leader>b``: set current line a bulleted item, checkbox will be destroyed.
+
+  - Customize with ``g:todo_set_bullet``
 
 Default mappings:
 
