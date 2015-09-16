@@ -34,37 +34,62 @@ If you want to decrease/increase indent in insert mode, use ``<C-d>`` or ``<C-t>
 Customizable Settings
 ---------------------
 
-* Checkboxes
+Checkboxes
+~~~~~~~~~~
 
-  - To add a checkbox, stick ``call todo#add#checkbox('[ ]', 'White')`` into your vimrc. This checkbox can be looped with ``<C-c>``.
-  - To add a checkbox without participated in ``<C-c>`` loop, use ``call todo#add#checkbox('[ ]', 'White', 0)`` instead.
-  - Default settings
+To add a checkbox, stick this into your vimrc :
 
-    ..  code-block:: vim
+..  code-block:: vim
 
-        call todo#add#checkbox('[ ]', 'White')
-        call todo#add#checkbox('[v]', 'LightGreen')
-        call todo#add#checkbox('[x]', 'LightRed')
-        call todo#add#checkbox('[i]', 'LightYellow', 0)
-        call todo#add#checkbox('[?]', 'LightYellow', 0)
-        call todo#add#checkbox('[!]', 'LightRed', 0)
+    call todo#add#checkbox('[ ]', 'White')
 
-  - If you prefer to use unicode checkboxes
+This checkbox can be looped with ``<C-c>``.
 
-    ..  code-block:: vim
+To add a checkbox without participated in ``<C-c>`` loop, use this instead:
 
-        call todo#add#checkbox('☐', 'white')
-        call todo#add#checkbox('☑', 'green')
-        call todo#add#checkbox('☒', 'red')
+..  code-block:: vim
 
-* Bullets
+    call todo#add#checkbox('[ ]', 'White', 0)
 
-  - ``let g:todo_bullet = '>'``
+Here is the default settings of this plugin:
 
-* Colors
+..  code-block:: vim
 
-  - ``let g:todo_bullet_color = 'LightCyan'``
-  - ``let g:todo_url_color = 'LightCyan'``
+    call todo#add#checkbox('[ ]', 'White')
+    call todo#add#checkbox('[v]', 'LightGreen')
+    call todo#add#checkbox('[x]', 'LightRed')
+    call todo#add#checkbox('[i]', 'LightYellow', 0)
+    call todo#add#checkbox('[?]', 'LightYellow', 0)
+    call todo#add#checkbox('[!]', 'LightRed', 0)
+
+And if you prefer to use unicode checkboxes:
+
+..  code-block:: vim
+
+    call todo#add#checkbox('☐', 'white')
+    call todo#add#checkbox('☑', 'green')
+    call todo#add#checkbox('☒', 'red')
+
+Bullets
+~~~~~~~
+
+Currently only one kind of bullets supported:
+
+..  code-block:: vim
+
+    let g:todo_bullet = '>'
+
+Colors
+~~~~~~
+
+You can assign color of certain patterns:
+
+..  code-block:: vim
+
+    let g:todo_bullet_color = 'LightCyan'
+    let g:todo_url_color = 'LightCyan'
+
+Currently only foreground color setting supported, no underline or background color yet.
 
 Screenshot
 ----------
