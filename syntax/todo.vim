@@ -22,7 +22,7 @@ execute 'hi def todo_bulleted_item ctermfg='. g:todo_bullet_color
 
 let s:checkbox_flow_number = 1
 for c in keys(g:_todo_checkbox_color)
-    if c != ''
+    if c != '' && g:_todo_checkbox_color[c] != ''
         execute 'syn match checkbox'. s:checkbox_flow_number .' _\v^ *\V'. c .'_'
         execute 'hi def    checkbox'. s:checkbox_flow_number .' ctermfg='. g:_todo_checkbox_color[c] .''
         let s:checkbox_flow_number = s:checkbox_flow_number + 1
