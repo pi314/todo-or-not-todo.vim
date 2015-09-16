@@ -23,9 +23,9 @@ function! s:parse_line (lc) " {{{
     let l:tlc = s:trim_left(a:lc)
 
     for c in g:_todo_checkbox_total
-        let l:pattern_len = strlen(l:c)
         if s:startswith(l:tlc, l:c)
             " got a checkbox
+            let l:pattern_len = strlen(l:c)
             let l:ret['checkbox'] = l:c
             let l:ret['type'] = 'checkbox'
             let l:text_tmp = l:tlc[(l:pattern_len):]
@@ -36,9 +36,9 @@ function! s:parse_line (lc) " {{{
     endfor
 
     for b in g:todo_bullets
-        let l:pattern_len = strlen(l:b)
         if s:startswith(l:tlc, l:b)
             " got a bullet
+            let l:pattern_len = strlen(l:b)
             let l:ret['checkbox'] = l:b
             let l:ret['type'] = 'bullet'
             let l:text_tmp = l:tlc[(l:pattern_len):]
@@ -71,13 +71,13 @@ function! todo#set_bullet () " {{{
     if strlen(l:pspace) == 0 && line('.') > 1
         let l:pspace = s:parse_line(getline(line('.') - 1))['pspace']
     endif
-    let l:bspace = repeat(' ', &softtabstop - (strlen(l:plc['pspace'] . g:todo_bullets[0]) % &softtabstop))
+    let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(l:plc['pspace'] . g:todo_bullets[0]) % &softtabstop))
     call setline('.', l:pspace . g:todo_bullets[0] . l:bspace . l:plc['text'])
 
     let l:col = col('.')
-    if l:col >= strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
+    if l:col >= strdisplaywidth(l:plc['origin']) - strdisplaywidth(l:plc['text']) + 1
         let l:nclc = getline('.')
-        call cursor(line('.'), l:col + strlen(l:nclc) - strlen(l:plc['origin']))
+        call cursor(line('.'), l:col + strdisplaywidth(l:nclc) - strdisplaywidth(l:plc['origin']))
     endif
 endfunction " }}}
 
@@ -94,13 +94,13 @@ function! todo#set_checkbox (...) " {{{
         let l:checkbox = g:_todo_checkbox_loop[0]
     endif
 
-    let l:bspace = repeat(' ', &softtabstop - (strlen(l:plc['pspace'] . l:checkbox) % &softtabstop))
+    let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(l:plc['pspace'] . l:checkbox) % &softtabstop))
     call setline('.', l:plc['pspace'] . l:checkbox . l:bspace . l:plc['text'])
 
     let l:col = col('.')
-    if l:col >= strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
+    if l:col >= strdisplaywidth(l:plc['origin']) - strdisplaywidth(l:plc['text']) + 1
         let l:nclc = getline('.')
-        call cursor(line('.'), l:col + strlen(l:nclc) - strlen(l:plc['origin']))
+        call cursor(line('.'), l:col + strdisplaywidth(l:nclc) - strdisplaywidth(l:plc['origin']))
     endif
 endfunction "}}}
 
