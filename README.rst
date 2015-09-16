@@ -36,9 +36,8 @@ Customizable Settings
 
 * Checkboxes
 
-  - ``let g:todo_checkboxes = ['[ ]', '[v]', '[x]', '', '[i]', '[?]', '[!]']``
-  - All checkboxes must be placed into this array
-  - The checkboxes before empty string (``''``) will be looped with ``<C-c>``
+  - To add a checkbox, stick ``call todo#add#checkbox('[ ]', 'White')`` into your vimrc. This checkbox can be looped with ``<C-c>``.
+  - To add a checkbox without participated in ``<C-c>`` loop, use ``call todo#add#checkbox('[ ]', 'White', 0)`` instead.
 
 * Bullets
 
