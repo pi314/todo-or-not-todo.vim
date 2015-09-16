@@ -15,12 +15,17 @@ Use Vundle_
 
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
 
-Default Key Mappings
---------------------
+Key Mappings
+------------
 
 These mappings should finally be customizable.
 
-* [normal][insert] ``<C-c>``: switch between checkboxes
+Customizable mappings:
+
+* [normal][insert] ``<C-c>``: switch between checkboxes, set with ``g:todo_loop_checkbox``
+
+Default mappings:
+
 * [normal] ``>`` ``<``: increase and decrease indent
 * [visual] ``>`` ``<``: increase and decrease indent of selected lines
 * [normal] ``o``: open a new line with bullet
