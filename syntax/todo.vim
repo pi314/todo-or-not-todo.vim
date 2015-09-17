@@ -1,3 +1,9 @@
+" prevent syntax/ loaded before ftplugin/, which contains all important
+" variables
+if !exists('g:todo_plugin_loaded')
+    finish
+endif
+
 syn match   todo_string _\v"([^\\"]|\\.)*"_
 hi def      todo_string ctermfg=LightMagenta
 
@@ -9,10 +15,6 @@ hi def      todo_strong_emphasis    ctermfg=LightRed
 
 syn match   todo_url    _\<[a-zA-Z+-.]*://[^ \[\]]*_
 hi def      todo_url    ctermfg=LightCyan
-
-if !exists('g:todo_plugin_loaded')
-    finish
-endif
 
 " ------------------------------------------- "
 " dynamically generate bullet coloring syntax "

@@ -87,3 +87,5 @@ nnoremap <buffer> <silent> ^ :call todo#move_cursor_to_line_start()<CR>
 nnoremap <buffer> <silent> J :call todo#join_two_lines()<CR>
 
 let g:todo_plugin_loaded = 1
+
+syntax on
