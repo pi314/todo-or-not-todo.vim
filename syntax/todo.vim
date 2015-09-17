@@ -10,6 +10,10 @@ hi def      todo_strong_emphasis    ctermfg=LightRed
 syn match   todo_url    _\<[a-zA-Z+-.]*://[^ \[\]]*_
 hi def      todo_url    ctermfg=LightCyan
 
+if !exists('g:todo_plugin_loaded')
+    finish
+endif
+
 " ------------------------------------------- "
 " dynamically generate bullet coloring syntax "
 " ------------------------------------------- "

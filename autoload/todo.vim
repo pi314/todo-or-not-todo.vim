@@ -195,5 +195,3 @@ function! todo#move_cursor_to_line_start () " {{{
         call cursor(line('.'), l:logic_line_start)
     endif
 endfunction " }}}
-
-let s:kinds_of_checkbox = -2
