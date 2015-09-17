@@ -39,7 +39,7 @@ if !exists('g:_todo_checkbox_initialized')
     let g:_todo_checkbox_initialized = 1
 endif
 
-if !exists('g:todo_bullets') || s:not_string_array(g:todo_bullets)
+if !exists('g:todo_bullet') || s:not_string_array(g:todo_bullet)
     let g:todo_bullet = '>'
 endif
 
