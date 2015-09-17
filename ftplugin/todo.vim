@@ -63,6 +63,14 @@ if !exists('g:todo_set_bullet') || type (g:todo_set_bullet) != type('') || g:tod
     let g:todo_set_bullet = '<leader>b'
 endif
 
+if !exists('g:todo_comment_prefix') || type(g:todo_comment_prefix) != type('')
+    let g:todo_comment_prefix = ' #'
+endif
+
+if !exists('g:todo_comment_color') || type(g:todo_comment_color) != type('')
+    let g:todo_comment_color = 'LightCyan'
+endif
+
 " -------- "
 " mappings "
 " -------- "

@@ -31,3 +31,6 @@ for c in keys(g:_todo_checkbox_color)
         let s:checkbox_flow_number = s:checkbox_flow_number + 1
     endif
 endfor
+
+execute 'syn match todo_comment _\V'. g:todo_comment_prefix .'\v.*$_'
+execute 'hi def    todo_comment ctermfg='. g:todo_comment_color

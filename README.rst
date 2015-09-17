@@ -99,6 +99,8 @@ You can assign color of certain patterns:
 
     let g:todo_bullet_color = 'LightCyan'
     let g:todo_url_color = 'LightCyan'
+    let g:todo_comment_prefix = ' #'
+    let g:todo_comment_color = 'LightCyan'
 
 Currently only foreground color setting supported, no underline or background color yet.
 
