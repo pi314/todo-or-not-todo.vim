@@ -1,6 +1,7 @@
-if exists('g:todo_plugin_loaded')
-    finish
-endif
+" If I keep this, only one tab can use this plugin QQ
+" if exists('g:todo_plugin_loaded')
+"     finish
+" endif
 
 " ----------------------------------- "
 " extract and set tab related options "
