@@ -65,7 +65,7 @@ if !exists('g:todo_set_bullet') || type (g:todo_set_bullet) != type('') || g:tod
 endif
 
 if !exists('g:todo_comment_prefix') || type(g:todo_comment_prefix) != type('')
-    let g:todo_comment_prefix = ' #'
+    let g:todo_comment_prefix = '\v(^| )#'
 endif
 
 if !exists('g:todo_comment_color') || type(g:todo_comment_color) != type('')
