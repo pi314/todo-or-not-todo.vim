@@ -22,11 +22,11 @@ These mappings should finally be customizable.
 
 Customizable mappings:
 
-* [normal][insert] ``<C-c>``: switch between checkboxes.
+* [normal][insert][visual] ``<C-c>``: switch between checkboxes.
 
   - Customize with ``g:todo_loop_checkbox``
 
-* [normal][insert] ``<leader>b``: set current line a bulleted item, checkbox will be destroyed.
+* [normal][insert][visual] ``<leader>b``: set current line a bulleted item, checkbox will be destroyed.
 
   - Customize with ``g:todo_set_bullet``
 
@@ -48,7 +48,19 @@ Customizable Settings
 Checkboxes
 ~~~~~~~~~~
 
-To add a checkbox, stick this into your vimrc :
+Checkboxes are seperated into two types ::
+
+  [ ][v][x] [i][?][!]
+
+These checkboxes are recognized by this plugin, i.e. they are colorized and can be switched with ``<C-c>``.
+
+Depend on their type, ``<C-c>`` changes them in different way:
+
+* If your cursor is on a bulleted item, press ``<C-c>`` makes that bullet a ``[ ]``
+* If your cursor is on the same line with ``[ ]``, ``[v]`` or ``[x]``, ``<C-c>`` makes them the next one (round-robin)
+* If your cursor is on the same line with ``[i]``, ``[?]`` or ``[!]``, ``<C-c>`` makes them a ``[ ]``
+
+To add a checkbox, stick this into your vimrc:
 
 ..  code-block:: vim
 
@@ -56,11 +68,11 @@ To add a checkbox, stick this into your vimrc :
 
 This checkbox can be looped with ``<C-c>``.
 
-To add a checkbox without participated in ``<C-c>`` loop, use this instead:
+To add a checkbox without participated in ``<C-c>`` loop, add a ``0`` as the third argument:
 
 ..  code-block:: vim
 
-    call todo#add#checkbox('[ ]', 'White', 0)
+    call todo#add#checkbox('[i]', 'LightYellow', 0)
 
 Here is the default settings of this plugin:
 
@@ -80,6 +92,27 @@ And if you prefer to use unicode checkboxes:
     call todo#add#checkbox('☐', 'white')
     call todo#add#checkbox('☑', 'green')
     call todo#add#checkbox('☒', 'red')
+
+The color strings are evaluated into argument ``ctermfg``, if you are new to vim, you can pick colors here:
+
+* Black
+* DarkBlue
+* DarkGreen
+* DarkCyan
+* DarkRed
+* DarkMagenta
+* Brown, DarkYellow
+* LightGray, LightGrey, Gray, Grey
+* DarkGray, DarkGrey
+* Blue, LightBlue
+* Green, LightGreen
+* Cyan, LightCyan
+* Red, LightRed
+* Magenta, LightMagenta
+* Yellow, LightYellow
+* White
+
+Note: *Once you called todo#add#checkbox(), all the built-in checkboxes are disabled.*
 
 Bullets
 ~~~~~~~
