@@ -171,10 +171,13 @@ endfunction " }}}
 function! todo#open_new_line () " {{{
     let l:row = line('.')
     let l:col = col('.')
+    let l:plc = s:parse_line(getline('.'))
     call append(l:row, '')
     let l:row = l:row + 1
     call cursor(l:row, l:col)
-    call todo#set_bullet()
+    if has_key(l:plc, 'bullet') || has_key(l:plc, 'checkbox')
+        call todo#set_bullet()
+    endif
 endfunction " }}}
 
 function! todo#join_two_lines () " {{{
@@ -194,4 +197,12 @@ function! todo#move_cursor_to_line_start () " {{{
     else
         call cursor(line('.'), l:logic_line_start)
     endif
+endfunction " }}}
+
+function! todo#new_line () " {{{
+    let l:plc = s:parse_line(getline('.'))
+    if has_key(l:plc, 'bullet') || has_key(l:plc, 'checkbox')
+        return "\<CR>\<C-o>:call todo#set_bullet()\<CR>"
+    endif
+    return "\<CR>"
 endfunction " }}}
