@@ -89,8 +89,8 @@ nnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>
 vnoremap <buffer> <silent> > :call todo#increase_indent()<CR>gv
 vnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>gv
 
-nnoremap <buffer> <silent> o :call todo#open_new_line()<CR>A
-inoremap <buffer> <silent> <CR> <C-r>=todo#new_line()<CR>
+nnoremap <buffer> <silent> o A<C-r>=todo#carriage_return()<CR>
+inoremap <buffer> <silent> <CR> <C-r>=todo#carriage_return()<CR>
 
 nnoremap <buffer> <silent> I I<C-o>:call todo#move_cursor_to_line_start()<CR>
 nnoremap <buffer> <silent> ^ :call todo#move_cursor_to_line_start()<CR>

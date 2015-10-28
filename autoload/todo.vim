@@ -199,14 +199,16 @@ function! todo#move_cursor_to_line_start () " {{{
     endif
 endfunction " }}}
 
-function! todo#new_line () " {{{
+function! todo#carriage_return () " {{{
     let l:plc = s:parse_line(getline('.'))
-    if has_key(l:plc, 'bullet') || has_key(l:plc, 'checkbox')
-        if l:plc['text'] ==# ''
-            return "\<C-u>\<CR>\<C-o>:call todo#set_bullet()\<CR>"
-        else
-            return "\<CR>\<C-o>:call todo#set_bullet()\<CR>"
-        endif
+    if !has_key(l:plc, 'bullet') && !has_key(l:plc, 'checkbox')
+        return "\<CR>"
     endif
-    return "\<CR>"
+
+    if col('.') == strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
+        call append(line('.') - 1, '')
+        return ""
+    endif
+
+    return "\<CR>\<C-o>:call todo#set_bullet()\<CR>"
 endfunction " }}}
