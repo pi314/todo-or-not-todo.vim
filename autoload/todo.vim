@@ -66,7 +66,7 @@ endfunction " }}}
 function! todo#set_bullet () " {{{
     let l:plc = s:parse_line(getline('.'))
     let l:pspace = l:plc['pspace']
-    if strlen(l:pspace) == 0 && line('.') > 1
+    if strlen(l:pspace) == 0 && line('.') > 1 && !has_key(l:plc, 'checkbox')
         let l:pspace = s:parse_line(getline(line('.') - 1))['pspace']
     endif
     let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(l:plc['pspace'] . g:todo_bullet) % &softtabstop))
