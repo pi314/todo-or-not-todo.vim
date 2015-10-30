@@ -200,6 +200,11 @@ function! todo#move_cursor_to_line_start () " {{{
 endfunction " }}}
 
 function! todo#carriage_return () " {{{
+    if pumvisible()
+        " say yes to completion
+        return "\<C-y>"
+    endif
+
     let l:plc = s:parse_line(getline('.'))
     if !has_key(l:plc, 'bullet') && !has_key(l:plc, 'checkbox')
         return "\<CR>"
