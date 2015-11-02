@@ -240,11 +240,29 @@ function! todo#shift_tab () " {{{
     endif
 endfunction " }}}
 
-function! s:highlighter (row, col1, col2) " {{{
+function! s:highlighter (row, ...) " {{{
     let l:line = getline(a:row)
-    let l:line_part1 = (a:col1 == 1) ? ('') : (l:line[:(a:col1-2)])
-    let l:line_part2 = (a:col1 == a:col2) ? (l:line[a:col-1]) : (l:line[(a:col1-1):(a:col2-1)])
-    let l:line_part3 = (a:col2 == strlen(l:line) + 1) ? ('') : (l:line[(a:col2):])
+    if strlen(l:line) == 0
+        return
+    endif
+
+    if a:0 == 2
+        """ row, col1, col2
+        let l:line_part1 = (a:1 <= 1) ? ('') : (l:line[:(a:1-2)])
+        let l:line_part2 = (a:1 == a:2) ? (l:line[a:1-1]) : (l:line[(a:1-1):(a:2-1)])
+        let l:line_part3 = (a:2 >= strlen(l:line) + 1) ? ('') : (l:line[(a:2):])
+    elseif a:0 == 1
+        """ row, col, _
+        let l:line_part1 = (a:1 <= 1) ? ('') : (l:line[:(a:1-2)])
+        let l:line_part2 = (a:1 == strlen(l:line) + 1) ? ('') : (l:line[(a:1-1):])
+        let l:line_part3 = ''
+    else
+        """ row, _, _
+        let l:line_part1 = ''
+        let l:line_part2 = l:line
+        let l:line_part3 = ''
+    endif
+
     call setline(a:row,
         \l:line_part1 .
         \g:todo_highlighter_start .
@@ -254,15 +272,38 @@ function! s:highlighter (row, col1, col2) " {{{
     \)
 endfunction " }}}
 
-function! todo#highlighter ()
+function! todo#highlighter () range " {{{
     normal! gv
-    let l:col1 = col('.')
-    normal! o
-    let l:col2 = col('.')
-    normal! o
+    let l:mode = mode()
     execute "normal! \<ESC>"
-    let l:min_col = min([l:col1, l:col2])
-    let l:max_col = max([l:col1, l:col2])
-    call s:highlighter('.', l:min_col, l:max_col)
+    if l:mode ==# 'v'
+        let [l:row1, l:col1] = getpos("'<")[1:2]
+        let [l:row2, l:col2] = getpos("'>")[1:2]
+        if l:row1 == l:row2
+            call s:highlighter(l:row1, l:col1, l:col2)
+        else
+            call s:highlighter(l:row1, l:col1)
+            for l:row in range(l:row1 + 1, l:row2 - 1)
+                call s:highlighter(l:row)
+            endfor
+            call s:highlighter(l:row2, 1, l:col2)
+        endif
+
+    elseif l:mode ==# 'V'
+        for l:row in range(a:firstline, a:lastline)
+            call s:highlighter(l:row)
+        endfor
+
+    elseif l:mode ==# ''
+        let [l:row1, l:col1] = getpos("'<")[1:2]
+        let [l:row2, l:col2] = getpos("'>")[1:2]
+        let l:min_col = min([l:col1, l:col2])
+        let l:max_col = max([l:col1, l:col2])
+        for l:row in range(l:row1, l:row2)
+            call s:highlighter(l:row, l:min_col, l:max_col)
+        endfor
+
+    endif
+
     call cursor(line('.'), col('.') + strlen(g:todo_highlighter_start))
-endfunction
+endfunction " }}}
