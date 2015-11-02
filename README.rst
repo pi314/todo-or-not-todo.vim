@@ -39,6 +39,7 @@ Default mappings:
 * [normal] ``I``: insert text at logical line start
 * [normal] ``^``: move cursor to line start smartly
 * [normal] ``J``: join two lines, bullet or checkbox on next line will de destroyed
+* [insert] ``<TAB>``, ``<S-TAB>``: if cursor is at line start, increase/decrease indent
 
 If you want to decrease/increase indent in insert mode, use ``<C-d>`` or ``<C-t>``.  It's Vim's builtin motion command.
 

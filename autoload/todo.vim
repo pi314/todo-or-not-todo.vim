@@ -217,3 +217,25 @@ function! todo#carriage_return () " {{{
 
     return "\<CR>\<C-o>:call todo#set_bullet()\<CR>"
 endfunction " }}}
+
+function! todo#tab() " {{{
+    let l:plc = s:parse_line(getline('.'))
+    if !has_key(l:plc, 'checkbox')
+        return "\<TAB>"
+    endif
+
+    let l:logic_line_start = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
+    if col('.') == l:logic_line_start
+        return "\<C-o>:call todo#increase_indent()\<CR>"
+    else
+        return "\<TAB>"
+    endif
+endfunction " }}}
+
+function! todo#shift_tab() " {{{
+    let l:plc = s:parse_line(getline('.'))
+    let l:logic_line_start = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
+    if col('.') == l:logic_line_start
+        call todo#decrease_indent()
+    endif
+endfunction " }}}

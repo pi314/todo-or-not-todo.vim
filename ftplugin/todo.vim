@@ -92,6 +92,10 @@ nnoremap <buffer> <silent> ^ :call todo#move_cursor_to_line_start()<CR>
 
 nnoremap <buffer> <silent> J :call todo#join_two_lines()<CR>
 
+inoremap <buffer> <silent> <TAB> <C-r>=todo#tab()<CR>
+inoremap <buffer> <silent> <S-TAB> <C-\><C-o>:call todo#shift_tab()<CR>
+
+
 " prevent syntax/ loaded before ftplugin/, which contains all important
 " variables
 let g:todo_plugin_loaded = 1
