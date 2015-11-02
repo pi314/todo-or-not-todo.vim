@@ -307,3 +307,7 @@ function! todo#highlighter () range " {{{
 
     call cursor(line('.'), col('.') + strlen(g:todo_highlighter_start))
 endfunction " }}}
+
+function! todo#eraser () " {{{
+    call setline('.', substitute(getline('.'), '\v['. g:todo_highlighter_start . g:todo_highlighter_end .']', '', 'g'))
+endfunction " }}}

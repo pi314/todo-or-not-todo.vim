@@ -113,6 +113,7 @@ inoremap <buffer> <silent> <TAB> <C-r>=todo#tab()<CR>
 inoremap <buffer> <silent> <S-TAB> <C-\><C-o>:call todo#shift_tab()<CR>
 
 execute 'vnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#highlighter()<CR>'
+execute 'nnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#eraser()<CR>'
 
 " prevent syntax/ loaded before ftplugin/, which contains all important
 " variables
