@@ -34,3 +34,7 @@ endfor
 
 execute 'syn match todo_comment _\V'. g:todo_comment_prefix .'\v.*$_'
 execute 'hi def    todo_comment ctermfg='. g:todo_comment_color
+
+execute 'syn match todo_highlighter_symbol _\v['. g:todo_highlighter_start . g:todo_highlighter_end .']_ conceal'
+execute 'syn match todo_highlighter _\v('. g:todo_highlighter_start .')@<=.*('. g:todo_highlighter_end .')@=_'
+execute 'hi def    todo_highlighter ctermfg=Black ctermbg='. g:todo_highlighter_color

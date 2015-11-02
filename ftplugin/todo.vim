@@ -12,6 +12,9 @@ if shiftwidth() == 8
     setlocal shiftwidth=4
 endif
 
+setlocal conceallevel=3
+setlocal concealcursor=n
+
 " --------------------- "
 " set default variables "
 " --------------------- "
@@ -67,6 +70,20 @@ if !exists('g:todo_comment_color') || type(g:todo_comment_color) != type('')
     let g:todo_comment_color = 'LightCyan'
 endif
 
+if !exists('g:todo_highlighter') || type(g:todo_highlighter) != type('')
+    let g:todo_highlighter = '<leader>c'
+endif
+
+if !exists('g:todo_highlighter_start') || type(g:todo_highlighter_start) != type('')
+        \|| !exists('g:todo_highlighter_end') || type(g:todo_highlighter_end) != type('')
+    let g:todo_highlighter_start = '⢝'
+    let g:todo_highlighter_end = '⡢'
+endif
+
+if !exists('g:todo_highlighter_color') || type(g:todo_highlighter_color) != type('')
+    let g:todo_highlighter_color = 'LightYellow'
+endif
+
 " -------- "
 " mappings "
 " -------- "
@@ -95,6 +112,7 @@ nnoremap <buffer> <silent> J :call todo#join_two_lines()<CR>
 inoremap <buffer> <silent> <TAB> <C-r>=todo#tab()<CR>
 inoremap <buffer> <silent> <S-TAB> <C-\><C-o>:call todo#shift_tab()<CR>
 
+execute 'vnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#highlighter()<CR>'
 
 " prevent syntax/ loaded before ftplugin/, which contains all important
 " variables

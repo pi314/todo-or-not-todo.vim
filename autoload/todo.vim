@@ -218,7 +218,7 @@ function! todo#carriage_return () " {{{
     return "\<CR>\<C-o>:call todo#set_bullet()\<CR>"
 endfunction " }}}
 
-function! todo#tab() " {{{
+function! todo#tab () " {{{
     let l:plc = s:parse_line(getline('.'))
     if !has_key(l:plc, 'checkbox')
         return "\<TAB>"
@@ -232,10 +232,37 @@ function! todo#tab() " {{{
     endif
 endfunction " }}}
 
-function! todo#shift_tab() " {{{
+function! todo#shift_tab () " {{{
     let l:plc = s:parse_line(getline('.'))
     let l:logic_line_start = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
     if col('.') == l:logic_line_start
         call todo#decrease_indent()
     endif
 endfunction " }}}
+
+function! s:highlighter (row, col1, col2) " {{{
+    let l:line = getline(a:row)
+    let l:line_part1 = (a:col1 == 1) ? ('') : (l:line[:(a:col1-2)])
+    let l:line_part2 = (a:col1 == a:col2) ? (l:line[a:col-1]) : (l:line[(a:col1-1):(a:col2-1)])
+    let l:line_part3 = (a:col2 == strlen(l:line) + 1) ? ('') : (l:line[(a:col2):])
+    call setline(a:row,
+        \l:line_part1 .
+        \g:todo_highlighter_start .
+        \l:line_part2 .
+        \g:todo_highlighter_end .
+        \l:line_part3
+    \)
+endfunction " }}}
+
+function! todo#highlighter ()
+    normal! gv
+    let l:col1 = col('.')
+    normal! o
+    let l:col2 = col('.')
+    normal! o
+    execute "normal! \<ESC>"
+    let l:min_col = min([l:col1, l:col2])
+    let l:max_col = max([l:col1, l:col2])
+    call s:highlighter('.', l:min_col, l:max_col)
+    call cursor(line('.'), col('.') + strlen(g:todo_highlighter_start))
+endfunction
