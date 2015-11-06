@@ -63,6 +63,10 @@ function! s:valid_checkbox (c) " {{{
     return index(g:_todo_checkbox_total, a:c) >= 0
 endfunction " }}}
 
+function! s:first_char_of (str) " {{{
+    return nr2char(char2nr(a:str))
+endfunction " }}}
+
 function! todo#set_bullet () " {{{
     let l:plc = s:parse_line(getline('.'))
     let l:pspace = l:plc['pspace']
@@ -248,9 +252,10 @@ function! s:highlighter (row, ...) " {{{
 
     if a:0 == 2
         """ row, col1, col2
+        let l:col2 = (a:2) + strlen(s:first_char_of(l:line[(a:2-1):])) - 1
         let l:line_part1 = (a:1 <= 1) ? ('') : (l:line[:(a:1-2)])
-        let l:line_part2 = (a:1 == a:2) ? (l:line[a:1-1]) : (l:line[(a:1-1):(a:2-1)])
-        let l:line_part3 = (a:2 >= strlen(l:line) + 1) ? ('') : (l:line[(a:2):])
+        let l:line_part2 = (a:1 == l:col2) ? (l:line[a:1-1]) : (l:line[(a:1-1):(l:col2-1)])
+        let l:line_part3 = (l:col2 >= strlen(l:line) + 1) ? ('') : (l:line[(l:col2):])
     elseif a:0 == 1
         """ row, col, _
         let l:line_part1 = (a:1 <= 1) ? ('') : (l:line[:(a:1-2)])
