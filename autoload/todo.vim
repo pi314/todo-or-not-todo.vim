@@ -300,13 +300,10 @@ function! todo#highlighter () range " {{{
         endfor
 
     elseif l:mode ==# ''
-        let [l:row1, l:col1] = getpos("'<")[1:2]
-        let [l:row2, l:col2] = getpos("'>")[1:2]
-        let l:min_col = min([l:col1, l:col2])
-        let l:max_col = max([l:col1, l:col2])
-        for l:row in range(l:row1, l:row2)
-            call s:highlighter(l:row, l:min_col, l:max_col)
-        endfor
+        normal! gv
+        execute "normal! A". g:todo_highlighter_end
+        execute "normal! gvI". g:todo_highlighter_start
+        execute "normal! \<ESC>"
 
     endif
 
