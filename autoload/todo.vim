@@ -224,6 +224,12 @@ function! todo#tab() " {{{
         return "\<TAB>"
     endif
 
+    let l:bspace_checkbox_len = strdisplaywidth(l:plc['bspace'] . l:plc['checkbox'])
+    if l:bspace_checkbox_len > &softtabstop || l:bspace_checkbox_len % &softtabstop != 0
+        " make up bspace
+        return "\<TAB>"
+    endif
+
     let l:logic_line_start = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
     if col('.') == l:logic_line_start
         return "\<C-o>:call todo#increase_indent()\<CR>"
