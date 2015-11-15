@@ -10,17 +10,22 @@ function! s:startswith (text, pattern) " {{{
     return a:text[:(strlen(a:pattern) - 1)] ==# a:pattern
 endfunction " }}}
 
-function! s:parse_line (lc) " {{{
+function! s:parse_line (row) " {{{
     " patterns:
     " <pspace> <checkbox> <bspace> <text>
     " <pspace> <bullet> <bspace> <text>
     " <pspace> <text>
 
     let l:ret = {}
+    if type(a:row) == type(0)
+        let l:ret['row'] = a:row
+    else
+        let l:ret['row'] = line(a:row)
+    endif
     let l:ret['text'] = ''
-    let l:ret['origin'] = a:lc
-    let l:ret['pspace'] = matchstr(a:lc, '^ *')
-    let l:tlc = s:trim_left(a:lc)
+    let l:ret['origin'] = getline(a:row)
+    let l:ret['pspace'] = matchstr(l:ret['origin'], '^ *')
+    let l:tlc = s:trim_left(l:ret['origin'])
 
     for c in g:_todo_checkbox_total
         if s:startswith(l:tlc, l:c)
@@ -68,10 +73,10 @@ function! s:first_char_of (str) " {{{
 endfunction " }}}
 
 function! todo#set_bullet () " {{{
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     let l:pspace = l:plc['pspace']
     if strlen(l:pspace) == 0 && line('.') > 1 && !has_key(l:plc, 'checkbox')
-        let l:pspace = s:parse_line(getline(line('.') - 1))['pspace']
+        let l:pspace = s:parse_line(line('.') - 1)['pspace']
     endif
     let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(l:plc['pspace'] . g:todo_bullet) % &softtabstop))
     call setline('.', l:pspace . g:todo_bullet . l:bspace . l:plc['text'])
@@ -84,7 +89,7 @@ function! todo#set_bullet () " {{{
 endfunction " }}}
 
 function! todo#set_checkbox (...) " {{{
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     if (a:0 == 1) && s:valid_checkbox(a:1)
         " use user assigned check box
         let l:checkbox = (a:1)
@@ -110,7 +115,7 @@ function! todo#switch_checkbox (...) " {{{
     " check if we need to use user assigned check box
     let l:uacb = (a:0 == 1) && s:valid_checkbox(a:1)
 
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     if has_key(l:plc, 'bspace') && l:plc['type'] == 'checkbox'
         " found a checkbox, switch it to next checkbox
         let l:checkbox = (l:uacb) ? (a:1) : (s:get_next_checkbox(l:plc['checkbox']))
@@ -126,7 +131,7 @@ function! todo#switch_checkbox (...) " {{{
 endfunction " }}}
 
 function! todo#increase_indent () " {{{
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     let l:sw = shiftwidth()
     let l:prepend_len = l:sw - (strlen(l:plc['pspace']) % l:sw)
     call setline('.', repeat(' ', l:prepend_len) . l:plc['origin'])
@@ -141,7 +146,7 @@ function! todo#increase_indent () " {{{
 endfunction " }}}
 
 function! todo#decrease_indent () " {{{
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     let l:sw = shiftwidth()
     let l:col = col('.')
 
@@ -175,7 +180,7 @@ endfunction " }}}
 function! todo#open_new_line () " {{{
     let l:row = line('.')
     let l:col = col('.')
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     call append(l:row, '')
     let l:row = l:row + 1
     call cursor(l:row, l:col)
@@ -187,14 +192,14 @@ endfunction " }}}
 function! todo#join_two_lines () " {{{
     let l:nln = line('.') + 1
     if l:nln <= line('$')
-        let l:plc = s:parse_line(getline(l:nln))
+        let l:plc = s:parse_line(l:nln)
         call setline(l:nln, l:plc['text'])
         normal! J
     endif
 endfunction " }}}
 
 function! todo#move_cursor_to_line_start () " {{{
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     let l:logic_line_start = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
     if col('.') == l:logic_line_start
         call cursor(line('.'), strlen(l:plc['pspace']) + 1)
@@ -209,7 +214,7 @@ function! todo#carriage_return () " {{{
         return "\<C-y>"
     endif
 
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     if !has_key(l:plc, 'bullet') && !has_key(l:plc, 'checkbox')
         return "\<CR>"
     endif
@@ -223,7 +228,7 @@ function! todo#carriage_return () " {{{
 endfunction " }}}
 
 function! todo#tab () " {{{
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     if !has_key(l:plc, 'checkbox')
         return "\<TAB>"
     endif
@@ -243,7 +248,7 @@ function! todo#tab () " {{{
 endfunction " }}}
 
 function! todo#shift_tab () " {{{
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     let l:logic_line_start = strlen(l:plc['origin']) - strlen(l:plc['text']) + 1
     if col('.') == l:logic_line_start
         call todo#decrease_indent()
