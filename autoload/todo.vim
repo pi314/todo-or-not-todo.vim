@@ -2,6 +2,11 @@
 " functions "
 " --------- "
 
+let s:RESET = 0
+let s:NORMAL_MODE = 1
+let s:INSERT_MODE = 2
+let s:state_before_menu_complete = s:RESET
+
 function! s:trim_left (text) " {{{
     return substitute(a:text, '^\s*', '', '')
 endfunction " }}}
@@ -318,4 +323,36 @@ endfunction " }}}
 
 function! todo#eraser () " {{{
     call setline('.', substitute(getline('.'), '\v['. g:todo_highlighter_start . g:todo_highlighter_end .']', '', 'g'))
+endfunction " }}}
+
+function! todo#checkbox_menu () " {{{
+    " check if we need to use user assigned check box
+    if mode() ==# 'n'
+        let s:state_before_menu_complete = s:NORMAL_MODE
+        call feedkeys("i\<C-r>=todo#checkbox_menu()\<CR>")
+        return ''
+    endif
+
+    if s:state_before_menu_complete == s:RESET
+        let s:state_before_menu_complete = s:INSERT_MODE
+    endif
+
+    let l:plc = s:parse_line(getline('.'))
+    if has_key(l:plc, 'type') && (l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
+        " found a checkbox, prepare the completion menu
+        call cursor(
+            \line('.'),
+            \strlen(l:plc['pspace'] . l:plc['checkbox']) + 1)
+
+        call complete(strlen(l:plc['pspace']) + 1, g:_todo_checkbox_total)
+    endif
+
+    return ''
+endfunction " }}}
+
+function! todo#recover_menu_state () " {{{
+    if s:state_before_menu_complete == s:NORMAL_MODE
+        call feedkeys("\<ESC>", 't')
+    endif
+    let s:state_before_menu_complete = s:RESET
 endfunction " }}}
