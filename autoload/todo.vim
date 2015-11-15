@@ -66,6 +66,10 @@ function! s:write_line (plc) " {{{
     else
         let l:new_line = a:plc['pspace'] . a:plc['text']
     endif
+    if l:new_line == a:plc['origin']
+        return
+    endif
+
     call setline(a:plc['row'], l:new_line)
 
     if a:plc['row'] == line('.')
