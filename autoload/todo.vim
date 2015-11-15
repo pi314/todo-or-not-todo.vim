@@ -61,7 +61,11 @@ function! s:parse_line (row) " {{{
 endfunction " }}}
 
 function! s:write_line (plc) " {{{
-    let l:new_line = a:plc['pspace'] . a:plc['checkbox'] . a:plc['bspace'] . a:plc['text']
+    if has_key(a:plc, 'checkbox')
+        let l:new_line = a:plc['pspace'] . a:plc['checkbox'] . a:plc['bspace'] . a:plc['text']
+    else
+        let l:new_line = a:plc['pspace'] . a:plc['text']
+    endif
     call setline(a:plc['row'], l:new_line)
 
     if a:plc['row'] == line('.')
@@ -94,20 +98,19 @@ function! s:first_char_of (str) " {{{
     return nr2char(char2nr(a:str))
 endfunction " }}}
 
-function! todo#set_bullet () " {{{
-    let l:plc = s:parse_line('.')
-    let l:pspace = l:plc['pspace']
-    if strlen(l:pspace) == 0 && line('.') > 1 && !has_key(l:plc, 'checkbox')
+function! s:set_bullet (plc) " {{{
+    let l:pspace = a:plc['pspace']
+    if strlen(l:pspace) == 0 && line('.') > 1 && !has_key(a:plc, 'checkbox')
         let l:pspace = s:parse_line(line('.') - 1)['pspace']
     endif
-    let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(l:plc['pspace'] . g:todo_bullet) % &softtabstop))
-    call setline('.', l:pspace . g:todo_bullet . l:bspace . l:plc['text'])
+    let a:plc['pspace'] = l:pspace
+    let a:plc['checkbox'] = g:todo_bullet
+    let a:plc['bspace'] = repeat(' ', &softtabstop - (strdisplaywidth(a:plc['pspace'] . g:todo_bullet) % &softtabstop))
+    call s:write_line(a:plc)
+endfunction " }}}
 
-    let l:col = col('.')
-    if l:col >= strdisplaywidth(l:plc['origin']) - strdisplaywidth(l:plc['text']) + 1
-        let l:nclc = getline('.')
-        call cursor(line('.'), l:col + strdisplaywidth(l:nclc) - strdisplaywidth(l:plc['origin']))
-    endif
+function! todo#set_bullet () " {{{
+    call s:set_bullet(s:parse_line('.'))
 endfunction " }}}
 
 function! s:set_checkbox (plc, ...) " {{{
@@ -162,7 +165,7 @@ function! todo#increase_indent () " {{{
         if l:plc['type'] == 'checkbox'
             call s:set_checkbox(l:plc)
         else
-            call todo#set_bullet()
+            call s:set_bullet(l:plc)
         endif
     endif
 endfunction " }}}
@@ -188,7 +191,7 @@ function! todo#decrease_indent () " {{{
         if l:plc['type'] == 'checkbox'
             call s:set_checkbox(l:plc)
         else
-            call todo#set_bullet()
+            call s:set_bullet(l:plc)
         endif
     endif
 endfunction " }}}
