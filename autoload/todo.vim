@@ -129,12 +129,6 @@ function! s:set_checkbox (plc, ...) " {{{
     let a:plc['checkbox'] = l:checkbox
     let a:plc['bspace'] = l:bspace
     call s:write_line(a:plc)
-    "
-    " let l:col = col('.')
-    " if l:col >= strdisplaywidth(a:plc['origin']) - strdisplaywidth(a:plc['text']) + 1
-    "     let l:nclc = getline('.')
-    "     call cursor(line('.'), l:col + strdisplaywidth(l:nclc) - strdisplaywidth(a:plc['origin']))
-    " endif
 endfunction "}}}
 
 function! todo#switch_checkbox (...) " {{{
