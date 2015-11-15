@@ -24,10 +24,10 @@ execute 'syn match todo_bulleted_item _\v(^ *)@<=\V'. g:todo_bullet .'_'
 execute 'hi def    todo_bulleted_item ctermfg='. g:todo_bullet_color
 
 let s:checkbox_flow_number = 1
-for c in keys(g:_todo_checkbox_color)
-    if c != '' && g:_todo_checkbox_color[c] != ''
+for c in keys(b:todo_checkbox_color)
+    if c != '' && b:todo_checkbox_color[c] != ''
         execute 'syn match checkbox'. s:checkbox_flow_number .' _\v(^ *)@<=\V'. c .'_'
-        execute 'hi def    checkbox'. s:checkbox_flow_number .' ctermfg='. g:_todo_checkbox_color[c] .''
+        execute 'hi def    checkbox'. s:checkbox_flow_number .' ctermfg='. b:todo_checkbox_color[c] .''
         let s:checkbox_flow_number = s:checkbox_flow_number + 1
     endif
 endfor

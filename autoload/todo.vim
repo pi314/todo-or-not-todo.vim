@@ -32,7 +32,7 @@ function! s:parse_line (row) " {{{
     let l:ret['pspace'] = matchstr(l:ret['origin'], '^ *')
     let l:tlc = s:trim_left(l:ret['origin'])
 
-    for c in g:_todo_checkbox_total
+    for c in b:todo_checkbox_total
         if s:startswith(l:tlc, l:c)
             " got a checkbox
             let l:pattern_len = strlen(l:c)
@@ -82,16 +82,16 @@ function! s:write_line (plc) " {{{
 endfunction " }}}
 
 function! s:get_next_checkbox (c) " {{{
-    let l:l = len(g:_todo_checkbox_loop)
-    let l:i = index(g:_todo_checkbox_total, a:c)
+    let l:l = len(b:todo_checkbox_loop)
+    let l:i = index(b:todo_checkbox_total, a:c)
     if l:i == -1 || l:i >= l:l
-        return g:_todo_checkbox_loop[0]
+        return b:todo_checkbox_loop[0]
     endif
-    return g:_todo_checkbox_loop[(l:i + 1) % (l:l)]
+    return b:todo_checkbox_loop[(l:i + 1) % (l:l)]
 endfunction " }}}
 
 function! s:valid_checkbox (c) " {{{
-    return index(g:_todo_checkbox_total, a:c) >= 0
+    return index(b:todo_checkbox_total, a:c) >= 0
 endfunction " }}}
 
 function! s:first_char_of (str) " {{{
@@ -122,7 +122,7 @@ function! s:set_checkbox (plc, ...) " {{{
         let l:checkbox = a:plc['checkbox']
     else
         " set a new checkbox
-        let l:checkbox = g:_todo_checkbox_loop[0]
+        let l:checkbox = b:todo_checkbox_loop[0]
     endif
 
     let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(a:plc['pspace'] . l:checkbox) % &softtabstop))
@@ -336,4 +336,44 @@ endfunction " }}}
 
 function! todo#eraser () " {{{
     call setline('.', substitute(getline('.'), '\v['. g:todo_highlighter_start . g:todo_highlighter_end .']', '', 'g'))
+endfunction " }}}
+
+function! todo#checkbox_menu () " {{{
+    " check if we need to use user assigned check box
+    if pumvisible()
+        return "\<C-n>"
+    endif
+
+    if mode() ==# 'n'
+        let s:state_before_menu_complete = s:NORMAL_MODE
+        call feedkeys("i\<C-r>=todo#checkbox_menu()\<CR>")
+        return ''
+    endif
+
+    if s:state_before_menu_complete == s:RESET
+        let s:state_before_menu_complete = s:INSERT_MODE
+    endif
+
+    let l:plc = s:parse_line('.')
+    if has_key(l:plc, 'type') && (l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
+        " found a checkbox, prepare the completion menu
+        call cursor(
+            \line('.'),
+            \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
+
+        let l:checkbox_str = []
+        for l:checkbox in b:todo_checkbox_total
+            call add(l:checkbox_str, l:checkbox . s:get_bspace(l:checkbox))
+        endfor
+        call complete(strlen(l:plc['pspace']) + 1, l:checkbox_str)
+    endif
+
+    return ''
+endfunction " }}}
+
+function! todo#recover_menu_state () " {{{
+    if s:state_before_menu_complete == s:NORMAL_MODE
+        call feedkeys("\<ESC>", 't')
+    endif
+    let s:state_before_menu_complete = s:RESET
 endfunction " }}}
