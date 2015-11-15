@@ -10,6 +10,11 @@ function! s:startswith (text, pattern) " {{{
     return a:text[:(strlen(a:pattern) - 1)] ==# a:pattern
 endfunction " }}}
 
+function! s:endswith (text, pattern) " {{{
+    let l:index = strlen(a:text) - strlen(a:pattern)
+    return a:text[(l:index):] ==# a:pattern
+endfunction " }}}
+
 function! s:parse_line (row) " {{{
     " patterns:
     " <pspace> <checkbox> <bspace> <text>
@@ -55,6 +60,23 @@ function! s:parse_line (row) " {{{
     return l:ret
 endfunction " }}}
 
+function! s:write_line (plc) " {{{
+    let l:new_line = a:plc['pspace'] . a:plc['checkbox'] . a:plc['bspace'] . a:plc['text']
+    call setline(a:plc['row'], l:new_line)
+
+    if a:plc['row'] == line('.')
+        let l:col = col('.')
+        if l:col == 0
+            return
+        endif
+        let l:old_line_right = a:plc['origin'][(l:col - 1):]
+        if s:endswith(l:new_line, l:old_line_right)
+            " cursor right not changed
+            call cursor(line('.'), l:col + strlen(l:new_line) - strlen(a:plc['origin']))
+        endif
+    endif
+endfunction " }}}
+
 function! s:get_next_checkbox (c) " {{{
     let l:l = len(g:_todo_checkbox_loop)
     let l:i = index(g:_todo_checkbox_total, a:c)
@@ -88,27 +110,28 @@ function! todo#set_bullet () " {{{
     endif
 endfunction " }}}
 
-function! todo#set_checkbox (...) " {{{
-    let l:plc = s:parse_line('.')
+function! s:set_checkbox (plc, ...) " {{{
     if (a:0 == 1) && s:valid_checkbox(a:1)
         " use user assigned check box
         let l:checkbox = (a:1)
-    elseif has_key(l:plc, 'checkbox') && l:plc['type'] == 'checkbox'
+    elseif has_key(a:plc, 'checkbox') && a:plc['type'] == 'checkbox'
         " use original checkbox
-        let l:checkbox = l:plc['checkbox']
+        let l:checkbox = a:plc['checkbox']
     else
         " set a new checkbox
         let l:checkbox = g:_todo_checkbox_loop[0]
     endif
 
-    let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(l:plc['pspace'] . l:checkbox) % &softtabstop))
-    call setline('.', l:plc['pspace'] . l:checkbox . l:bspace . l:plc['text'])
-
-    let l:col = col('.')
-    if l:col >= strdisplaywidth(l:plc['origin']) - strdisplaywidth(l:plc['text']) + 1
-        let l:nclc = getline('.')
-        call cursor(line('.'), l:col + strdisplaywidth(l:nclc) - strdisplaywidth(l:plc['origin']))
-    endif
+    let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(a:plc['pspace'] . l:checkbox) % &softtabstop))
+    let a:plc['checkbox'] = l:checkbox
+    let a:plc['bspace'] = l:bspace
+    call s:write_line(a:plc)
+    "
+    " let l:col = col('.')
+    " if l:col >= strdisplaywidth(a:plc['origin']) - strdisplaywidth(a:plc['text']) + 1
+    "     let l:nclc = getline('.')
+    "     call cursor(line('.'), l:col + strdisplaywidth(l:nclc) - strdisplaywidth(a:plc['origin']))
+    " endif
 endfunction "}}}
 
 function! todo#switch_checkbox (...) " {{{
@@ -119,14 +142,14 @@ function! todo#switch_checkbox (...) " {{{
     if has_key(l:plc, 'bspace') && l:plc['type'] == 'checkbox'
         " found a checkbox, switch it to next checkbox
         let l:checkbox = (l:uacb) ? (a:1) : (s:get_next_checkbox(l:plc['checkbox']))
-        call todo#set_checkbox(l:checkbox)
+        call s:set_checkbox(l:plc, l:checkbox)
         return
     endif
 
     if l:uacb
-        call todo#set_checkbox(a:1)
+        call s:set_checkbox(l:plc, a:1)
     else
-        call todo#set_checkbox()
+        call s:set_checkbox(l:plc)
     endif
 endfunction " }}}
 
@@ -134,11 +157,10 @@ function! todo#increase_indent () " {{{
     let l:plc = s:parse_line('.')
     let l:sw = shiftwidth()
     let l:prepend_len = l:sw - (strlen(l:plc['pspace']) % l:sw)
-    call setline('.', repeat(' ', l:prepend_len) . l:plc['origin'])
-    call cursor(line('.'), col('.') + l:prepend_len)
+    let l:plc['pspace'] .= repeat(' ', l:prepend_len)
     if has_key(l:plc, 'checkbox')
         if l:plc['type'] == 'checkbox'
-            call todo#set_checkbox()
+            call s:set_checkbox(l:plc)
         else
             call todo#set_bullet()
         endif
@@ -160,17 +182,11 @@ function! todo#decrease_indent () " {{{
         let l:trim_len = l:sw
     endif
 
-    if l:col < l:trim_len + 1
-        call cursor(line('.'), 1)
-    else
-        call cursor(line('.'), col('.') - l:trim_len)
-    endif
-
-    call setline('.', l:plc['origin'][(l:trim_len):])
+    let l:plc['pspace'] = l:plc['pspace'][(l:trim_len):]
 
     if has_key(l:plc, 'checkbox')
         if l:plc['type'] == 'checkbox'
-            call todo#set_checkbox()
+            call s:set_checkbox(l:plc)
         else
             call todo#set_bullet()
         endif
