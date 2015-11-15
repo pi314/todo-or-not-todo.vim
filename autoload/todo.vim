@@ -37,7 +37,7 @@ function! s:parse_line (row) " {{{
     let l:ret['pspace'] = matchstr(l:ret['origin'], '^ *')
     let l:tlc = s:trim_left(l:ret['origin'])
 
-    for c in g:_todo_checkbox_total
+    for c in b:todo_checkbox_total
         if s:startswith(l:tlc, l:c)
             " got a checkbox
             let l:pattern_len = strlen(l:c)
@@ -71,6 +71,10 @@ function! s:write_line (plc) " {{{
     else
         let l:new_line = a:plc['pspace'] . a:plc['text']
     endif
+    if l:new_line == a:plc['origin']
+        return
+    endif
+
     call setline(a:plc['row'], l:new_line)
 
     if a:plc['row'] == line('.')
@@ -95,16 +99,16 @@ function! s:get_bspace (checkbox) " {{{
 endfunction " }}}
 
 function! s:get_next_checkbox (c) " {{{
-    let l:l = len(g:_todo_checkbox_loop)
-    let l:i = index(g:_todo_checkbox_total, a:c)
+    let l:l = len(b:todo_checkbox_loop)
+    let l:i = index(b:todo_checkbox_total, a:c)
     if l:i == -1 || l:i >= l:l
-        return g:_todo_checkbox_loop[0]
+        return b:todo_checkbox_loop[0]
     endif
-    return g:_todo_checkbox_loop[(l:i + 1) % (l:l)]
+    return b:todo_checkbox_loop[(l:i + 1) % (l:l)]
 endfunction " }}}
 
 function! s:valid_checkbox (c) " {{{
-    return index(g:_todo_checkbox_total, a:c) >= 0
+    return index(b:todo_checkbox_total, a:c) >= 0
 endfunction " }}}
 
 function! s:first_char_of (str) " {{{
@@ -135,7 +139,7 @@ function! s:set_checkbox (plc, ...) " {{{
         let l:checkbox = a:plc['checkbox']
     else
         " set a new checkbox
-        let l:checkbox = g:_todo_checkbox_loop[0]
+        let l:checkbox = b:todo_checkbox_loop[0]
     endif
 
     let l:bspace = s:get_bspace(l:checkbox)
@@ -375,7 +379,7 @@ function! todo#checkbox_menu () " {{{
             \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
 
         let l:checkbox_str = []
-        for l:checkbox in g:_todo_checkbox_total
+        for l:checkbox in b:todo_checkbox_total
             call add(l:checkbox_str, l:checkbox . s:get_bspace(l:checkbox))
         endfor
         call complete(strlen(l:plc['pspace']) + 1, l:checkbox_str)

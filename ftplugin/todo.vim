@@ -32,14 +32,14 @@ function! s:not_string_array (ary) " {{{
     return 0
 endfunction " }}}
 
-if !exists('g:_todo_checkbox_initialized')
+if !exists('b:todo_checkbox_initialized')
     call todo#add#checkbox('[ ]', 'White')
     call todo#add#checkbox('[v]', 'LightGreen')
     call todo#add#checkbox('[x]', 'LightRed')
     call todo#add#checkbox('[i]', 'LightYellow', 0)
     call todo#add#checkbox('[?]', 'LightYellow', 0)
     call todo#add#checkbox('[!]', 'LightRed', 0)
-    let g:_todo_checkbox_initialized = 1
+    let b:todo_checkbox_initialized = 1
 endif
 
 if !exists('g:todo_bullet') || s:not_string_array(g:todo_bullet)
