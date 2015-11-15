@@ -9,14 +9,14 @@ This project is still at an early development stage, many features are not custo
 Ideas, issues and many other things are appreciated!
 
 Installation
-------------
+-------------
 
 Use Vundle_
 
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
 
 Key Mappings
-------------
+-------------
 
 These mappings should finally be customizable.
 
@@ -29,6 +29,20 @@ Customizable mappings:
 * [normal][insert][visual] ``<leader>b``: set current line a bulleted item, checkbox will be destroyed.
 
   - Customize with ``g:todo_set_bullet``
+
+* [visual] ``<leader>c``: colorize selected text with highlighter.
+
+  - Customize with ``g:todo_highlighter``
+  - The start marker and end marker of highlighter is also customizable
+
+    ..  code-block:: vim
+
+        let g:todo_highlighter_start = '⢝'
+        let g:todo_highlighter_end = '⡢'
+
+* [normal] ``<leader>c``: erase highlighter of current line.
+
+  - Customize with ``g:todo_highlighter``
 
 Default mappings:
 
@@ -43,10 +57,10 @@ Default mappings:
 * [insert] ``<C-d>``, ``<C-t>``: decrease/increase indent of current line
 
 Customizable Settings
----------------------
+----------------------
 
 Checkboxes
-~~~~~~~~~~
+````````````
 
 Checkboxes are seperated into two types ::
 
@@ -115,7 +129,7 @@ The color strings are evaluated into argument ``ctermfg``, if you are new to vim
 Note: *Once you called todo#add#checkbox(), all the built-in checkboxes are disabled.*
 
 Bullets
-~~~~~~~
+`````````
 
 Currently only one kind of bullets supported:
 
@@ -124,7 +138,7 @@ Currently only one kind of bullets supported:
     let g:todo_bullet = '>'
 
 Colors
-~~~~~~
+````````
 
 You can assign color of certain patterns:
 
@@ -134,15 +148,16 @@ You can assign color of certain patterns:
     let g:todo_url_color = 'LightCyan'
     let g:todo_comment_prefix = '\v(^| )#'
     let g:todo_comment_color = 'LightCyan'
+    let g:todo_highlighter_color = 'LightYellow'
 
 Currently only foreground color setting supported, no underline or background color yet.
 
 Screenshot
-----------
+-----------
 
 ..  image:: screenshot.png
 
 License
--------
+--------
 
 This project in released under WTFPL Version 2.
