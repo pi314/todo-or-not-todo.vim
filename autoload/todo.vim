@@ -86,6 +86,14 @@ function! s:write_line (plc) " {{{
     endif
 endfunction " }}}
 
+function! s:vwidth (s) " {{{
+    return strdisplaywidth(a:s)
+endfunction " }}}
+
+function! s:get_bspace (checkbox) " {{{
+    return repeat(' ', &softtabstop - (s:vwidth(a:checkbox) % &softtabstop))
+endfunction " }}}
+
 function! s:get_next_checkbox (c) " {{{
     let l:l = len(g:_todo_checkbox_loop)
     let l:i = index(g:_todo_checkbox_total, a:c)
@@ -110,7 +118,7 @@ function! s:set_bullet (plc) " {{{
     endif
     let a:plc['pspace'] = l:pspace
     let a:plc['checkbox'] = g:todo_bullet
-    let a:plc['bspace'] = repeat(' ', &softtabstop - (strdisplaywidth(a:plc['pspace'] . g:todo_bullet) % &softtabstop))
+    let a:plc['bspace'] = s:get_bspace(g:todo_bullet)
     call s:write_line(a:plc)
 endfunction " }}}
 
@@ -130,7 +138,7 @@ function! s:set_checkbox (plc, ...) " {{{
         let l:checkbox = g:_todo_checkbox_loop[0]
     endif
 
-    let l:bspace = repeat(' ', &softtabstop - (strdisplaywidth(a:plc['pspace'] . l:checkbox) % &softtabstop))
+    let l:bspace = s:get_bspace(l:checkbox)
     let a:plc['checkbox'] = l:checkbox
     let a:plc['bspace'] = l:bspace
     call s:write_line(a:plc)
@@ -345,6 +353,10 @@ endfunction " }}}
 
 function! todo#checkbox_menu () " {{{
     " check if we need to use user assigned check box
+    if pumvisible()
+        return "\<C-n>"
+    endif
+
     if mode() ==# 'n'
         let s:state_before_menu_complete = s:NORMAL_MODE
         call feedkeys("i\<C-r>=todo#checkbox_menu()\<CR>")
@@ -355,14 +367,18 @@ function! todo#checkbox_menu () " {{{
         let s:state_before_menu_complete = s:INSERT_MODE
     endif
 
-    let l:plc = s:parse_line(getline('.'))
+    let l:plc = s:parse_line('.')
     if has_key(l:plc, 'type') && (l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
         " found a checkbox, prepare the completion menu
         call cursor(
             \line('.'),
-            \strlen(l:plc['pspace'] . l:plc['checkbox']) + 1)
+            \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
 
-        call complete(strlen(l:plc['pspace']) + 1, g:_todo_checkbox_total)
+        let l:checkbox_str = []
+        for l:checkbox in g:_todo_checkbox_total
+            call add(l:checkbox_str, l:checkbox . s:get_bspace(l:checkbox))
+        endfor
+        call complete(strlen(l:plc['pspace']) + 1, l:checkbox_str)
     endif
 
     return ''
