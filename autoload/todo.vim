@@ -379,7 +379,7 @@ function! todo#checkbox_menu () " {{{
             \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
 
         let l:checkbox_str = []
-        for l:checkbox in b:todo_checkbox_total
+        for l:checkbox in b:todo_checkbox_total + [g:todo_bullet]
             call add(l:checkbox_str, l:checkbox . s:get_bspace(l:checkbox))
         endfor
         call complete(strlen(l:plc['pspace']) + 1, l:checkbox_str)
