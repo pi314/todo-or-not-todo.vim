@@ -70,10 +70,10 @@ function! s:write_line (plc) " {{{
         return
     endif
 
+    let l:col = col('.')
     call setline(a:plc['row'], l:new_line)
 
     if a:plc['row'] == line('.')
-        let l:col = col('.')
         if l:col == 0
             return
         endif
