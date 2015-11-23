@@ -32,14 +32,14 @@ function! s:not_string_array (ary) " {{{
     return 0
 endfunction " }}}
 
-if !exists('g:_todo_checkbox_initialized')
+if !exists('b:todo_checkbox_initialized')
     call todo#add#checkbox('[ ]', 'White')
     call todo#add#checkbox('[v]', 'LightGreen')
     call todo#add#checkbox('[x]', 'LightRed')
     call todo#add#checkbox('[i]', 'LightYellow', 0)
     call todo#add#checkbox('[?]', 'LightYellow', 0)
     call todo#add#checkbox('[!]', 'LightRed', 0)
-    let g:_todo_checkbox_initialized = 1
+    let b:todo_checkbox_initialized = 1
 endif
 
 if !exists('g:todo_bullet') || s:not_string_array(g:todo_bullet)
@@ -84,13 +84,26 @@ if !exists('g:todo_highlighter_color') || type(g:todo_highlighter_color) != type
     let g:todo_highlighter_color = 'LightYellow'
 endif
 
+if !exists('g:todo_checkbox_switch_style') || type(g:todo_checkbox_switch_style) != type('')
+    let g:todo_checkbox_switch_style = 'default'
+endif
+if index(['default', 'menu'], g:todo_checkbox_switch_style) == -1
+    let g:todo_checkbox_switch_style = 'default'
+endif
+
 " -------- "
 " mappings "
 " -------- "
 
-execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
-execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-o>:call todo#switch_checkbox()<CR>'
-execute 'vnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
+if g:todo_checkbox_switch_style ==# 'default'
+    execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
+    execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-o>:call todo#switch_checkbox()<CR>'
+    execute 'vnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
+elseif g:todo_checkbox_switch_style ==# 'menu'
+    execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#checkbox_menu()<CR>'
+    execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-r>=todo#checkbox_menu()<CR>'
+    autocmd CompleteDone * call todo#recover_menu_state()
+endif
 
 execute 'nnoremap <buffer> <silent> '. g:todo_set_bullet .' :call todo#set_bullet()<CR>'
 execute 'inoremap <buffer> <silent> '. g:todo_set_bullet .' <C-o>:call todo#set_bullet()<CR>'

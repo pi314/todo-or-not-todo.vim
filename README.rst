@@ -1,23 +1,22 @@
 ================
 Todo or not todo
 ================
-
 A plugin for you to manage your TODOs, or NOT TODOs.
 
 This project is still at an early development stage, many features are not customizable yet.
 
 Ideas, issues and many other things are appreciated!
 
+
 Installation
 -------------
-
 Use Vundle_
 
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
 
+
 Key Mappings
 -------------
-
 These mappings should finally be customizable.
 
 Customizable mappings:
@@ -56,12 +55,12 @@ Default mappings:
 * [insert] ``<TAB>``, ``<S-TAB>``: if cursor is at line start, increase/decrease indent
 * [insert] ``<C-d>``, ``<C-t>``: decrease/increase indent of current line
 
+
 Customizable Settings
 ----------------------
 
 Checkboxes
 ````````````
-
 Checkboxes are seperated into two types ::
 
   [ ][v][x] [i][?][!]
@@ -128,18 +127,27 @@ The color strings are evaluated into argument ``ctermfg``, if you are new to vim
 
 Note: *Once you called todo#add#checkbox(), all the built-in checkboxes are disabled.*
 
+--------
+For those who loves popup menu, this plugin also provides menu mode:
+
+..  code-block:: vim
+
+    let g:todo_checkbox_switch_style = 'menu'
+
+Under menu mode, all checkboxes can be selected, no matter they are added with no-loop option.
+
+
 Bullets
 `````````
-
 Currently only one kind of bullets supported:
 
 ..  code-block:: vim
 
     let g:todo_bullet = '>'
 
+
 Colors
 ````````
-
 You can assign color of certain patterns:
 
 ..  code-block:: vim
@@ -152,12 +160,12 @@ You can assign color of certain patterns:
 
 Currently only foreground color setting supported, no underline or background color yet.
 
+
 Screenshot
 -----------
-
 ..  image:: screenshot.png
+
 
 License
 --------
-
 This project in released under WTFPL Version 2.
