@@ -128,6 +128,7 @@ The color strings are evaluated into argument ``ctermfg``, if you are new to vim
 Note: *Once you called todo#add#checkbox(), all the built-in checkboxes are disabled.*
 
 --------
+
 For those who loves popup menu, this plugin also provides menu mode:
 
 ..  code-block:: vim
