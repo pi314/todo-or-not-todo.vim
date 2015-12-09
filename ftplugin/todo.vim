@@ -67,11 +67,11 @@ endif
 " mappings "
 " -------- "
 
-if g:todo_checkbox_switch_style ==# 'default' && g:todo_checkbox_switch_style !=# ''
+if g:todo_checkbox_switch_style ==# 'default' && g:todo_loop_checkbox !=# ''
     execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
     execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-o>:call todo#switch_checkbox()<CR>'
     execute 'vnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
-elseif g:todo_checkbox_switch_style ==# 'menu' && g:todo_checkbox_switch_style !=# ''
+elseif g:todo_checkbox_switch_style ==# 'menu' && g:todo_loop_checkbox !=# ''
     execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#checkbox_menu()<CR>'
     execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-r>=todo#checkbox_menu()<CR>'
     autocmd CompleteDone * call todo#recover_menu_state()

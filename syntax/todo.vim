@@ -20,8 +20,13 @@ hi def      todo_url    ctermfg=LightCyan
 " dynamically generate bullet coloring syntax "
 " ------------------------------------------- "
 
-execute 'syn match todo_bulleted_item _\v(^\s*)@<=\V'. g:todo_bullet .'_'
-execute 'hi def    todo_bulleted_item ctermfg='. g:todo_bullet_color
+if g:todo_bullet !=# ''
+    execute 'syn match todo_bulleted_item _\v(^\s*)@<=\V'. g:todo_bullet .'_'
+endif
+
+if g:todo_bullet_color !=# ''
+    execute 'hi def    todo_bulleted_item ctermfg='. g:todo_bullet_color
+endif
 
 let s:checkbox_flow_number = 1
 for c in keys(b:todo_checkbox_color)
@@ -32,11 +37,21 @@ for c in keys(b:todo_checkbox_color)
     endif
 endfor
 
-execute 'syn match todo_comment _\V'. g:todo_comment_prefix .'\v.*$_'
-execute 'hi def    todo_comment ctermfg='. g:todo_comment_color
+if g:todo_comment_prefix !=# ''
+    execute 'syn match todo_comment _\V'. g:todo_comment_prefix .'\v.*$_'
+endif
 
-execute 'syn match todo_highlighter_symbol _\v['. g:todo_highlighter_start . g:todo_highlighter_end .']_ conceal'
-execute 'syn match todo_highlighter _\v('. g:todo_highlighter_start .')@<='.
-        \'[^'. g:todo_highlighter_start . g:todo_highlighter_end .']*'.
-        \'('. g:todo_highlighter_end .')@=_'
-execute 'hi def    todo_highlighter ctermfg=Black ctermbg='. g:todo_highlighter_color
+if g:todo_comment_color !=# ''
+    execute 'hi def    todo_comment ctermfg='. g:todo_comment_color
+endif
+
+if g:todo_highlighter_start !=# '' && g:todo_highlighter_end !=# ''
+    execute 'syn match todo_highlighter_symbol _\v['. g:todo_highlighter_start . g:todo_highlighter_end .']_ conceal'
+    execute 'syn match todo_highlighter _\v('. g:todo_highlighter_start .')@<='.
+            \'[^'. g:todo_highlighter_start . g:todo_highlighter_end .']*'.
+            \'('. g:todo_highlighter_end .')@=_'
+endif
+
+if g:todo_highlighter_color !=# ''
+    execute 'hi def    todo_highlighter ctermfg=Black ctermbg='. g:todo_highlighter_color
+endif
