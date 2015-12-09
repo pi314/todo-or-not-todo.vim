@@ -19,18 +19,18 @@ setlocal concealcursor=n
 " set default variables "
 " --------------------- "
 
-function! s:not_string_array (ary) " {{{
-    if type(a:ary) != type([])
-        return 1
+function! s:value_ok(option, type)
+    if !exists('g:'. a:option) || type(g:[a:option]) != a:type
+        return 0
     endif
-    for i in a:ary
-        if type(l:i) != type('')
-            return 1
-        endif
-    endfor
+    return 1
+endfunction
 
-    return 0
-endfunction " }}}
+function! s:set_default_value(option, type, default_value)
+    if !s:value_ok(a:option, a:type)
+        let g:[a:option] = a:default_value
+    endif
+endfunction
 
 if !exists('b:todo_checkbox_initialized')
     call todo#add#checkbox('[ ]', 'White')
@@ -42,51 +42,23 @@ if !exists('b:todo_checkbox_initialized')
     let b:todo_checkbox_initialized = 1
 endif
 
-if !exists('g:todo_bullet') || s:not_string_array(g:todo_bullet)
-    let g:todo_bullet = '>'
-endif
+call s:set_default_value('todo_bullet',         type(''), '>')
+call s:set_default_value('todo_bullet_color',   type(''), 'LightCyan')
+call s:set_default_value('todo_url_color',      type(''), 'LightCyan')
+call s:set_default_value('todo_loop_checkbox',  type(''), '<C-c>')
+call s:set_default_value('todo_set_bullet',     type(''), '<leader>b')
+call s:set_default_value('todo_comment_prefix', type(''), '\v(^| )#')
+call s:set_default_value('todo_comment_color',  type(''), 'LightCyan')
+call s:set_default_value('todo_highlighter',    type(''),  '<leader>c')
 
-if !exists('g:todo_bullet_color') || type(g:todo_bullet_color) != type('')
-    let g:todo_bullet_color = 'LightCyan'
-endif
-
-if !exists('g:todo_url_color') || type(g:todo_url_color) != type('')
-    let g:todo_url_color = 'LightCyan'
-endif
-
-if !exists('g:todo_loop_checkbox') || type (g:todo_loop_checkbox) != type('') || g:todo_loop_checkbox == ''
-    let g:todo_loop_checkbox = '<C-c>'
-endif
-
-if !exists('g:todo_set_bullet') || type (g:todo_set_bullet) != type('') || g:todo_set_bullet == ''
-    let g:todo_set_bullet = '<leader>b'
-endif
-
-if !exists('g:todo_comment_prefix') || type(g:todo_comment_prefix) != type('')
-    let g:todo_comment_prefix = '\v(^| )#'
-endif
-
-if !exists('g:todo_comment_color') || type(g:todo_comment_color) != type('')
-    let g:todo_comment_color = 'LightCyan'
-endif
-
-if !exists('g:todo_highlighter') || type(g:todo_highlighter) != type('')
-    let g:todo_highlighter = '<leader>c'
-endif
-
-if !exists('g:todo_highlighter_start') || type(g:todo_highlighter_start) != type('')
-        \|| !exists('g:todo_highlighter_end') || type(g:todo_highlighter_end) != type('')
+if !s:value_ok('todo_highlighter_start', type(''))
+        \|| !s:value_ok('todo_highlighter_end', type(''))
     let g:todo_highlighter_start = '⢝'
     let g:todo_highlighter_end = '⡢'
 endif
 
-if !exists('g:todo_highlighter_color') || type(g:todo_highlighter_color) != type('')
-    let g:todo_highlighter_color = 'LightYellow'
-endif
-
-if !exists('g:todo_checkbox_switch_style') || type(g:todo_checkbox_switch_style) != type('')
-    let g:todo_checkbox_switch_style = 'default'
-endif
+call s:set_default_value('todo_highlighter_color',      type(''), 'LightYellow')
+call s:set_default_value('todo_checkbox_switch_style',  type(''), 'default')
 if index(['default', 'menu'], g:todo_checkbox_switch_style) == -1
     let g:todo_checkbox_switch_style = 'default'
 endif
@@ -95,19 +67,21 @@ endif
 " mappings "
 " -------- "
 
-if g:todo_checkbox_switch_style ==# 'default'
+if g:todo_checkbox_switch_style ==# 'default' && g:todo_checkbox_switch_style !=# ''
     execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
     execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-o>:call todo#switch_checkbox()<CR>'
     execute 'vnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
-elseif g:todo_checkbox_switch_style ==# 'menu'
+elseif g:todo_checkbox_switch_style ==# 'menu' && g:todo_checkbox_switch_style !=# ''
     execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#checkbox_menu()<CR>'
     execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-r>=todo#checkbox_menu()<CR>'
     autocmd CompleteDone * call todo#recover_menu_state()
 endif
 
-execute 'nnoremap <buffer> <silent> '. g:todo_set_bullet .' :call todo#set_bullet()<CR>'
-execute 'inoremap <buffer> <silent> '. g:todo_set_bullet .' <C-o>:call todo#set_bullet()<CR>'
-execute 'vnoremap <buffer> <silent> '. g:todo_set_bullet .' :call todo#set_bullet()<CR>'
+if g:todo_set_bullet !=# ''
+    execute 'nnoremap <buffer> <silent> '. g:todo_set_bullet .' :call todo#set_bullet()<CR>'
+    execute 'inoremap <buffer> <silent> '. g:todo_set_bullet .' <C-o>:call todo#set_bullet()<CR>'
+    execute 'vnoremap <buffer> <silent> '. g:todo_set_bullet .' :call todo#set_bullet()<CR>'
+endif
 
 nnoremap <buffer> <silent> > :call todo#increase_indent()<CR>
 nnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>
@@ -125,8 +99,10 @@ nnoremap <buffer> <silent> J :call todo#join_two_lines()<CR>
 inoremap <buffer> <silent> <TAB> <C-r>=todo#tab()<CR>
 inoremap <buffer> <silent> <S-TAB> <C-\><C-o>:call todo#shift_tab()<CR>
 
-execute 'vnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#highlighter()<CR>'
-execute 'nnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#eraser()<CR>'
+if g:todo_highlighter !=# ''
+    execute 'vnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#highlighter()<CR>'
+    execute 'nnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#eraser()<CR>'
+endif
 
 " prevent syntax/ loaded before ftplugin/, which contains all important
 " variables
