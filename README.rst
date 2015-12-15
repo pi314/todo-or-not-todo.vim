@@ -133,9 +133,11 @@ For those who loves popup menu, this plugin also provides menu mode:
 
 ..  code-block:: vim
 
-    let g:todo_checkbox_switch_style = 'menu'
+    let g:todo_select_checkbox = '<C-c>'
 
 Under menu mode, all checkboxes can be selected, no matter they are added with no-loop option.
+
+Menu mode and loop mode can be configured with different key mappings.
 
 
 Bullets
