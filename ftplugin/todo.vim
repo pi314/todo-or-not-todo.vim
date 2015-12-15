@@ -58,22 +58,29 @@ if !s:value_ok('todo_highlighter_start', type(''))
 endif
 
 call s:set_default_value('todo_highlighter_color',      type(''), 'LightYellow')
-call s:set_default_value('todo_checkbox_switch_style',  type(''), 'default')
-if index(['default', 'menu'], g:todo_checkbox_switch_style) == -1
-    let g:todo_checkbox_switch_style = 'default'
+
+if !s:value_ok('todo_loop_checkbox', type('')) &&
+        \!s:value_ok('todo_loop_checkbox', type(''))
+    let g:todo_loop_checkbox = '<C-c>'
+    let g:todo_select_checkbox = ''
+else
+    call s:set_default_value('todo_loop_checkbox', type(''), '')
+    call s:set_default_value('todo_select_checkbox', type(''), '')
 endif
 
 " -------- "
 " mappings "
 " -------- "
 
-if g:todo_checkbox_switch_style ==# 'default' && g:todo_loop_checkbox !=# ''
+if g:todo_loop_checkbox !=# ''
     execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
     execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-o>:call todo#switch_checkbox()<CR>'
     execute 'vnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
-elseif g:todo_checkbox_switch_style ==# 'menu' && g:todo_loop_checkbox !=# ''
-    execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#checkbox_menu()<CR>'
-    execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-r>=todo#checkbox_menu()<CR>'
+endif
+
+if g:todo_select_checkbox !=# ''
+    execute 'nnoremap <buffer> <silent> '. g:todo_select_checkbox .' :call todo#checkbox_menu()<CR>'
+    execute 'inoremap <buffer> <silent> '. g:todo_select_checkbox .' <C-r>=todo#checkbox_menu()<CR>'
     autocmd CompleteDone * call todo#recover_menu_state()
 endif
 
