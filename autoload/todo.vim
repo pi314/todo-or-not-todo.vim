@@ -390,7 +390,7 @@ endfunction " }}}
 
 function! todo#recover_menu_state () " {{{
     if s:state_before_menu_complete == s:NORMAL_MODE
-        call feedkeys("\<ESC>", 't')
+        call feedkeys("\<ESC>^", 't')
     endif
     let s:state_before_menu_complete = s:RESET
 endfunction " }}}
