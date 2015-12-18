@@ -45,10 +45,10 @@ endif
 call s:set_default_value('todo_bullet',         type(''), '>')
 call s:set_default_value('todo_bullet_color',   type(''), 'LightCyan')
 call s:set_default_value('todo_url_color',      type(''), 'LightCyan')
-call s:set_default_value('todo_set_bullet',     type(''), '<leader>b')
+call s:set_default_value('todo_set_bullet',     type(''), '<Leader>b')
 call s:set_default_value('todo_comment_prefix', type(''), '\v(^| )#')
 call s:set_default_value('todo_comment_color',  type(''), 'LightCyan')
-call s:set_default_value('todo_highlighter',    type(''),  '<leader>c')
+call s:set_default_value('todo_highlighter',    type(''),  '<Leader>c')
 
 if !s:value_ok('todo_highlighter_start', type(''))
         \|| !s:value_ok('todo_highlighter_end', type(''))

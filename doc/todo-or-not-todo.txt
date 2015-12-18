@@ -6,12 +6,18 @@
 Contents
 
     1.  Introductions...................|ToDoOrNotToDoIntroductions|
-    2.  Checkbox Configurations.........|ToDoOrNotToDoCheckboxSettings|
+        1.1 Checkboxes..................|ToDoOrNotToDoIntroCheckboxes|
+        1.2 Highlighter.................|ToDoOrNotToDoIntroHighlighter|
+    2.  Add New Checkbox................|ToDoOrNotToDoAddNewCheckbox|
     3.  Default Key Mappings............|ToDoOrNotToDoDefaultMappings|
     4.  Configurable Key Mappings.......|ToDoOrNotToDoMappings|
+    5.  Other Configurations............|ToDoOrNotToDoConfigurations|
 
 ==============================================================================
 1.  Introductions                                 *ToDoOrNotToDoIntroductions*
+
+------------------------------------------------------------------------------
+1.1 Checkboxes                                  *ToDoOrNotToDoIntroCheckboxes*
 
     This plugin allows you to easily manipulate checkboxes and bullets to
     build your todo-lists.
@@ -31,7 +37,7 @@ Contents
 <
     may be seldom-used.
 
-    These checkbox will all being colorized by todo-or-not-todo, but
+    These checkbox will all being colorized by todo-or-not-todo, but only
     often-used checkboxes can be switched with a single key stroke.
 
     There are also bullets, e.g. >
@@ -40,16 +46,38 @@ Contents
 <
     you can use it as comments of todo items
 
-==============================================================================
-2.  Checkbox Configurations                    *ToDoOrNotToDoCheckboxSettings*
+------------------------------------------------------------------------------
+1.2 Highlighter                                *ToDoOrNotToDoIntroHighlighter*
 
-    Checkboxes can be set by |todo#checkbox#add|, for example, >
+    Todo-or-not-todo has a built-in highlighter.  You can use visual mode to
+    select text, press <Leader>c, text will be highlighted.
+
+    Be careful, don't overlap the highlighter marks.
+
+    The key mapping is configurable with |g:todo_highlighter|.
+
+==============================================================================
+2.  Add New Checkbox                             *ToDoOrNotToDoAddNewCheckbox*
+                                                         *todo#checkbox#add()*
+    To add often-used checkboxes, use |todo#checkbox#add()| >
 
         call todo#checkbox#add('[ ]', 'White')
         call todo#checkbox#add('[v]', 'Green')
         call todo#checkbox#add('[x]', 'Red')
 <
-    Now these checkboxes can be round-robined with |g:todo_loop_checkbox|
+    The first argument is the shape of checkbox, it's not a regex pattern.
+    The second argument is the foreground color of the checkbox, background
+    color is not supported.
+
+    Now these checkboxes can be round-robined with |g:todo_loop_checkbox|.
+
+    To add seldom-used checkboxes, use >
+
+        call todo#checkbox#add('[i]', 'Yellow', 0)
+        call todo#checkbox#add('[?]', 'Yellow', 0)
+        call todo#checkbox#add('[!]', 'Red', 0)
+<
+    If exists, the third argument should be zero.
 
 ==============================================================================
 3.  Default Key Mappings                        *ToDoOrNotToDoDefaultMappings*
@@ -65,7 +93,39 @@ Default: >
 
     let g:todo_loop_checkbox = '<C-c>'
 <
-Switch the checkbox of current line.  If there is no checkbox, create one.
+Switch the checkbox in front of of current line.
+If there is no checkbox, create one.
 If there is a bullet, change it to the first-added checkbox.
+If current checkbox is seldom-used, change it to the first-added checkbox.
 
 ------------------------------------------------------------------------------
+                                                      *g:todo_select_checkbox*
+Default: >
+
+    let g:todo_select_checkbox = ''
+<
+Use menu to select checkbox.
+All checkboxes can be selected, even bullet.
+
+------------------------------------------------------------------------------
+                                                           *g:todo_set_bullet*
+Default: >
+
+    let g:todo_set_bullet = '<Leader>b'
+<
+Add a bullet in front of current line.
+If there is a checkbox, change it to a bullet.
+
+------------------------------------------------------------------------------
+                                                          *g:todo_highlighter*
+Default: >
+
+    let g:todo_highlighter = '<Leader>c'
+>
+In visual mode, mark visual mode selected region.
+In normal mode, erase the mark in current line.
+
+==============================================================================
+5.  Other Configurations                         *ToDoOrNotToDoConfigurations*
+
+==============================================================================
