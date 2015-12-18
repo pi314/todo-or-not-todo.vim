@@ -59,7 +59,7 @@ endif
 call s:set_default_value('todo_highlighter_color',      type(''), 'LightYellow')
 
 if !s:value_ok('todo_loop_checkbox', type('')) &&
-        \!s:value_ok('todo_loop_checkbox', type(''))
+        \!s:value_ok('todo_select_checkbox', type(''))
     let g:todo_loop_checkbox = '<C-c>'
     let g:todo_select_checkbox = ''
 else
