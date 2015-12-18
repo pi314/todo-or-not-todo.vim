@@ -33,12 +33,12 @@ function! s:set_default_value(option, type, default_value)
 endfunction
 
 if !exists('b:todo_checkbox_initialized')
-    call todo#add#checkbox('[ ]', 'White')
-    call todo#add#checkbox('[v]', 'LightGreen')
-    call todo#add#checkbox('[x]', 'LightRed')
-    call todo#add#checkbox('[i]', 'LightYellow', 0)
-    call todo#add#checkbox('[?]', 'LightYellow', 0)
-    call todo#add#checkbox('[!]', 'LightRed', 0)
+    call todo#checkbox#add('[ ]', 'White')
+    call todo#checkbox#add('[v]', 'Green')
+    call todo#checkbox#add('[x]', 'Red')
+    call todo#checkbox#add('[i]', 'Yellow', 0)
+    call todo#checkbox#add('[?]', 'Yellow', 0)
+    call todo#checkbox#add('[!]', 'Red', 0)
     let b:todo_checkbox_initialized = 1
 endif
 

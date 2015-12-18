@@ -43,8 +43,29 @@ Contents
 ==============================================================================
 2.  Checkbox Configurations                    *ToDoOrNotToDoCheckboxSettings*
 
+    Checkboxes can be set by |todo#checkbox#add|, for example, >
+
+        call todo#checkbox#add('[ ]', 'White')
+        call todo#checkbox#add('[v]', 'Green')
+        call todo#checkbox#add('[x]', 'Red')
+<
+    Now these checkboxes can be round-robined with |g:todo_loop_checkbox|
+
 ==============================================================================
 3.  Default Key Mappings                        *ToDoOrNotToDoDefaultMappings*
 
 ==============================================================================
 4.  Configurable Key Mappings                          *ToDoOrNotToDoMappings*
+
+    Several key mappings can be configured by global variables.
+
+------------------------------------------------------------------------------
+                                                        *g:todo_loop_checkbox*
+Default: >
+
+    let g:todo_loop_checkbox = '<C-c>'
+<
+Switch the checkbox of current line.  If there is no checkbox, create one.
+If there is a bullet, change it to the first-added checkbox.
+
+------------------------------------------------------------------------------
