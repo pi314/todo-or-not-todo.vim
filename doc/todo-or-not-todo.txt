@@ -82,6 +82,30 @@ Contents
 ==============================================================================
 3.  Default Key Mappings                        *ToDoOrNotToDoDefaultMappings*
 
+These mappings are defined by default:
+
+Normal Mode:
+    >           increase indent
+    <           decrease indent
+    o           if current line is a bulleted item, open a new line with
+                bullet. Otherwise just like built-in behavior
+    I           insert text at logical line start
+    ^           move cursor to logical line start
+    J           join two lines, bullet or checkbox on next line will be
+                destroyed
+
+Insert Mode:
+    <CR>        if current line is a bulleted item or has a checkbox, create a
+                new bulleted item in new line with same indent
+    <TAB>       if cursor is at logical line start, increase indent
+    <S-TAB>     if cursor is at logical line start, decrease indent
+    <C-d>       decrease indent of current line
+    <C-t>       increase indent of current line
+
+Visual Mode:
+    >           increase indent of selected lines
+    <           decrease indent of selected lines
+
 ==============================================================================
 4.  Configurable Key Mappings                          *ToDoOrNotToDoMappings*
 
@@ -124,6 +148,11 @@ Default: >
 >
 In visual mode, mark visual mode selected region.
 In normal mode, erase the mark in current line.
+
+How text is marked is actually surround selected text with
+|g:todo_highlighter_start| and |g:todo_highlighter_end|.
+
+Currently, marked region cannot overlap, this should be fixed in the future.
 
 ==============================================================================
 5.  Other Configurations                         *ToDoOrNotToDoConfigurations*

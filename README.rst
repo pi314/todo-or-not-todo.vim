@@ -25,11 +25,11 @@ Customizable mappings:
 
   - Customize with ``g:todo_loop_checkbox``
 
-* [normal][insert][visual] ``<leader>b``: set current line a bulleted item, checkbox will be destroyed.
+* [normal][insert][visual] ``<Leader>b``: set current line a bulleted item, checkbox will be destroyed.
 
   - Customize with ``g:todo_set_bullet``
 
-* [visual] ``<leader>c``: colorize selected text with highlighter.
+* [visual] ``<Leader>c``: colorize selected text with highlighter.
 
   - Customize with ``g:todo_highlighter``
   - The start marker and end marker of highlighter is also customizable
@@ -39,7 +39,7 @@ Customizable mappings:
         let g:todo_highlighter_start = '⢝'
         let g:todo_highlighter_end = '⡢'
 
-* [normal] ``<leader>c``: erase highlighter of current line.
+* [normal] ``<Leader>c``: erase highlighter of current line.
 
   - Customize with ``g:todo_highlighter``
 
