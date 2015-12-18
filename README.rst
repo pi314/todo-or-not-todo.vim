@@ -61,7 +61,7 @@ Customizable Settings
 
 Checkboxes
 ````````````
-Checkboxes are seperated into two types ::
+Checkboxes are separated into two types ::
 
   [ ][v][x] [i][?][!]
 

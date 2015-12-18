@@ -1,0 +1,50 @@
+*todo-or-not-todo.txt*
+
+                    A plugin that helps you managing your todos, or not-todos.
+
+==============================================================================
+Contents
+
+    1.  Introductions...................|ToDoOrNotToDoIntroductions|
+    2.  Checkbox Configurations.........|ToDoOrNotToDoCheckboxSettings|
+    3.  Default Key Mappings............|ToDoOrNotToDoDefaultMappings|
+    4.  Configurable Key Mappings.......|ToDoOrNotToDoMappings|
+
+==============================================================================
+1.  Introductions                                 *ToDoOrNotToDoIntroductions*
+
+    This plugin allows you to easily manipulate checkboxes and bullets to
+    build your todo-lists.
+
+    Checkboxes are classified into two types: often-used and seldom-used.
+    For example, >
+
+        [ ] Todo list item
+        [v] Finished item
+        [x] Dropped item
+<
+    may be often-used checkboxes, and >
+
+        [i] Doing
+        [?] Need more information
+        [!] Important
+<
+    may be seldom-used.
+
+    These checkbox will all being colorized by todo-or-not-todo, but
+    often-used checkboxes can be switched with a single key stroke.
+
+    There are also bullets, e.g. >
+
+        >   bulleted list item
+<
+    you can use it as comments of todo items
+
+==============================================================================
+2.  Checkbox Configurations                    *ToDoOrNotToDoCheckboxSettings*
+
+==============================================================================
+3.  Default Key Mappings                        *ToDoOrNotToDoDefaultMappings*
+
+==============================================================================
+4.  Configurable Key Mappings                          *ToDoOrNotToDoMappings*
