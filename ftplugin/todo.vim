@@ -43,11 +43,12 @@ if !exists('b:todo_checkbox_initialized')
 endif
 
 call s:set_default_value('todo_bullet',         type(''), '>')
-call s:set_default_value('todo_bullet_color',   type(''), 'LightCyan')
-call s:set_default_value('todo_url_color',      type(''), 'LightCyan')
+call s:set_default_value('todo_bullet_color',   type(''), 'Cyan')
+call s:set_default_value('todo_url_pattern',    type(''), '\<[a-zA-Z+-.]*://[^ 	\[\]]*')
+call s:set_default_value('todo_url_color',      type(''), 'Cyan')
 call s:set_default_value('todo_set_bullet',     type(''), '<Leader>b')
 call s:set_default_value('todo_comment_prefix', type(''), '\v(^| )#')
-call s:set_default_value('todo_comment_color',  type(''), 'LightCyan')
+call s:set_default_value('todo_comment_color',  type(''), 'Cyan')
 call s:set_default_value('todo_highlighter',    type(''),  '<Leader>c')
 
 if !s:value_ok('todo_highlighter_start', type(''))
@@ -56,7 +57,7 @@ if !s:value_ok('todo_highlighter_start', type(''))
     let g:todo_highlighter_end = '⡢'
 endif
 
-call s:set_default_value('todo_highlighter_color', type(''), 'LightYellow')
+call s:set_default_value('todo_highlighter_color', type(''), 'Yellow')
 
 if !s:value_ok('todo_loop_checkbox', type('')) &&
         \!s:value_ok('todo_select_checkbox', type(''))

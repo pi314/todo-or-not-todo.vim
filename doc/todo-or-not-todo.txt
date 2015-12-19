@@ -12,6 +12,7 @@ Contents
     3.  Default Key Mappings............|ToDoOrNotToDoDefaultMappings|
     4.  Configurable Key Mappings.......|ToDoOrNotToDoMappings|
     5.  Other Configurations............|ToDoOrNotToDoConfigurations|
+    6.  License.........................|ToDoOrNotToDoLicense|
 
 ==============================================================================
 1.  Introductions                                 *ToDoOrNotToDoIntroductions*
@@ -85,13 +86,13 @@ Contents
 These mappings are defined by default:
 
 Normal Mode:
-    >           increase indent
-    <           decrease indent
-    o           if current line is a bulleted item, open a new line with
+    `>`           increase indent
+    `<`           decrease indent
+    `o`           if current line is a bulleted item, open a new line with
                 bullet. Otherwise just like built-in behavior
-    I           insert text at logical line start
-    ^           move cursor to logical line start
-    J           join two lines, bullet or checkbox on next line will be
+    `I`           insert text at logical line start
+    `^`           move cursor to logical line start
+    `J`           join two lines, bullet or checkbox on next line will be
                 destroyed
 
 Insert Mode:
@@ -103,8 +104,8 @@ Insert Mode:
     <C-t>       increase indent of current line
 
 Visual Mode:
-    >           increase indent of selected lines
-    <           decrease indent of selected lines
+    `>`           increase indent of selected lines
+    `<`           decrease indent of selected lines
 
 ==============================================================================
 4.  Configurable Key Mappings                          *ToDoOrNotToDoMappings*
@@ -113,10 +114,8 @@ Visual Mode:
 
 ------------------------------------------------------------------------------
                                                         *g:todo_loop_checkbox*
-Default: >
+Default: `'<C-c>'`
 
-    let g:todo_loop_checkbox = '<C-c>'
-<
 Switch the checkbox in front of of current line.
 If there is no checkbox, create one.
 If there is a bullet, change it to the first-added checkbox.
@@ -124,27 +123,21 @@ If current checkbox is seldom-used, change it to the first-added checkbox.
 
 ------------------------------------------------------------------------------
                                                       *g:todo_select_checkbox*
-Default: >
+Default: `''`
 
-    let g:todo_select_checkbox = ''
-<
 Use menu to select checkbox.
 All checkboxes can be selected, even bullet.
 
 ------------------------------------------------------------------------------
                                                            *g:todo_set_bullet*
-Default: >
+Default: `'<Leader>b'`
 
-    let g:todo_set_bullet = '<Leader>b'
-<
 Add a bullet in front of current line.
 If there is a checkbox, change it to a bullet.
 
 ------------------------------------------------------------------------------
                                                           *g:todo_highlighter*
-Default: >
-
-    let g:todo_highlighter = '<Leader>c'
+Default: `'<Leader>c'`
 >
 In visual mode, mark visual mode selected region.
 In normal mode, erase the mark in current line.
@@ -157,4 +150,62 @@ Currently, marked region cannot overlap, this should be fixed in the future.
 ==============================================================================
 5.  Other Configurations                         *ToDoOrNotToDoConfigurations*
 
+------------------------------------------------------------------------------
+                                                               *g:todo_bullet*
+Default: `'>'`
+
+The symbol of bullets.
+Only one type of bullet can be set.
+Should be a literal string and not a pattern.
+
+------------------------------------------------------------------------------
+                                                         *g:todo_bullet_color*
+Default: `'Cyan'`
+
+The highlighting color of bullet.
+
+------------------------------------------------------------------------------
+                                                          *g:todo_url_pattern*
+Default: '\<[a-zA-Z+-.]*://[^ 	\[\]]*'
+
+The pattern of URL.  Default pattern is not very precise.
+
+------------------------------------------------------------------------------
+                                                            *g:todo_url_color*
+Default: `'Cyan'`
+
+The highlighting color of URL.
+
+------------------------------------------------------------------------------
+                                                       *g:todo_comment_prefix*
+Default: '\v(^| )#'
+
+The prefix pattern of comment.
+
+------------------------------------------------------------------------------
+                                                        *g:todo_comment_color*
+Default: `'Cyan'`
+
+The highlighting color of comment.
+
+------------------------------------------------------------------------------
+                                                    *g:todo_highlighter_start*
+Default:                                              *g:todo_highlighter_end*
+>
+    let g:todo_highlighter_start = '⢝'
+    let g:todo_highlighter_end = '⡢'
+<
+The start and end symbol of highlighter marked text.
+Changed it to often-used characters may cause incorrectly highlighting.
+
+------------------------------------------------------------------------------
+                                                    *g:todo_highlighter_color*
+Default: `'Yellow'`
+
+The highlighting color of highlighter marked text.
+
 ==============================================================================
+6.  License                                             *ToDoOrNotToDoLicense*
+
+Todo-or-not-todo is released under WTFPL Version 2.
+See http://sam.zoy.org/wtfpl/COPYING.
