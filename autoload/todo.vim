@@ -362,8 +362,13 @@ function! todo#checkbox_menu () " {{{
     endif
 
     if mode() ==# 'n'
+        let s:state_before_menu_complete = s:NORMAL_MODE
         call feedkeys("i\<C-r>=todo#checkbox_menu()\<CR>")
         return ''
+    endif
+
+    if s:state_before_menu_complete == s:RESET
+        let s:state_before_menu_complete = s:INSERT_MODE
     endif
 
     let l:plc = s:parse_line('.')
@@ -385,4 +390,11 @@ function! todo#checkbox_menu () " {{{
     call complete(strlen(l:plc['pspace']) + 1, l:checkbox_str)
 
     return ''
+endfunction " }}}
+
+function! todo#recover_insert_mode () " {{{
+    if s:state_before_menu_complete == s:NORMAL_MODE
+        let s:state_before_menu_complete = s:RESET
+        call feedkeys("\<ESC>^", 't')
+    endif
 endfunction " }}}

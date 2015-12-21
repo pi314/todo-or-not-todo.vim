@@ -79,9 +79,9 @@ if g:todo_loop_checkbox !=# ''
 endif
 
 if g:todo_select_checkbox !=# ''
-    execute 'nnoremap <buffer> <silent> '. g:todo_select_checkbox .' i<C-r>=todo#checkbox_menu()<CR>'
+    execute 'nnoremap <buffer> <silent> '. g:todo_select_checkbox .' :call todo#checkbox_menu()<CR>'
     execute 'inoremap <buffer> <silent> '. g:todo_select_checkbox .' <C-r>=todo#checkbox_menu()<CR>'
-    autocmd CompleteDone * call feedkeys("\<ESC>^", 't')
+    autocmd CompleteDone * call todo#recover_insert_mode()
 endif
 
 if g:todo_set_bullet !=# ''

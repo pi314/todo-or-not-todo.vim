@@ -1,3 +1,7 @@
+* 0.10.1
+
+  - Fix bug: CompleteDone event always send a ``<ESC>``
+
 * 0.10.0
 
   - We have document now
