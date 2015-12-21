@@ -55,6 +55,8 @@ Default mappings:
 * [insert] ``<TAB>``, ``<S-TAB>``: if cursor is at line start, increase/decrease indent
 * [insert] ``<C-d>``, ``<C-t>``: decrease/increase indent of current line
 
+You can disable default mappings with ``let g:todo_default_mappings = 0``
+
 
 Customizable Settings
 ----------------------

@@ -38,8 +38,12 @@ Contents
 <
     may be seldom-used.
 
-    These checkbox will all being colorized by todo-or-not-todo, but only
+    All these checkbox will be colorized by todo-or-not-todo, but only
     often-used checkboxes can be switched with a single key stroke.
+    (configure with |g:todo_loop_checkbox|)
+
+    You can also set a key stroke to select checkboxes with vim menu.
+    (configure with |g:todo_select_checkbox|)
 
     There are also bullets, e.g. >
 
@@ -100,12 +104,12 @@ Insert Mode:
                 new bulleted item in new line with same indent
     <TAB>       if cursor is at logical line start, increase indent
     <S-TAB>     if cursor is at logical line start, decrease indent
-    <C-d>       decrease indent of current line
-    <C-t>       increase indent of current line
 
 Visual Mode:
     `>`           increase indent of selected lines
     `<`           decrease indent of selected lines
+
+To disable them, set |g:todo_default_mappings| to 0.
 
 ==============================================================================
 4.  Configurable Key Mappings                          *ToDoOrNotToDoMappings*
@@ -203,6 +207,13 @@ Changed it to often-used characters may cause incorrectly highlighting.
 Default: `'Yellow'`
 
 The highlighting color of highlighter marked text.
+
+------------------------------------------------------------------------------
+                                                     *g:todo_default_mappings*
+Default: none
+
+If this value is set to 0, default mappings will not be defined.
+See |ToDoOrNotToDoDefaultMappings|
 
 ==============================================================================
 6.  License                                             *ToDoOrNotToDoLicense*

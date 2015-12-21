@@ -90,21 +90,25 @@ if g:todo_set_bullet !=# ''
     execute 'vnoremap <buffer> <silent> '. g:todo_set_bullet .' :call todo#set_bullet()<CR>'
 endif
 
-nnoremap <buffer> <silent> > :call todo#increase_indent()<CR>
-nnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>
-vnoremap <buffer> <silent> > :call todo#increase_indent()<CR>gv
-vnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>gv
+if !s:value_ok('todo_default_mappings', type(0)) || g:todo_default_mappings == 1
+    " user doesn't set g:todo_default_mappings or it's 1
+    " define default mappings
+    nnoremap <buffer> <silent> > :call todo#increase_indent()<CR>
+    nnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>
+    vnoremap <buffer> <silent> > :call todo#increase_indent()<CR>gv
+    vnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>gv
 
-nnoremap <buffer> <silent> o A<C-r>=todo#carriage_return()<CR>
-inoremap <buffer> <silent> <CR> <C-r>=todo#carriage_return()<CR>
+    nnoremap <buffer> <silent> o A<C-r>=todo#carriage_return()<CR>
+    inoremap <buffer> <silent> <CR> <C-r>=todo#carriage_return()<CR>
 
-nnoremap <buffer> <silent> I I<C-o>:call todo#move_cursor_to_line_start()<CR>
-nnoremap <buffer> <silent> ^ :call todo#move_cursor_to_line_start()<CR>
+    nnoremap <buffer> <silent> I I<C-o>:call todo#move_cursor_to_line_start()<CR>
+    nnoremap <buffer> <silent> ^ :call todo#move_cursor_to_line_start()<CR>
 
-nnoremap <buffer> <silent> J :call todo#join_two_lines()<CR>
+    nnoremap <buffer> <silent> J :call todo#join_two_lines()<CR>
 
-inoremap <buffer> <silent> <TAB> <C-r>=todo#tab()<CR>
-inoremap <buffer> <silent> <S-TAB> <C-\><C-o>:call todo#shift_tab()<CR>
+    inoremap <buffer> <silent> <TAB> <C-r>=todo#tab()<CR>
+    inoremap <buffer> <silent> <S-TAB> <C-\><C-o>:call todo#shift_tab()<CR>
+endif
 
 if g:todo_highlighter !=# ''
     execute 'vnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#highlighter()<CR>'
