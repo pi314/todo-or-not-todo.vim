@@ -158,7 +158,7 @@ You can assign color of certain patterns:
 ..  code-block:: vim
 
     let g:todo_bullet_color = 'Cyan'
-    let g:todo_url_color = 'ightCyan'
+    let g:todo_url_color = 'Cyan'
     let g:todo_comment_prefix = '\v(^| )#'
     let g:todo_comment_color = 'Cyan'
     let g:todo_highlighter_color = 'Yellow'
