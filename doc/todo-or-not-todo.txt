@@ -1,0 +1,222 @@
+*todo-or-not-todo.txt*
+
+                    A plugin that helps you managing your todos, or not-todos.
+
+==============================================================================
+Contents
+
+    1.  Introductions...................|ToDoOrNotToDoIntroductions|
+        1.1 Checkboxes..................|ToDoOrNotToDoIntroCheckboxes|
+        1.2 Highlighter.................|ToDoOrNotToDoIntroHighlighter|
+    2.  Add New Checkbox................|ToDoOrNotToDoAddNewCheckbox|
+    3.  Default Key Mappings............|ToDoOrNotToDoDefaultMappings|
+    4.  Configurable Key Mappings.......|ToDoOrNotToDoMappings|
+    5.  Other Configurations............|ToDoOrNotToDoConfigurations|
+    6.  License.........................|ToDoOrNotToDoLicense|
+
+==============================================================================
+1.  Introductions                                 *ToDoOrNotToDoIntroductions*
+
+------------------------------------------------------------------------------
+1.1 Checkboxes                                  *ToDoOrNotToDoIntroCheckboxes*
+
+    This plugin allows you to easily manipulate checkboxes and bullets to
+    build your todo-lists.
+
+    Checkboxes are classified into two types: often-used and seldom-used.
+    For example, >
+
+        [ ] Todo list item
+        [v] Finished item
+        [x] Dropped item
+<
+    may be often-used checkboxes, and >
+
+        [i] Doing
+        [?] Need more information
+        [!] Important
+<
+    may be seldom-used.
+
+    All these checkbox will be colorized by todo-or-not-todo, but only
+    often-used checkboxes can be switched with a single key stroke.
+    (configure with |g:todo_loop_checkbox|)
+
+    You can also set a key stroke to select checkboxes with vim menu.
+    (configure with |g:todo_select_checkbox|)
+
+    There are also bullets, e.g. >
+
+        >   bulleted list item
+<
+    you can use it as comments of todo items
+
+------------------------------------------------------------------------------
+1.2 Highlighter                                *ToDoOrNotToDoIntroHighlighter*
+
+    Todo-or-not-todo has a built-in highlighter.  You can use visual mode to
+    select text, press <Leader>c, text will be highlighted.
+
+    Be careful, don't overlap the highlighter marks.
+
+    The key mapping is configurable with |g:todo_highlighter|.
+
+==============================================================================
+2.  Add New Checkbox                             *ToDoOrNotToDoAddNewCheckbox*
+                                                         *todo#checkbox#add()*
+    To add often-used checkboxes, use |todo#checkbox#add()| >
+
+        call todo#checkbox#add('[ ]', 'White')
+        call todo#checkbox#add('[v]', 'Green')
+        call todo#checkbox#add('[x]', 'Red')
+<
+    The first argument is the shape of checkbox, it's not a regex pattern.
+    The second argument is the foreground color of the checkbox, background
+    color is not supported.
+
+    Now these checkboxes can be round-robined with |g:todo_loop_checkbox|.
+
+    To add seldom-used checkboxes, use >
+
+        call todo#checkbox#add('[i]', 'Yellow', 0)
+        call todo#checkbox#add('[?]', 'Yellow', 0)
+        call todo#checkbox#add('[!]', 'Red', 0)
+<
+    If exists, the third argument should be zero.
+
+==============================================================================
+3.  Default Key Mappings                        *ToDoOrNotToDoDefaultMappings*
+
+These mappings are defined by default:
+
+Normal Mode:
+    `>`           increase indent
+    `<`           decrease indent
+    `o`           if current line is a bulleted item, open a new line with
+                bullet. Otherwise just like built-in behavior
+    `I`           insert text at logical line start
+    `^`           move cursor to logical line start
+    `J`           join two lines, bullet or checkbox on next line will be
+                destroyed
+
+Insert Mode:
+    <CR>        if current line is a bulleted item or has a checkbox, create a
+                new bulleted item in new line with same indent
+    <TAB>       if cursor is at logical line start, increase indent
+    <S-TAB>     if cursor is at logical line start, decrease indent
+
+Visual Mode:
+    `>`           increase indent of selected lines
+    `<`           decrease indent of selected lines
+
+To disable them, set |g:todo_default_mappings| to 0.
+
+==============================================================================
+4.  Configurable Key Mappings                          *ToDoOrNotToDoMappings*
+
+    Several key mappings can be configured by global variables.
+
+------------------------------------------------------------------------------
+                                                        *g:todo_loop_checkbox*
+Default: `'<C-c>'`
+
+Switch the checkbox in front of of current line.
+If there is no checkbox, create one.
+If there is a bullet, change it to the first-added checkbox.
+If current checkbox is seldom-used, change it to the first-added checkbox.
+
+------------------------------------------------------------------------------
+                                                      *g:todo_select_checkbox*
+Default: `''`
+
+Use menu to select checkbox.
+All checkboxes can be selected, even bullet.
+
+------------------------------------------------------------------------------
+                                                           *g:todo_set_bullet*
+Default: `'<Leader>b'`
+
+Add a bullet in front of current line.
+If there is a checkbox, change it to a bullet.
+
+------------------------------------------------------------------------------
+                                                          *g:todo_highlighter*
+Default: `'<Leader>c'`
+>
+In visual mode, mark visual mode selected region.
+In normal mode, erase the mark in current line.
+
+How text is marked is actually surround selected text with
+|g:todo_highlighter_start| and |g:todo_highlighter_end|.
+
+Currently, marked region cannot overlap, this should be fixed in the future.
+
+==============================================================================
+5.  Other Configurations                         *ToDoOrNotToDoConfigurations*
+
+------------------------------------------------------------------------------
+                                                               *g:todo_bullet*
+Default: `'>'`
+
+The symbol of bullets.
+Only one type of bullet can be set.
+Should be a literal string and not a pattern.
+
+------------------------------------------------------------------------------
+                                                         *g:todo_bullet_color*
+Default: `'Cyan'`
+
+The highlighting color of bullet.
+
+------------------------------------------------------------------------------
+                                                          *g:todo_url_pattern*
+Default: '\<[a-zA-Z+-.]*://[^ 	\[\]]*'
+
+The pattern of URL.  Default pattern is not very precise.
+
+------------------------------------------------------------------------------
+                                                            *g:todo_url_color*
+Default: `'Cyan'`
+
+The highlighting color of URL.
+
+------------------------------------------------------------------------------
+                                                       *g:todo_comment_prefix*
+Default: '\v(^| )#'
+
+The prefix pattern of comment.
+
+------------------------------------------------------------------------------
+                                                        *g:todo_comment_color*
+Default: `'Cyan'`
+
+The highlighting color of comment.
+
+------------------------------------------------------------------------------
+                                                    *g:todo_highlighter_start*
+Default:                                              *g:todo_highlighter_end*
+>
+    let g:todo_highlighter_start = '⢝'
+    let g:todo_highlighter_end = '⡢'
+<
+The start and end symbol of highlighter marked text.
+Changed it to often-used characters may cause incorrectly highlighting.
+
+------------------------------------------------------------------------------
+                                                    *g:todo_highlighter_color*
+Default: `'Yellow'`
+
+The highlighting color of highlighter marked text.
+
+------------------------------------------------------------------------------
+                                                     *g:todo_default_mappings*
+Default: none
+
+If this value is set to 0, default mappings will not be defined.
+See |ToDoOrNotToDoDefaultMappings|
+
+==============================================================================
+6.  License                                             *ToDoOrNotToDoLicense*
+
+Todo-or-not-todo is released under WTFPL Version 2.
+See http://sam.zoy.org/wtfpl/COPYING.

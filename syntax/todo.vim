@@ -5,16 +5,18 @@ if !exists('g:todo_plugin_loaded')
 endif
 
 syn match   todo_string _\v"([^\\"]|\\.)*"_
-hi def      todo_string ctermfg=LightMagenta
+hi def      todo_string ctermfg=Magenta
 
 syn match   todo_emphasis   _\v\*[^*]*\*_
 hi def      todo_emphasis   ctermfg=White
 
 syn match   todo_strong_emphasis    _\v\*\*.*\*\*_
-hi def      todo_strong_emphasis    ctermfg=LightRed
+hi def      todo_strong_emphasis    ctermfg=Red
 
-syn match   todo_url    _\<[a-zA-Z+-.]*://[^ 	\[\]]*_
-hi def      todo_url    ctermfg=LightCyan
+if g:todo_url_color !=# '' && g:todo_url_pattern !=# ''
+    execute 'syn match todo_url _'. g:todo_url_pattern .'_'
+    execute 'hi def todo_url ctermfg='. g:todo_url_color
+endif
 
 " ------------------------------------------- "
 " dynamically generate bullet coloring syntax "
@@ -25,7 +27,7 @@ if g:todo_bullet !=# ''
 endif
 
 if g:todo_bullet_color !=# ''
-    execute 'hi def    todo_bulleted_item ctermfg='. g:todo_bullet_color
+    execute 'hi def todo_bulleted_item ctermfg='. g:todo_bullet_color
 endif
 
 let s:checkbox_flow_number = 1

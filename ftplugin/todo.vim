@@ -33,23 +33,23 @@ function! s:set_default_value(option, type, default_value)
 endfunction
 
 if !exists('b:todo_checkbox_initialized')
-    call todo#add#checkbox('[ ]', 'White')
-    call todo#add#checkbox('[v]', 'LightGreen')
-    call todo#add#checkbox('[x]', 'LightRed')
-    call todo#add#checkbox('[i]', 'LightYellow', 0)
-    call todo#add#checkbox('[?]', 'LightYellow', 0)
-    call todo#add#checkbox('[!]', 'LightRed', 0)
+    call todo#checkbox#add('[ ]', 'White')
+    call todo#checkbox#add('[v]', 'Green')
+    call todo#checkbox#add('[x]', 'Red')
+    call todo#checkbox#add('[i]', 'Yellow', 0)
+    call todo#checkbox#add('[?]', 'Yellow', 0)
+    call todo#checkbox#add('[!]', 'Red', 0)
     let b:todo_checkbox_initialized = 1
 endif
 
 call s:set_default_value('todo_bullet',         type(''), '>')
-call s:set_default_value('todo_bullet_color',   type(''), 'LightCyan')
-call s:set_default_value('todo_url_color',      type(''), 'LightCyan')
-call s:set_default_value('todo_loop_checkbox',  type(''), '<C-c>')
-call s:set_default_value('todo_set_bullet',     type(''), '<leader>b')
+call s:set_default_value('todo_bullet_color',   type(''), 'Cyan')
+call s:set_default_value('todo_url_pattern',    type(''), '\<[a-zA-Z+-.]*://[^ 	\[\]]*')
+call s:set_default_value('todo_url_color',      type(''), 'Cyan')
+call s:set_default_value('todo_set_bullet',     type(''), '<Leader>b')
 call s:set_default_value('todo_comment_prefix', type(''), '\v(^| )#')
-call s:set_default_value('todo_comment_color',  type(''), 'LightCyan')
-call s:set_default_value('todo_highlighter',    type(''),  '<leader>c')
+call s:set_default_value('todo_comment_color',  type(''), 'Cyan')
+call s:set_default_value('todo_highlighter',    type(''),  '<Leader>c')
 
 if !s:value_ok('todo_highlighter_start', type(''))
         \|| !s:value_ok('todo_highlighter_end', type(''))
@@ -57,10 +57,10 @@ if !s:value_ok('todo_highlighter_start', type(''))
     let g:todo_highlighter_end = '⡢'
 endif
 
-call s:set_default_value('todo_highlighter_color',      type(''), 'LightYellow')
+call s:set_default_value('todo_highlighter_color', type(''), 'Yellow')
 
 if !s:value_ok('todo_loop_checkbox', type('')) &&
-        \!s:value_ok('todo_loop_checkbox', type(''))
+        \!s:value_ok('todo_select_checkbox', type(''))
     let g:todo_loop_checkbox = '<C-c>'
     let g:todo_select_checkbox = ''
 else
@@ -79,9 +79,9 @@ if g:todo_loop_checkbox !=# ''
 endif
 
 if g:todo_select_checkbox !=# ''
-    execute 'nnoremap <buffer> <silent> '. g:todo_select_checkbox .' :call todo#checkbox_menu()<CR>'
+    execute 'nnoremap <buffer> <silent> '. g:todo_select_checkbox .' i<C-r>=todo#checkbox_menu()<CR>'
     execute 'inoremap <buffer> <silent> '. g:todo_select_checkbox .' <C-r>=todo#checkbox_menu()<CR>'
-    autocmd CompleteDone * call todo#recover_menu_state()
+    autocmd CompleteDone * call feedkeys("\<ESC>^", 't')
 endif
 
 if g:todo_set_bullet !=# ''
@@ -90,21 +90,25 @@ if g:todo_set_bullet !=# ''
     execute 'vnoremap <buffer> <silent> '. g:todo_set_bullet .' :call todo#set_bullet()<CR>'
 endif
 
-nnoremap <buffer> <silent> > :call todo#increase_indent()<CR>
-nnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>
-vnoremap <buffer> <silent> > :call todo#increase_indent()<CR>gv
-vnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>gv
+if !s:value_ok('todo_default_mappings', type(0)) || g:todo_default_mappings == 1
+    " user doesn't set g:todo_default_mappings or it's 1
+    " define default mappings
+    nnoremap <buffer> <silent> > :call todo#increase_indent()<CR>
+    nnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>
+    vnoremap <buffer> <silent> > :call todo#increase_indent()<CR>gv
+    vnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>gv
 
-nnoremap <buffer> <silent> o A<C-r>=todo#carriage_return()<CR>
-inoremap <buffer> <silent> <CR> <C-r>=todo#carriage_return()<CR>
+    nnoremap <buffer> <silent> o A<C-r>=todo#carriage_return()<CR>
+    inoremap <buffer> <silent> <CR> <C-r>=todo#carriage_return()<CR>
 
-nnoremap <buffer> <silent> I I<C-o>:call todo#move_cursor_to_line_start()<CR>
-nnoremap <buffer> <silent> ^ :call todo#move_cursor_to_line_start()<CR>
+    nnoremap <buffer> <silent> I I<C-o>:call todo#move_cursor_to_line_start()<CR>
+    nnoremap <buffer> <silent> ^ :call todo#move_cursor_to_line_start()<CR>
 
-nnoremap <buffer> <silent> J :call todo#join_two_lines()<CR>
+    nnoremap <buffer> <silent> J :call todo#join_two_lines()<CR>
 
-inoremap <buffer> <silent> <TAB> <C-r>=todo#tab()<CR>
-inoremap <buffer> <silent> <S-TAB> <C-\><C-o>:call todo#shift_tab()<CR>
+    inoremap <buffer> <silent> <TAB> <C-r>=todo#tab()<CR>
+    inoremap <buffer> <silent> <S-TAB> <C-\><C-o>:call todo#shift_tab()<CR>
+endif
 
 if g:todo_highlighter !=# ''
     execute 'vnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#highlighter()<CR>'

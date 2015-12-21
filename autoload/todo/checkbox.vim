@@ -1,4 +1,4 @@
-function! todo#add#checkbox (checkbox, color, ...)
+function! todo#checkbox#add (checkbox, color, ...)
     if !exists('b:todo_checkbox_initialized') || b:todo_checkbox_initialized != 1
         let b:todo_checkbox_loop = []
         let b:todo_checkbox_total = []

@@ -25,11 +25,11 @@ Customizable mappings:
 
   - Customize with ``g:todo_loop_checkbox``
 
-* [normal][insert][visual] ``<leader>b``: set current line a bulleted item, checkbox will be destroyed.
+* [normal][insert][visual] ``<Leader>b``: set current line a bulleted item, checkbox will be destroyed.
 
   - Customize with ``g:todo_set_bullet``
 
-* [visual] ``<leader>c``: colorize selected text with highlighter.
+* [visual] ``<Leader>c``: colorize selected text with highlighter.
 
   - Customize with ``g:todo_highlighter``
   - The start marker and end marker of highlighter is also customizable
@@ -39,7 +39,7 @@ Customizable mappings:
         let g:todo_highlighter_start = '⢝'
         let g:todo_highlighter_end = '⡢'
 
-* [normal] ``<leader>c``: erase highlighter of current line.
+* [normal] ``<Leader>c``: erase highlighter of current line.
 
   - Customize with ``g:todo_highlighter``
 
@@ -55,13 +55,15 @@ Default mappings:
 * [insert] ``<TAB>``, ``<S-TAB>``: if cursor is at line start, increase/decrease indent
 * [insert] ``<C-d>``, ``<C-t>``: decrease/increase indent of current line
 
+You can disable default mappings with ``let g:todo_default_mappings = 0``
+
 
 Customizable Settings
 ----------------------
 
 Checkboxes
 ````````````
-Checkboxes are seperated into two types ::
+Checkboxes are separated into two types ::
 
   [ ][v][x] [i][?][!]
 
@@ -85,18 +87,18 @@ To add a checkbox without participated in ``<C-c>`` loop, add a ``0`` as the thi
 
 ..  code-block:: vim
 
-    call todo#add#checkbox('[i]', 'LightYellow', 0)
+    call todo#add#checkbox('[i]', 'Yellow', 0)
 
 Here is the default settings of this plugin:
 
 ..  code-block:: vim
 
     call todo#add#checkbox('[ ]', 'White')
-    call todo#add#checkbox('[v]', 'LightGreen')
-    call todo#add#checkbox('[x]', 'LightRed')
-    call todo#add#checkbox('[i]', 'LightYellow', 0)
-    call todo#add#checkbox('[?]', 'LightYellow', 0)
-    call todo#add#checkbox('[!]', 'LightRed', 0)
+    call todo#add#checkbox('[v]', 'Green')
+    call todo#add#checkbox('[x]', 'Red')
+    call todo#add#checkbox('[i]', 'Yellow', 0)
+    call todo#add#checkbox('[?]', 'Yellow', 0)
+    call todo#add#checkbox('[!]', 'Red', 0)
 
 And if you prefer to use unicode checkboxes:
 
@@ -155,11 +157,11 @@ You can assign color of certain patterns:
 
 ..  code-block:: vim
 
-    let g:todo_bullet_color = 'LightCyan'
-    let g:todo_url_color = 'LightCyan'
+    let g:todo_bullet_color = 'Cyan'
+    let g:todo_url_color = 'Cyan'
     let g:todo_comment_prefix = '\v(^| )#'
-    let g:todo_comment_color = 'LightCyan'
-    let g:todo_highlighter_color = 'LightYellow'
+    let g:todo_comment_color = 'Cyan'
+    let g:todo_highlighter_color = 'Yellow'
 
 Currently only foreground color setting supported, no underline or background color yet.
 
@@ -171,4 +173,5 @@ Screenshot
 
 License
 --------
-This project in released under WTFPL Version 2.
+This project is released under WTFPL Version 2.
+See http://sam.zoy.org/wtfpl/COPYING.
