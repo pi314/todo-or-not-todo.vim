@@ -362,35 +362,27 @@ function! todo#checkbox_menu () " {{{
     endif
 
     if mode() ==# 'n'
-        let s:state_before_menu_complete = s:NORMAL_MODE
         call feedkeys("i\<C-r>=todo#checkbox_menu()\<CR>")
         return ''
     endif
 
-    if s:state_before_menu_complete == s:RESET
-        let s:state_before_menu_complete = s:INSERT_MODE
-    endif
-
     let l:plc = s:parse_line('.')
-    if has_key(l:plc, 'type') && (l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
-        " found a checkbox, prepare the completion menu
-        call cursor(
-            \line('.'),
-            \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
-
-        let l:checkbox_str = []
-        for l:checkbox in b:todo_checkbox_total + [g:todo_bullet]
-            call add(l:checkbox_str, l:checkbox . s:get_bspace(l:checkbox))
-        endfor
-        call complete(strlen(l:plc['pspace']) + 1, l:checkbox_str)
+    if !has_key(l:plc, 'type') || !(l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
+        " current line is an ordinary line
+        " or it's not checkbox item nor bulleted list item
+        call todo#switch_checkbox()
+        let l:plc = s:parse_line('.')
     endif
+
+    call cursor(
+        \line('.'),
+        \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
+
+    let l:checkbox_str = []
+    for l:checkbox in b:todo_checkbox_total + [g:todo_bullet]
+        call add(l:checkbox_str, l:checkbox . s:get_bspace(l:checkbox))
+    endfor
+    call complete(strlen(l:plc['pspace']) + 1, l:checkbox_str)
 
     return ''
-endfunction " }}}
-
-function! todo#recover_menu_state () " {{{
-    if s:state_before_menu_complete == s:NORMAL_MODE
-        call feedkeys("\<ESC>^", 't')
-    endif
-    let s:state_before_menu_complete = s:RESET
 endfunction " }}}
