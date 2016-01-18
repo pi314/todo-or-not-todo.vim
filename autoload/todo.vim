@@ -178,6 +178,8 @@ function! todo#increase_indent () " {{{
         else
             call s:set_bullet(l:plc)
         endif
+    else
+        call s:write_line(l:plc)
     endif
 endfunction " }}}
 
@@ -204,6 +206,8 @@ function! todo#decrease_indent () " {{{
         else
             call s:set_bullet(l:plc)
         endif
+    else
+        call s:write_line(l:plc)
     endif
 endfunction " }}}
 

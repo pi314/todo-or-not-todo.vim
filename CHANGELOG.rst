@@ -1,3 +1,7 @@
+* 0.10.2
+
+  - Fix bug: ``>`` and ``<`` doesn't work on lines without bullet
+
 * 0.10.1
 
   - Fix bug: CompleteDone event always send a ``<ESC>``
