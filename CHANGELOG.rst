@@ -1,3 +1,7 @@
+* 0.10.3
+
+  - Make todo_strong_emphasis highlight non-greedy
+
 * 0.10.2
 
   - Fix bug: ``>`` and ``<`` doesn't work on lines without bullet

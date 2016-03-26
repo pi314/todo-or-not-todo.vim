@@ -10,7 +10,7 @@ hi def      todo_string ctermfg=Magenta
 syn match   todo_emphasis   _\v\*[^*]*\*_
 hi def      todo_emphasis   ctermfg=White
 
-syn match   todo_strong_emphasis    _\v\*\*.*\*\*_
+syn match   todo_strong_emphasis    _\v\*\*.{-}\*\*_
 hi def      todo_strong_emphasis    ctermfg=Red
 
 if g:todo_url_color !=# '' && g:todo_url_pattern !=# ''
