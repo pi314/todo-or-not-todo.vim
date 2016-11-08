@@ -83,7 +83,7 @@ To add a checkbox, stick this into your vimrc:
 
 This checkbox can be looped with ``<C-c>``.
 
-To add a checkbox without participated in ``<C-c>`` loop, add a ``0`` as the third argument:
+To add a checkbox without participated in ``<C-c>`` loop, add a ``noloop`` as the third argument:
 
 ..  code-block:: vim
 
@@ -93,20 +93,21 @@ Here is the default settings of this plugin:
 
 ..  code-block:: vim
 
-    call todo#add#checkbox('[ ]', 'White')
-    call todo#add#checkbox('[v]', 'Green')
-    call todo#add#checkbox('[x]', 'Red')
-    call todo#add#checkbox('[i]', 'Yellow', 0)
-    call todo#add#checkbox('[?]', 'Yellow', 0)
-    call todo#add#checkbox('[!]', 'Red', 0)
+    call todo#checkbox#add('[ ]', 'White', 'Todo')
+    call todo#checkbox#add('[v]', 'Green', 'Done')
+    call todo#checkbox#add('[x]', 'Red', 'Not todo')
+    call todo#checkbox#add('[i]', 'Yellow', 'noloop', 'Doing')
+    call todo#checkbox#add('[?]', 'Yellow', 'noloop', 'Not sure')
+    call todo#checkbox#add('[!]', 'Red', 'noloop', 'Important')
 
 And if you prefer to use unicode checkboxes:
 
 ..  code-block:: vim
 
-    call todo#add#checkbox('☐', 'white')
-    call todo#add#checkbox('☑', 'green')
-    call todo#add#checkbox('☒', 'red')
+    call todo#checkbox#clear()
+    call todo#checkbox#add('☐', 'white')
+    call todo#checkbox#add('☑', 'green')
+    call todo#checkbox#add('☒', 'red')
 
 The color strings are evaluated into argument ``ctermfg``, if you are new to vim, you can pick colors here:
 
@@ -126,8 +127,6 @@ The color strings are evaluated into argument ``ctermfg``, if you are new to vim
 * Magenta, LightMagenta
 * Yellow, LightYellow
 * White
-
-Note: *Once you called todo#add#checkbox(), all the built-in checkboxes are disabled.*
 
 --------
 

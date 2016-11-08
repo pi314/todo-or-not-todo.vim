@@ -1,7 +1,6 @@
 " ----------------------------------- "
 " extract and set tab related options "
 " ----------------------------------- "
-
 if &softtabstop == 0
     " user not setting &softtabstop, set it to 4
     setlocal softtabstop=4
@@ -15,10 +14,10 @@ endif
 setlocal conceallevel=3
 setlocal concealcursor=n
 
+
 " --------------------- "
 " set default variables "
 " --------------------- "
-
 function! s:value_ok(option, type)
     if !exists('g:'. a:option) || type(g:[a:option]) != a:type
         return 0
@@ -31,16 +30,6 @@ function! s:set_default_value(option, type, default_value)
         let g:[a:option] = a:default_value
     endif
 endfunction
-
-if !exists('b:todo_checkbox_initialized')
-    call todo#checkbox#add('[ ]', 'White')
-    call todo#checkbox#add('[v]', 'Green')
-    call todo#checkbox#add('[x]', 'Red')
-    call todo#checkbox#add('[i]', 'Yellow', 0)
-    call todo#checkbox#add('[?]', 'Yellow', 0)
-    call todo#checkbox#add('[!]', 'Red', 0)
-    let b:todo_checkbox_initialized = 1
-endif
 
 call s:set_default_value('todo_bullet',         type(''), '>')
 call s:set_default_value('todo_bullet_color',   type(''), 'Cyan')
@@ -68,10 +57,10 @@ else
     call s:set_default_value('todo_select_checkbox', type(''), '')
 endif
 
+
 " -------- "
 " mappings "
 " -------- "
-
 if g:todo_loop_checkbox !=# ''
     execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
     execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-o>:call todo#switch_checkbox()<CR>'
@@ -91,7 +80,7 @@ if g:todo_set_bullet !=# ''
 endif
 
 if !s:value_ok('todo_default_mappings', type(0)) || g:todo_default_mappings == 1
-    " user doesn't set g:todo_default_mappings or it's 1
+    " user didn't set g:todo_default_mappings or it's 1
     " define default mappings
     nnoremap <buffer> <silent> > :call todo#increase_indent()<CR>
     nnoremap <buffer> <silent> < :call todo#decrease_indent()<CR>
@@ -115,7 +104,31 @@ if g:todo_highlighter !=# ''
     execute 'nnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#eraser()<CR>'
 endif
 
-" prevent syntax/ loaded before ftplugin/, which contains all important
-" variables
-let g:todo_plugin_loaded = 1
+
+" ---------------------- "
+" parse local checkboxes "
+" ---------------------- "
+function! s:parse_local_checkboxes ()
+    let l:probe = 1
+    while l:probe <= line('$')
+        let l:line = getline(l:probe)
+        let l:matchobj = matchlist(l:line, '\v^#\s*todo\s*:\s*%((clear)|([^:]+)\s*:\s([^:]+)\s*:\s%((noloop)\s*:\s*)?(.*))$')
+        if l:matchobj != []
+            if l:matchobj[1] ==# 'clear'
+                call todo#checkbox#clear()
+            else
+                call todo#checkbox#add(l:matchobj[2], l:matchobj[3], l:matchobj[4], l:matchobj[5])
+            endif
+        elseif l:line !~# '\v^#?\s*$'
+            break
+        endif
+
+        let l:probe = l:probe + 1
+    endwhile
+endfunction
+
+call s:parse_local_checkboxes()
+if !exists('b:todo_checkbox_all')
+    call todo#checkbox#init()
+endif
 syntax on

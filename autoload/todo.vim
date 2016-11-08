@@ -37,7 +37,7 @@ function! s:parse_line (row) " {{{
     let l:ret['pspace'] = matchstr(l:ret['origin'], '^ *')
     let l:tlc = s:trim_left(l:ret['origin'])
 
-    for c in b:todo_checkbox_total
+    for c in b:todo_checkbox_all
         if s:startswith(l:tlc, l:c)
             " got a checkbox
             let l:pattern_len = strlen(l:c)
@@ -100,7 +100,7 @@ endfunction " }}}
 
 function! s:get_next_checkbox (c) " {{{
     let l:l = len(b:todo_checkbox_loop)
-    let l:i = index(b:todo_checkbox_total, a:c)
+    let l:i = index(b:todo_checkbox_all, a:c)
     if l:i == -1 || l:i >= l:l
         return b:todo_checkbox_loop[0]
     endif
@@ -108,7 +108,7 @@ function! s:get_next_checkbox (c) " {{{
 endfunction " }}}
 
 function! s:valid_checkbox (c) " {{{
-    return index(b:todo_checkbox_total, a:c) >= 0
+    return index(b:todo_checkbox_all, a:c) >= 0
 endfunction " }}}
 
 function! s:first_char_of (str) " {{{
@@ -387,11 +387,14 @@ function! todo#checkbox_menu () " {{{
         \line('.'),
         \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
 
-    let l:checkbox_str = []
-    for l:checkbox in b:todo_checkbox_total + [g:todo_bullet]
-        call add(l:checkbox_str, l:checkbox . s:get_bspace(l:checkbox))
+    let l:checkbox_menu = []
+    for l:checkbox in b:todo_checkbox_all + [g:todo_bullet]
+        call add(l:checkbox_menu, {
+            \'word': l:checkbox . s:get_bspace(l:checkbox),
+            \'menu': get(b:todo_checkbox_desc, l:checkbox, '')
+        \})
     endfor
-    call complete(strlen(l:plc['pspace']) + 1, l:checkbox_str)
+    call complete(strlen(l:plc['pspace']) + 1, l:checkbox_menu)
 
     return ''
 endfunction " }}}

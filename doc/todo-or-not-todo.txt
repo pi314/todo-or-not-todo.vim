@@ -78,11 +78,20 @@ Contents
 
     To add seldom-used checkboxes, use >
 
-        call todo#checkbox#add('[i]', 'Yellow', 0)
-        call todo#checkbox#add('[?]', 'Yellow', 0)
-        call todo#checkbox#add('[!]', 'Red', 0)
+        call todo#checkbox#add('[i]', 'Yellow', 'noloop')
+        call todo#checkbox#add('[?]', 'Yellow', 'noloop')
+        call todo#checkbox#add('[!]', 'Red', 'noloop')
 <
-    If exists, the third argument should be zero.
+
+    To add descriptions of the checkboxes in completion menu, use >
+
+        call todo#checkbox#add('[ ]', 'White', 'Todo')
+        call todo#checkbox#add('[v]', 'Green', 'Done')
+        call todo#checkbox#add('[x]', 'Red', 'Not todo')
+        call todo#checkbox#add('[i]', 'Yellow', 'noloop', 'Doing')
+        call todo#checkbox#add('[?]', 'Yellow', 'noloop', 'Not sure')
+        call todo#checkbox#add('[!]', 'Red', 'noloop', 'Important')
+<
 
 ==============================================================================
 3.  Default Key Mappings                        *ToDoOrNotToDoDefaultMappings*

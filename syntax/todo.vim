@@ -1,6 +1,4 @@
-" prevent syntax/ loaded before ftplugin/, which contains all important
-" variables
-if !exists('g:todo_plugin_loaded')
+if !exists('b:todo_checkbox_all')
     finish
 endif
 
@@ -18,10 +16,9 @@ if g:todo_url_color !=# '' && g:todo_url_pattern !=# ''
     execute 'hi def todo_url ctermfg='. g:todo_url_color
 endif
 
-" ------------------------------------------- "
-" dynamically generate bullet coloring syntax "
-" ------------------------------------------- "
-
+" ---------------------------------------- "
+" dynamically generate bullet color syntax "
+" ---------------------------------------- "
 if g:todo_bullet !=# ''
     execute 'syn match todo_bulleted_item _\v(^\s*)@<=\V'. g:todo_bullet .'_'
 endif
@@ -30,12 +27,12 @@ if g:todo_bullet_color !=# ''
     execute 'hi def todo_bulleted_item ctermfg='. g:todo_bullet_color
 endif
 
-let s:checkbox_flow_number = 1
+let s:checkbox_num = 1
 for c in keys(b:todo_checkbox_color)
     if c != '' && b:todo_checkbox_color[c] != ''
-        execute 'syn match checkbox'. s:checkbox_flow_number .' _\v(^ *)@<=\V'. c .'_'
-        execute 'hi def    checkbox'. s:checkbox_flow_number .' ctermfg='. b:todo_checkbox_color[c] .''
-        let s:checkbox_flow_number = s:checkbox_flow_number + 1
+        execute 'syn match checkbox'. s:checkbox_num .' _\v(^ *)@<=\V'. c .'_'
+        execute 'hi def    checkbox'. s:checkbox_num .' ctermfg='. b:todo_checkbox_color[c] .''
+        let s:checkbox_num = s:checkbox_num + 1
     endif
 endfor
 

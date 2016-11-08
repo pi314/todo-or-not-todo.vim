@@ -1,3 +1,11 @@
+* 0.11.0
+
+  - Support file-specific checkbox, just like vim modelines
+  - Add at the top of file to define new checkbox ::
+
+      # todo: [c]: cyan: Canceled
+      # todo: [n]: cyan: noloop: Canceled
+
 * 0.10.3
 
   - Make todo_strong_emphasis highlight non-greedy
