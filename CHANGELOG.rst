@@ -1,7 +1,11 @@
+* 0.11.1
+
+  - Fix bug of checkbox coloring procedure
+
 * 0.11.0
 
   - Support file-specific checkbox, just like vim modelines
-  - Add at the top of file to define new checkbox ::
+  - Add colon-separated strings like this at the top of file to define new checkbox ::
 
       # todo: [c]: cyan: Canceled
       # todo: [n]: cyan: noloop: Canceled

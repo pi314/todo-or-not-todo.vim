@@ -27,12 +27,11 @@ if g:todo_bullet_color !=# ''
     execute 'hi def todo_bulleted_item ctermfg='. g:todo_bullet_color
 endif
 
-let s:checkbox_num = 1
+" TODO: group names should be checked
 for c in keys(b:todo_checkbox_color)
     if c != '' && b:todo_checkbox_color[c] != ''
-        execute 'syn match checkbox'. s:checkbox_num .' _\v(^ *)@<=\V'. c .'_'
-        execute 'hi def    checkbox'. s:checkbox_num .' ctermfg='. b:todo_checkbox_color[c] .''
-        let s:checkbox_num = s:checkbox_num + 1
+        execute 'hi def    '. tolower(b:todo_checkbox_color[c]) .'_checkbox ctermfg='. b:todo_checkbox_color[c] .''
+        execute 'syn match '. tolower(b:todo_checkbox_color[c]) .'_checkbox _\v(^ *)@<=\V'. c .'_'
     endif
 endfor
 

@@ -128,6 +128,12 @@ The color strings are evaluated into argument ``ctermfg``, if you are new to vim
 * Yellow, LightYellow
 * White
 
+
+File-specific checkboxes can be defined with modeline-like colon-separated string placed at the top of file ::
+
+  # todo: [c]: cyan: Canceled
+  # todo: [n]: cyan: noloop: Canceled
+
 --------
 
 For those who loves popup menu, this plugin also provides menu mode:
