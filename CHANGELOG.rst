@@ -1,3 +1,7 @@
+* 0.11.2
+
+  - Version 0.11.2, change the default value of URL matching pattern
+
 * 0.11.1
 
   - Fix bug of checkbox coloring procedure

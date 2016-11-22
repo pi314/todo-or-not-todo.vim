@@ -33,7 +33,7 @@ endfunction
 
 call s:set_default_value('todo_bullet',         type(''), '>')
 call s:set_default_value('todo_bullet_color',   type(''), 'Cyan')
-call s:set_default_value('todo_url_pattern',    type(''), '\<[a-zA-Z+-.]*://[^ 	\[\]]*')
+call s:set_default_value('todo_url_pattern',    type(''), '\v<[a-zA-Z+-.]*:\/\/[^ 	\[\]`\<\>]*')
 call s:set_default_value('todo_url_color',      type(''), 'Cyan')
 call s:set_default_value('todo_set_bullet',     type(''), '<Leader>b')
 call s:set_default_value('todo_comment_prefix', type(''), '\v(^| )#')
