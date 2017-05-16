@@ -7,6 +7,13 @@ let s:NORMAL_MODE = 1
 let s:INSERT_MODE = 2
 let s:state_before_menu_complete = s:RESET
 
+function! s:shiftwidth ()
+    if exists('*shiftwidth')
+        return shiftwidth()
+    endif
+    return &shiftwidth
+endfunction
+
 function! s:trim_left (text) " {{{
     return substitute(a:text, '^\s*', '', '')
 endfunction " }}}
@@ -169,7 +176,7 @@ endfunction " }}}
 
 function! todo#increase_indent () " {{{
     let l:plc = s:parse_line('.')
-    let l:sw = shiftwidth()
+    let l:sw = s:shiftwidth()
     let l:prepend_len = l:sw - (strlen(l:plc['pspace']) % l:sw)
     let l:plc['pspace'] .= repeat(' ', l:prepend_len)
     if has_key(l:plc, 'checkbox')
@@ -185,7 +192,7 @@ endfunction " }}}
 
 function! todo#decrease_indent () " {{{
     let l:plc = s:parse_line('.')
-    let l:sw = shiftwidth()
+    let l:sw = s:shiftwidth()
     let l:col = col('.')
 
     let l:pspace_len = strlen(l:plc['pspace'])
