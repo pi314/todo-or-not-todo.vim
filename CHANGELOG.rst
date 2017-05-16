@@ -1,3 +1,7 @@
+* 0.11.3
+
+  - Fix error for older Vim 7.3 where ``shiftwidth()`` does not exist
+
 * 0.11.2
 
   - Version 0.11.2, change the default value of URL matching pattern
