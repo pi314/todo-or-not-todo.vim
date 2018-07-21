@@ -36,21 +36,22 @@ function! s:color_checkboxes ()
 endfunction
 call s:color_checkboxes()
 
+if g:todo_highlighter_start !=# '' && g:todo_highlighter_end !=# ''
+    " execute 'syn match todo_highlighter_symbol _\V'. g:todo_highlighter_start .'_ conceal'
+    " execute 'syn match todo_highlighter_symbol _\V'. g:todo_highlighter_end .'_ conceal'
+    execute 'syn match todo_highlighter _\v\V'. g:todo_highlighter_start .'\v'.
+            \'.*'.
+            \'\V'. g:todo_highlighter_end .'\v_'
+endif
+
+if g:todo_highlighter_color !=# ''
+    execute 'hi def    todo_highlighter ctermfg=Black ctermbg='. g:todo_highlighter_color
+endif
+
 if g:todo_comment_prefix !=# ''
     execute 'syn match todo_comment _\V'. g:todo_comment_prefix .'\v.*$_'
 endif
 
 if g:todo_comment_color !=# ''
     execute 'hi def    todo_comment ctermfg='. g:todo_comment_color
-endif
-
-if g:todo_highlighter_start !=# '' && g:todo_highlighter_end !=# ''
-    execute 'syn match todo_highlighter_symbol _\v['. g:todo_highlighter_start . g:todo_highlighter_end .']_ conceal'
-    execute 'syn match todo_highlighter _\v('. g:todo_highlighter_start .')@<='.
-            \'[^'. g:todo_highlighter_start . g:todo_highlighter_end .']*'.
-            \'('. g:todo_highlighter_end .')@=_'
-endif
-
-if g:todo_highlighter_color !=# ''
-    execute 'hi def    todo_highlighter ctermfg=Black ctermbg='. g:todo_highlighter_color
 endif
