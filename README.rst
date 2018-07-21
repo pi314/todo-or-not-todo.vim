@@ -1,22 +1,23 @@
-================
+===============================================================================
 Todo or not todo
-================
+===============================================================================
 A plugin for you to manage your TODOs, or NOT TODOs.
 
-This project is still at an early development stage, many features are not customizable yet.
+This project is still at an early development stage, many features are not
+customizable yet.
 
 Ideas, issues and many other things are appreciated!
 
 
 Installation
--------------
+-------------------------------------------------------------------------------
 Use Vundle_
 
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
 
 
 Key Mappings
--------------
+-------------------------------------------------------------------------------
 These mappings should finally be customizable.
 
 Customizable mappings:
@@ -25,7 +26,8 @@ Customizable mappings:
 
   - Customize with ``g:todo_loop_checkbox``
 
-* [normal][insert][visual] ``<Leader>b``: set current line a bulleted item, checkbox will be destroyed.
+* [normal][insert][visual] ``<Leader>b``: set current line a bulleted item,
+  checkbox will be destroyed.
 
   - Customize with ``g:todo_set_bullet``
 
@@ -59,57 +61,50 @@ You can disable default mappings with ``let g:todo_default_mappings = 0``
 
 
 Customizable Settings
-----------------------
+-------------------------------------------------------------------------------
 
 Checkboxes
-````````````
+*******************************************************************************
 Checkboxes are separated into two types ::
 
-  [ ][v][x] [i][?][!]
+  [ ][i][v][x]
+  [!]
 
-These checkboxes are recognized by this plugin, i.e. they are colorized and can be switched with ``<C-c>``.
+These checkboxes are recognized by this plugin, i.e. they are colorized and can
+be switched with ``<C-c>``.
 
 Depend on their type, ``<C-c>`` changes them in different way:
 
 * If your cursor is on a bulleted item, press ``<C-c>`` makes that bullet a ``[ ]``
-* If your cursor is on the same line with ``[ ]``, ``[v]`` or ``[x]``, ``<C-c>`` makes them the next one (round-robin)
-* If your cursor is on the same line with ``[i]``, ``[?]`` or ``[!]``, ``<C-c>`` makes them a ``[ ]``
+* If your cursor is on the same line with ``[ ]``, ``[i]``, ``[v]`` or ``[x]``,
+  ``<C-c>`` makes it the next one (round-robin.)
+* If your cursor is on the same line with ``[!]``, ``<C-c>`` makes it a ``[ ]``
 
 To add a checkbox, stick this into your vimrc:
 
 ..  code-block:: vim
 
-    call todo#add#checkbox('[ ]', 'White')
+    call todo#checkbox#cycle('[ ]', 'white', 'Description')
 
-This checkbox can be looped with ``<C-c>``.
+This checkbox can be cycleed with ``<C-c>``.
 
-To add a checkbox without participated in ``<C-c>`` loop, add a ``noloop`` as the third argument:
-
-..  code-block:: vim
-
-    call todo#add#checkbox('[i]', 'Yellow', 0)
-
-Here is the default settings of this plugin:
+To add a checkbox that is not participated in ``<C-c>`` cycle, use ``nocycle``:
 
 ..  code-block:: vim
 
-    call todo#checkbox#add('[ ]', 'White', 'Todo')
-    call todo#checkbox#add('[v]', 'Green', 'Done')
-    call todo#checkbox#add('[x]', 'Red', 'Not todo')
-    call todo#checkbox#add('[i]', 'Yellow', 'noloop', 'Doing')
-    call todo#checkbox#add('[?]', 'Yellow', 'noloop', 'Not sure')
-    call todo#checkbox#add('[!]', 'Red', 'noloop', 'Important')
+    call todo#checkbox#nocycle('[!]', 'red', 'Important')
 
-And if you prefer to use unicode checkboxes:
+Here is the default settings of this plugin: ::
 
-..  code-block:: vim
+    call todo#checkbox#cycle('[ ]', 'white', 'Todo')
+    call todo#checkbox#cycle('[i]', 'yellow', 'Working')
+    call todo#checkbox#cycle('[v]', 'green', 'Done')
+    call todo#checkbox#cycle('[x]', 'red', 'Not todo')
+    call todo#checkbox#nocycle('[!]', 'red', 'Important')
 
-    call todo#checkbox#clear()
-    call todo#checkbox#add('☐', 'white')
-    call todo#checkbox#add('☑', 'green')
-    call todo#checkbox#add('☒', 'red')
 
-The color strings are evaluated into argument ``ctermfg``, if you are new to vim, you can pick colors here:
+The color strings are evaluated into argument ``ctermfg``, if you are new to
+vim, you can pick colors here:
 
 * Black
 * DarkBlue
@@ -129,26 +124,49 @@ The color strings are evaluated into argument ``ctermfg``, if you are new to vim
 * White
 
 
-File-specific checkboxes can be defined with modeline-like colon-separated string placed at the top of file ::
+File Specific Checkboxes
+*******************************************************************************
+Sometimes you need a special todo file for specific todo-items.
 
-  # todo: [c]: cyan: Canceled
-  # todo: [n]: cyan: noloop: Canceled
+This plugin allows you to declare checkboxes by filename:
 
---------
+..  code-block:: vim
 
+    call todo#checkbox#file('special\.todo')
+    call todo#checkbox#cycle('[Pending]', 'white')
+    call todo#checkbox#cycle('[Working]', 'yellow')
+    call todo#checkbox#cycle('[Done]', 'green')
+
+    call todo#checkbox#file('')
+    call todo#checkbox#cycle('[?]', 'white')
+
+``todo#checkbox#file()`` accepts a vim regex pattern;
+all ``todo#checkbox#cycle()`` and ``todo#checkbox#nocycle()`` follows it will
+be registered under the pattern (until next pattern specified.)
+
+The order is important, only the first pattern that matches the filename will
+be applied.
+
+When no patterns matches the filename, the default setting will be applied
+(See above.)
+
+
+Menu Mode
+*******************************************************************************
 For those who loves popup menu, this plugin also provides menu mode:
 
 ..  code-block:: vim
 
-    let g:todo_select_checkbox = '<C-c>'
+    let g:todo_select_checkbox = '<C-k>'
 
-Under menu mode, all checkboxes can be selected, no matter they are added with no-loop option.
+Under menu mode, all checkboxes can be selected, no matter they are added with
+no-loop option.
 
 Menu mode and loop mode can be configured with different key mappings.
 
 
 Bullets
-`````````
+*******************************************************************************
 Currently only one kind of bullets supported:
 
 ..  code-block:: vim
@@ -157,7 +175,7 @@ Currently only one kind of bullets supported:
 
 
 Colors
-````````
+*******************************************************************************
 You can assign color of certain patterns:
 
 ..  code-block:: vim
@@ -172,11 +190,11 @@ Currently only foreground color setting supported, no underline or background co
 
 
 Screenshot
------------
+-------------------------------------------------------------------------------
 ..  image:: screenshot.png
 
 
 License
---------
+-------------------------------------------------------------------------------
 This project is released under WTFPL Version 2.
 See http://sam.zoy.org/wtfpl/COPYING.

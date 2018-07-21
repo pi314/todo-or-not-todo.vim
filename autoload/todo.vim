@@ -112,7 +112,12 @@ function! s:get_next_checkbox (c) " {{{
             return l:cycle[(l:i + 1) % (l:len)][0]
         endif
     endfor
-    return l:cycle[0][0]
+
+    if l:len
+        return l:cycle[0][0]
+    endif
+
+    return todo#checkbox#_all()[0][0]
 endfunction " }}}
 
 function! s:valid_checkbox (c) " {{{
