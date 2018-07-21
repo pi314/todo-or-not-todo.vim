@@ -1,50 +1,102 @@
-function! todo#checkbox#add (checkbox, color, ...)
-    if !exists('b:todo_checkbox_all')
-        call todo#checkbox#clear()
-        call todo#checkbox#init()
+let s:true = v:true
+let s:false = v:false
+
+let s:todo_curr_pattern = ''
+let s:todo_patterns = ['']
+let s:todo_checkboxes = {
+            \ '': [
+                \ [
+                    \ ['[ ]', 'white', 'todo'],
+                    \ ['[i]', 'yellow', 'working'],
+                    \ ['[v]', 'green', 'done'],
+                    \ ['[x]', 'red', 'not todo'],
+                \ ],
+                \ [
+                    \ ['[!]', 'red', 'important'],
+                \ ]
+            \ ]
+        \ }
+let s:todo_checkbox_freeze = s:false
+let s:todo_checkbox_cache_cycle = []
+let s:todo_checkbox_cache_nocycle = []
+
+
+function! todo#checkbox#file (pattern)
+    let s:todo_curr_pattern = a:pattern
+    if index(s:todo_patterns, s:todo_curr_pattern) == -1
+        call add(s:todo_patterns, s:todo_curr_pattern)
+        let s:todo_checkboxes[(s:todo_curr_pattern)] = [[], []]
     endif
+    let s:todo_checkbox_freeze = s:false
+endfunction
+
+
+function! todo#checkbox#cycle (checkbox, color, ...)
+    if a:checkbox == ''
+        return
+    endif
+
     if a:0 == 0
         let l:description = ''
-        let l:loop = 1
-    elseif a:0 == 1 && a:1 == 'noloop'
-        let l:description = ''
-        let l:loop = 0
-    elseif a:0 == 1 && a:1 !=# 'noloop'
+    elseif a:0 == 1
         let l:description = a:1
-        let l:loop = 1
-    elseif a:0 >= 2 && a:1 ==# 'noloop'
-        let l:description = a:2
-        let l:loop = 0
-    elseif a:0 >= 2 && a:1 ==# ''
-        let l:description = a:2
-        let l:loop = 1
-    elseif a:0 >= 2 && a:1 !=# 'noloop'
-        let l:description = a:1
-        let l:loop = 1
     endif
 
-    if !has_key(b:todo_checkbox_color, a:checkbox)
-        if l:loop
-            call add(b:todo_checkbox_loop, a:checkbox)
+    call add(s:todo_checkboxes[(s:todo_curr_pattern)][0], [a:checkbox, a:color, l:description])
+    let s:todo_checkbox_freeze = s:false
+endfunction
+
+
+function! todo#checkbox#_cycle ()
+    if s:todo_checkbox_freeze == s:false
+        call s:freeze()
+        let s:todo_checkbox_freeze = s:true
+    endif
+    return s:todo_checkbox_cache_cycle
+endfunction
+
+
+function! todo#checkbox#_nocycle ()
+    if s:todo_checkbox_freeze == s:false
+        call s:freeze()
+        let s:todo_checkbox_freeze = s:true
+    endif
+    return s:todo_checkbox_cache_nocycle
+endfunction
+
+
+function! todo#checkbox#_all ()
+    if s:todo_checkbox_freeze == s:false
+        call s:freeze()
+        let s:todo_checkbox_freeze = s:true
+    endif
+    return s:todo_checkbox_cache_cycle + s:todo_checkbox_cache_nocycle
+endfunction
+
+
+function! s:freeze ()
+    let s:todo_checkbox_cache_cycle = []
+    let s:todo_checkbox_cache_nocycle = []
+
+    let l:enable_default = 1
+    for l:ptn in s:todo_patterns
+        if l:ptn == ''
+            continue
         endif
-        call add(b:todo_checkbox_all, a:checkbox)
+
+        if matchstr(@%, l:ptn) ==# @%
+            let l:enable_default = 0
+            for l:item in s:todo_checkboxes[l:ptn][0]
+                call add(s:todo_checkbox_cache_cycle, l:item)
+            endfor
+            for l:item in s:todo_checkboxes[l:ptn][1]
+                call add(s:todo_checkbox_cache_nocycle, l:item)
+            endfor
+        endif
+    endfor
+
+    if l:enable_default
+        let s:todo_checkbox_cache_cycle = s:todo_checkboxes[''][0]
+        let s:todo_checkbox_cache_nocycle = s:todo_checkboxes[''][1]
     endif
-    let b:todo_checkbox_color[a:checkbox] = a:color
-    let b:todo_checkbox_desc[a:checkbox] = l:description
-endfunction
-
-function! todo#checkbox#clear ()
-    let b:todo_checkbox_loop = []
-    let b:todo_checkbox_all = []
-    let b:todo_checkbox_color = {}
-    let b:todo_checkbox_desc = {}
-endfunction
-
-function! todo#checkbox#init ()
-    call todo#checkbox#add('[ ]', 'White', 'Todo')
-    call todo#checkbox#add('[v]', 'Green', 'Done')
-    call todo#checkbox#add('[x]', 'Red', 'Not todo')
-    call todo#checkbox#add('[i]', 'Yellow', 'noloop', 'Doing')
-    call todo#checkbox#add('[?]', 'Yellow', 'noloop', 'Not sure')
-    call todo#checkbox#add('[!]', 'Red', 'noloop', 'Important')
 endfunction

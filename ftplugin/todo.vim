@@ -103,32 +103,3 @@ if g:todo_highlighter !=# ''
     execute 'vnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#highlighter()<CR>'
     execute 'nnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#eraser()<CR>'
 endif
-
-
-" ---------------------- "
-" parse local checkboxes "
-" ---------------------- "
-function! s:parse_local_checkboxes ()
-    let l:probe = 1
-    while l:probe <= line('$')
-        let l:line = getline(l:probe)
-        let l:matchobj = matchlist(l:line, '\v^#\s*todo\s*:\s*%((clear)|([^:]+)\s*:\s([^:]+)\s*:\s%((noloop)\s*:\s*)?(.*))$')
-        if l:matchobj != []
-            if l:matchobj[1] ==# 'clear'
-                call todo#checkbox#clear()
-            else
-                call todo#checkbox#add(l:matchobj[2], l:matchobj[3], l:matchobj[4], l:matchobj[5])
-            endif
-        elseif l:line !~# '\v^#?\s*$'
-            break
-        endif
-
-        let l:probe = l:probe + 1
-    endwhile
-endfunction
-
-call s:parse_local_checkboxes()
-if !exists('b:todo_checkbox_all')
-    call todo#checkbox#init()
-endif
-syntax on
