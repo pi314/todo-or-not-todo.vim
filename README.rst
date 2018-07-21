@@ -32,7 +32,7 @@ Customizable mappings:
 
   - Customize with ``g:todo_set_bullet``
 
-* [visual] ``<Leader>c``: colorize selected text with highlighter.
+* [visual] ``<Leader>h``: colorize selected text with highlighter.
 
   - Customize with ``g:todo_highlighter``
   - The start marker and end marker of highlighter is also customizable
@@ -42,9 +42,9 @@ Customizable mappings:
         let g:todo_highlighter_start = '#['
         let g:todo_highlighter_end = ']]'
 
-* [normal] ``<Leader>c``: erase highlighter of current line.
+* [normal][visual] ``<Leader>e``: erase highlighter of current line.
 
-  - Customize with ``g:todo_highlighter``
+  - Customize with ``g:todo_eraser``
 
 Default mappings:
 

@@ -375,7 +375,7 @@ function! todo#highlighter () range " {{{
 endfunction " }}}
 
 function! todo#eraser () " {{{
-    call setline('.', substitute(getline('.'), '\v['. g:todo_highlighter_start . g:todo_highlighter_end .']', '', 'g'))
+    call setline('.', substitute(getline('.'), '\V'. g:todo_highlighter_start .'\v(.*)\V'. g:todo_highlighter_end, '\1', 'g'))
 endfunction " }}}
 
 function! todo#checkbox_menu () " {{{

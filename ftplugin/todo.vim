@@ -38,7 +38,8 @@ call s:set_default_value('todo_url_color',      type(''), 'Cyan')
 call s:set_default_value('todo_set_bullet',     type(''), '<Leader>b')
 call s:set_default_value('todo_comment_prefix', type(''), '//')
 call s:set_default_value('todo_comment_color',  type(''), 'Cyan')
-call s:set_default_value('todo_highlighter',    type(''),  '<Leader>c')
+call s:set_default_value('todo_highlighter',    type(''), '<Leader>h')
+call s:set_default_value('todo_eraser',         type(''), '<Leader>e')
 
 if !s:value_ok('todo_highlighter_start', type(''))
         \|| !s:value_ok('todo_highlighter_end', type(''))
@@ -101,5 +102,8 @@ endif
 
 if g:todo_highlighter !=# ''
     execute 'vnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#highlighter()<CR>'
-    execute 'nnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#eraser()<CR>'
+endif
+if g:todo_eraser !=# ''
+    execute 'vnoremap <buffer> <silent> '. g:todo_eraser .' :call todo#eraser()<CR>'
+    execute 'nnoremap <buffer> <silent> '. g:todo_eraser .' :call todo#eraser()<CR>'
 endif
