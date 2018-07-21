@@ -30,6 +30,11 @@ function! todo#checkbox#cycle (checkbox, color, ...)
     else
         let l:desc = a:1
     endif
+
+    if a:color == ''
+        return
+    endif
+
     call s:todo_checkbox_add(a:checkbox, a:color, l:desc, 0)
 endfunction
 
@@ -40,6 +45,11 @@ function! todo#checkbox#nocycle (checkbox, color, ...)
     else
         let l:desc = a:1
     endif
+
+    if a:color == ''
+        return
+    endif
+
     call s:todo_checkbox_add(a:checkbox, a:color, l:desc, 1)
 endfunction
 
