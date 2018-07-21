@@ -11,9 +11,10 @@ Ideas, issues and many other things are appreciated!
 
 Installation
 -------------------------------------------------------------------------------
-Use Vundle_
+Use Vundle_ or vim-plug_
 
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
+..  _vim-plug: https://github.com/junegunn/vim-plug
 
 
 Key Mappings
@@ -126,7 +127,7 @@ vim, you can pick colors here:
 
 File Specific Checkboxes
 *******************************************************************************
-Sometimes you need a special todo file for specific todo-items.
+Sometimes you need a special todo file for specific kind of todo-items.
 
 This plugin allows you to declare checkboxes by filename:
 
@@ -148,7 +149,7 @@ The order is important, only the first pattern that matches the filename will
 be applied.
 
 When no patterns matches the filename, the default setting will be applied
-(See above.)
+(Listed above.)
 
 
 Menu Mode
