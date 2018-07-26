@@ -36,14 +36,15 @@ call s:set_default_value('todo_bullet_color',   type(''), 'Cyan')
 call s:set_default_value('todo_url_pattern',    type(''), '\v<[a-zA-Z+-.]*:\/\/[^ 	\[\]`\<\>]*')
 call s:set_default_value('todo_url_color',      type(''), 'Cyan')
 call s:set_default_value('todo_set_bullet',     type(''), '<Leader>b')
-call s:set_default_value('todo_comment_prefix', type(''), '\v(^| )#')
+call s:set_default_value('todo_comment_prefix', type(''), '//')
 call s:set_default_value('todo_comment_color',  type(''), 'Cyan')
-call s:set_default_value('todo_highlighter',    type(''),  '<Leader>c')
+call s:set_default_value('todo_highlighter',    type(''), '<Leader>h')
+call s:set_default_value('todo_eraser',         type(''), '<Leader>e')
 
 if !s:value_ok('todo_highlighter_start', type(''))
         \|| !s:value_ok('todo_highlighter_end', type(''))
-    let g:todo_highlighter_start = '⢝'
-    let g:todo_highlighter_end = '⡢'
+    let g:todo_highlighter_start = '#['
+    let g:todo_highlighter_end = ']]'
 endif
 
 call s:set_default_value('todo_highlighter_color', type(''), 'Yellow')
@@ -101,34 +102,8 @@ endif
 
 if g:todo_highlighter !=# ''
     execute 'vnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#highlighter()<CR>'
-    execute 'nnoremap <buffer> <silent> '. g:todo_highlighter .' :call todo#eraser()<CR>'
 endif
-
-
-" ---------------------- "
-" parse local checkboxes "
-" ---------------------- "
-function! s:parse_local_checkboxes ()
-    let l:probe = 1
-    while l:probe <= line('$')
-        let l:line = getline(l:probe)
-        let l:matchobj = matchlist(l:line, '\v^#\s*todo\s*:\s*%((clear)|([^:]+)\s*:\s([^:]+)\s*:\s%((noloop)\s*:\s*)?(.*))$')
-        if l:matchobj != []
-            if l:matchobj[1] ==# 'clear'
-                call todo#checkbox#clear()
-            else
-                call todo#checkbox#add(l:matchobj[2], l:matchobj[3], l:matchobj[4], l:matchobj[5])
-            endif
-        elseif l:line !~# '\v^#?\s*$'
-            break
-        endif
-
-        let l:probe = l:probe + 1
-    endwhile
-endfunction
-
-call s:parse_local_checkboxes()
-if !exists('b:todo_checkbox_all')
-    call todo#checkbox#init()
+if g:todo_eraser !=# ''
+    execute 'vnoremap <buffer> <silent> '. g:todo_eraser .' :call todo#eraser()<CR>'
+    execute 'nnoremap <buffer> <silent> '. g:todo_eraser .' :call todo#eraser()<CR>'
 endif
-syntax on
