@@ -6,7 +6,14 @@ if &softtabstop == 0
     setlocal softtabstop=4
 endif
 
-if shiftwidth() == 8
+function! s:shiftwidth () " {{{
+    if exists('*shiftwidth')
+        return shiftwidth()
+    endif
+    return &shiftwidth
+endfunction " }}}
+
+if s:shiftwidth() == 8
     " user not setting &shiftwidth, set it to 4
     setlocal shiftwidth=4
 endif
