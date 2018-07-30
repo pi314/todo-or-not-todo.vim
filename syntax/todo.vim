@@ -21,7 +21,7 @@ if g:todo_bullet !=# ''
 endif
 
 if g:todo_bullet_color !=# ''
-    execute 'hi def todo_bulleted_item ctermfg='. g:todo_bullet_color
+    execute 'hi def todo_bulleted_item ctermfg='. g:todo_bullet_color .' guifg='. g:todo_bullet_color
 endif
 
 
@@ -30,7 +30,7 @@ endif
 " --------------------------------------------------------------------------- "
 function! s:color_checkboxes ()
     for l:item in todo#checkbox#_all()
-        execute 'hi def    '. tolower(l:item[1]) .'_checkbox ctermfg='. l:item[1] .''
+        execute 'hi def    '. tolower(l:item[1]) .'_checkbox ctermfg='. l:item[1] .' guifg='. l:item[1]
         execute 'syn match '. tolower(l:item[1]) .'_checkbox _\v(^ *)@<=\V'. l:item[0] .'_'
     endfor
 endfunction
