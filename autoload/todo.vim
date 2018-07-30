@@ -1,5 +1,5 @@
-let s:true = v:true
-let s:false = v:false
+let s:true = exists('v:true') ? v:true : 1
+let s:false = exists('v:false') ? v:false : 0
 
 let s:RESET = 0
 let s:NORMAL_MODE = 1
