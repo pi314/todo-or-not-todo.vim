@@ -4,7 +4,6 @@ let s:false = exists('v:false') ? v:false : 0
 let s:RESET = 0
 let s:NORMAL_MODE = 1
 let s:INSERT_MODE = 2
-let s:state_before_menu_complete = s:RESET
 
 function! s:shiftwidth () " {{{
     if exists('*shiftwidth')
@@ -378,51 +377,77 @@ function! todo#eraser () " {{{
 endfunction " }}}
 
 function! todo#checkbox_menu () " {{{
-    " check if we need to use user assigned check box
-    if pumvisible()
-        return "\<C-n>"
-    endif
+    try
+        let l:checkbox_all = todo#checkbox#_all()
+        call add(l:checkbox_all, ['>'. repeat(' ', s:shiftwidth() - 2), '', 'Bullet'])
+        execute 'resize -'. len(l:checkbox_all)
 
-    if mode() ==# 'n'
-        let s:state_before_menu_complete = s:NORMAL_MODE
-        call feedkeys("i\<C-r>=todo#checkbox_menu()\<CR>")
-        return ''
-    endif
-
-    if s:state_before_menu_complete == s:RESET
-        let s:state_before_menu_complete = s:INSERT_MODE
-    endif
-
-    let l:plc = s:parse_line('.')
-    if !has_key(l:plc, 'type') || !(l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
-        " current line is an ordinary line
-        " or it's not checkbox item nor bulleted list item
-        call todo#switch_checkbox()
         let l:plc = s:parse_line('.')
-    endif
+        if !has_key(l:plc, 'type') || !(l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
+            let l:cursor = 0
+        else
+            for l:cursor in range(len(l:checkbox_all))
+                if l:plc['checkbox'] == l:checkbox_all[(l:cursor)][0]
+                    break
+                endif
+            endfor
+        endif
 
-    call cursor(
-        \line('.'),
-        \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
+        let l:more = &more
+        set nomore
+        while s:true
+            redraw!
+            for l:index in range(len(l:checkbox_all))
+                if l:index == l:cursor
+                    echo '> '. l:checkbox_all[(l:index)][0] .' '. l:checkbox_all[(l:index)][2]
+                else
+                    echo '  '. l:checkbox_all[(l:index)][0] .' '. l:checkbox_all[(l:index)][2]
+                endif
+            endfor
 
-    let l:checkbox_menu = []
-    for l:item in todo#checkbox#_all()
-        call add(l:checkbox_menu, {
-            \'word': l:item[0] .' ',
-            \'menu': l:item[2],
-        \ })
-    endfor
-    call add(l:checkbox_menu, {
-        \'word': g:todo_bullet . s:get_bspace(g:todo_bullet),
-    \ })
-    call complete(strlen(l:plc['pspace']) + 1, l:checkbox_menu)
+            let l:key = getchar()
+            if l:key == char2nr('j') || l:key == "\<Down>" || l:key == char2nr("\<C-n>")
+                let l:cursor = (l:cursor + 1) % len(l:checkbox_all)
+            elseif l:key == char2nr('k') || l:key == "\<Up>" || l:key == char2nr("\<C-p>")
+                let l:cursor = (l:cursor + len(l:checkbox_all) - 1) % len(l:checkbox_all)
+            elseif l:key == char2nr("\<CR>")
+                break
+            elseif l:key == char2nr('c') || l:key == char2nr('q') || l:key == char2nr("\<Esc>")
+                redraw!
+                return
+            endif
+        endwhile
+    finally
+        let &more = l:more
+        redraw!
+        execute 'resize +'. len(l:checkbox_all)
+    endtry
 
-    return ''
-endfunction " }}}
+    call todo#switch_checkbox(l:checkbox_all[(l:cursor)][0])
 
-function! todo#recover_insert_mode () " {{{
-    if s:state_before_menu_complete == s:NORMAL_MODE
-        let s:state_before_menu_complete = s:RESET
-        call feedkeys("\<ESC>^", 't')
-    endif
+    " let l:plc = s:parse_line('.')
+    " if !has_key(l:plc, 'type') || !(l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
+    "     " current line is an ordinary line
+    "     " or it's not checkbox item nor bulleted list item
+    "     call todo#switch_checkbox()
+    "     let l:plc = s:parse_line('.')
+    " endif
+    "
+    " call cursor(
+    "     \line('.'),
+    "     \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
+    "
+    " let l:checkbox_menu = []
+    " for l:item in todo#checkbox#_all()
+    "     call add(l:checkbox_menu, {
+    "         \'word': l:item[0] .' ',
+    "         \'menu': l:item[2],
+    "     \ })
+    " endfor
+    " call add(l:checkbox_menu, {
+    "     \'word': g:todo_bullet . s:get_bspace(g:todo_bullet),
+    " \ })
+    " call complete(strlen(l:plc['pspace']) + 1, l:checkbox_menu)
+    "
+    " return ''
 endfunction " }}}

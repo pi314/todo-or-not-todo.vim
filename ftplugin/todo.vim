@@ -56,14 +56,8 @@ endif
 
 call s:set_default_value('todo_highlighter_color', type(''), 'Yellow')
 
-if !s:value_ok('todo_next_checkbox', type('')) &&
-        \!s:value_ok('todo_select_checkbox', type(''))
-    let g:todo_next_checkbox = '<C-c>'
-    let g:todo_select_checkbox = ''
-else
-    call s:set_default_value('todo_next_checkbox', type(''), '')
-    call s:set_default_value('todo_select_checkbox', type(''), '')
-endif
+call s:set_default_value('todo_next_checkbox', type(''), '<C-c>')
+call s:set_default_value('todo_select_checkbox', type(''), '')
 
 
 " -------- "
@@ -77,8 +71,7 @@ endif
 
 if g:todo_select_checkbox !=# ''
     execute 'nnoremap <buffer> <silent> '. g:todo_select_checkbox .' :call todo#checkbox_menu()<CR>'
-    execute 'inoremap <buffer> <silent> '. g:todo_select_checkbox .' <C-r>=todo#checkbox_menu()<CR>'
-    autocmd CompleteDone * call todo#recover_insert_mode()
+    execute 'inoremap <buffer> <silent> '. g:todo_select_checkbox .' <C-o>:call todo#checkbox_menu()<CR>'
 endif
 
 if g:todo_set_bullet !=# ''
