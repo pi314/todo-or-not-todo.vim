@@ -376,11 +376,13 @@ function! todo#eraser () " {{{
     call setline('.', substitute(getline('.'), '\V'. g:todo_highlighter_start .'\v(.*)\V'. g:todo_highlighter_end, '\1', 'g'))
 endfunction " }}}
 
-function! todo#checkbox_menu () " {{{
+function! todo#checkbox_menu (mode) " {{{
     try
         let l:checkbox_all = todo#checkbox#_all()
         call add(l:checkbox_all, ['>'. repeat(' ', s:shiftwidth() - 2), '', 'Bullet'])
-        execute 'resize -'. len(l:checkbox_all)
+        if a:mode == 'n'
+            execute 'resize -'. len(l:checkbox_all)
+        endif
 
         let l:plc = s:parse_line('.')
         if !has_key(l:plc, 'type') || !(l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
@@ -394,7 +396,6 @@ function! todo#checkbox_menu () " {{{
         endif
 
         let l:more = &more
-        set nomore
         while s:true
             redraw!
             for l:index in range(len(l:checkbox_all))
@@ -420,34 +421,10 @@ function! todo#checkbox_menu () " {{{
     finally
         let &more = l:more
         redraw!
-        execute 'resize +'. len(l:checkbox_all)
+        if a:mode == "n"
+            execute 'resize +'. len(l:checkbox_all)
+        endif
     endtry
 
     call todo#switch_checkbox(l:checkbox_all[(l:cursor)][0])
-
-    " let l:plc = s:parse_line('.')
-    " if !has_key(l:plc, 'type') || !(l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
-    "     " current line is an ordinary line
-    "     " or it's not checkbox item nor bulleted list item
-    "     call todo#switch_checkbox()
-    "     let l:plc = s:parse_line('.')
-    " endif
-    "
-    " call cursor(
-    "     \line('.'),
-    "     \strlen(l:plc['pspace'] . l:plc['checkbox'] . l:plc['bspace']) + 1)
-    "
-    " let l:checkbox_menu = []
-    " for l:item in todo#checkbox#_all()
-    "     call add(l:checkbox_menu, {
-    "         \'word': l:item[0] .' ',
-    "         \'menu': l:item[2],
-    "     \ })
-    " endfor
-    " call add(l:checkbox_menu, {
-    "     \'word': g:todo_bullet . s:get_bspace(g:todo_bullet),
-    " \ })
-    " call complete(strlen(l:plc['pspace']) + 1, l:checkbox_menu)
-    "
-    " return ''
 endfunction " }}}
