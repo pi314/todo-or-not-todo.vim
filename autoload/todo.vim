@@ -267,7 +267,6 @@ function! todo#carriage_return () " {{{
     endif
 
     let l:plc = s:parse_line('.')
-    echom string(l:plc)
     if !has_key(l:plc, 'bullet') && !has_key(l:plc, 'checkbox')
         return "\<CR>"
     endif
