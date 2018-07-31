@@ -376,13 +376,11 @@ function! todo#eraser () " {{{
     call setline('.', substitute(getline('.'), '\V'. g:todo_highlighter_start .'\v(.*)\V'. g:todo_highlighter_end, '\1', 'g'))
 endfunction " }}}
 
-function! todo#checkbox_menu (mode) " {{{
+function! todo#checkbox_menu () " {{{
     try
         let l:checkbox_all = todo#checkbox#_all()
         call add(l:checkbox_all, ['>'. repeat(' ', s:shiftwidth() - 2), '', 'Bullet'])
-        if a:mode == 'n'
-            execute 'resize -'. len(l:checkbox_all)
-        endif
+        execute 'resize -'. len(l:checkbox_all)
 
         let l:plc = s:parse_line('.')
         if !has_key(l:plc, 'type') || !(l:plc['type'] == 'checkbox' || l:plc['type'] == 'bullet')
@@ -396,6 +394,9 @@ function! todo#checkbox_menu (mode) " {{{
         endif
 
         let l:more = &more
+        let l:showmode = &showmode
+        set nomore
+        set noshowmode
         while s:true
             redraw!
             for l:index in range(len(l:checkbox_all))
@@ -420,10 +421,9 @@ function! todo#checkbox_menu (mode) " {{{
         endwhile
     finally
         let &more = l:more
+        let &showmode = l:showmode
         redraw!
-        if a:mode == "n"
-            execute 'resize +'. len(l:checkbox_all)
-        endif
+        execute 'resize +'. len(l:checkbox_all)
     endtry
 
     call todo#switch_checkbox(l:checkbox_all[(l:cursor)][0])
