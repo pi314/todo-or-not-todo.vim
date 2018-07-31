@@ -25,7 +25,7 @@ Customizable mappings:
 
 * [normal][insert][visual] ``<C-c>``: switch between checkboxes.
 
-  - Customize with ``g:todo_loop_checkbox``
+  - Customize with ``g:todo_next_checkbox``
 
 * [normal][insert][visual] ``<Leader>b``: set current line a bulleted item,
   checkbox will be destroyed.
