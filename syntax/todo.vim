@@ -30,8 +30,8 @@ endif
 " --------------------------------------------------------------------------- "
 function! s:color_checkboxes ()
     for l:item in todo#checkbox#_all()
-        execute 'hi def    '. tolower(l:item[1]) .'_checkbox ctermfg='. l:item[1] .' guifg='. l:item[1]
-        execute 'syn match '. tolower(l:item[1]) .'_checkbox _\v(^ *)@<=\V'. l:item[0] .'_'
+        execute 'hi def    '. 'checkbox_' . tolower(l:item[1]) .' ctermfg='. l:item[1] .' guifg='. l:item[1]
+        execute 'syn match '. 'checkbox_' . tolower(l:item[1]) .' _\v(^ *)@<=\V'. l:item[0] .'_'
     endfor
 endfunction
 call s:color_checkboxes()
