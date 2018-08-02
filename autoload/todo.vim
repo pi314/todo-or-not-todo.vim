@@ -401,9 +401,17 @@ function! todo#checkbox_menu () " {{{
             redraw!
             for l:index in range(len(l:checkbox_all))
                 if l:index == l:cursor
-                    echo '> '. l:checkbox_all[(l:index)][0] .' '. l:checkbox_all[(l:index)][2]
+                    echo '> '
+                    exec 'echohl checkbox_'. tolower(l:checkbox_all[(l:index)][1])
+                    echon l:checkbox_all[(l:index)][0]
+                    echohl None
+                    echon ' '. l:checkbox_all[(l:index)][2]
                 else
-                    echo '  '. l:checkbox_all[(l:index)][0] .' '. l:checkbox_all[(l:index)][2]
+                    echo '  '
+                    exec 'echohl checkbox_'. tolower(l:checkbox_all[(l:index)][1])
+                    echon l:checkbox_all[(l:index)][0]
+                    echohl None
+                    echon ' '. l:checkbox_all[(l:index)][2]
                 endif
             endfor
 
