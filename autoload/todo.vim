@@ -379,7 +379,7 @@ endfunction " }}}
 function! todo#checkbox_menu () " {{{
     try
         let l:checkbox_all = todo#checkbox#_all()
-        call add(l:checkbox_all, ['>'. repeat(' ', s:shiftwidth() - 2), '', 'Bullet'])
+        call add(l:checkbox_all, ['>'. repeat(' ', s:shiftwidth() - 2), 'todo_bulleted_item', 'Bullet'])
         execute 'resize -'. len(l:checkbox_all)
 
         let l:plc = s:parse_line('.')
@@ -402,17 +402,19 @@ function! todo#checkbox_menu () " {{{
             for l:index in range(len(l:checkbox_all))
                 if l:index == l:cursor
                     echo '> '
-                    exec 'echohl checkbox_'. tolower(l:checkbox_all[(l:index)][1])
-                    echon l:checkbox_all[(l:index)][0]
-                    echohl None
-                    echon ' '. l:checkbox_all[(l:index)][2]
                 else
                     echo '  '
-                    exec 'echohl checkbox_'. tolower(l:checkbox_all[(l:index)][1])
-                    echon l:checkbox_all[(l:index)][0]
-                    echohl None
-                    echon ' '. l:checkbox_all[(l:index)][2]
                 endif
+
+                if l:checkbox_all[(l:index)][2] ==# 'Bullet'
+                    exec 'echohl '. tolower(l:checkbox_all[(l:index)][1])
+                else
+                    exec 'echohl checkbox_'. tolower(l:checkbox_all[(l:index)][1])
+                endif
+
+                echon l:checkbox_all[(l:index)][0]
+                echohl None
+                echon ' '. l:checkbox_all[(l:index)][2]
             endfor
 
             let l:key = getchar()
