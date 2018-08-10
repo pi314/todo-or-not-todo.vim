@@ -1,5 +1,5 @@
 syn match   todo_string _\v"([^\\"]|\\.)*"_
-hi def      todo_string ctermfg=Magenta guifg=Magenta
+hi def link todo_string String
 
 syn match   todo_emphasis _\v\*[^*]*\*_
 hi def      todo_emphasis ctermfg=White guifg=White
