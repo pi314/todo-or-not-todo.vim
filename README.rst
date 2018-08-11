@@ -11,7 +11,13 @@ Ideas, issues and many other things are appreciated!
 
 Installation
 -------------------------------------------------------------------------------
-Use Vundle_ or vim-plug_
+Vundle_ ::
+
+  Plugin 'pi314/todo-or-not-todo.vim'
+
+vim-plug_::
+
+  Plug 'pi314/todo-or-not-todo.vim'
 
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
 ..  _vim-plug: https://github.com/junegunn/vim-plug
@@ -25,7 +31,7 @@ Customizable mappings:
 
 * [normal][insert][visual] ``<C-c>``: switch between checkboxes.
 
-  - Customize with ``g:todo_loop_checkbox``
+  - Customize with ``g:todo_next_checkbox``
 
 * [normal][insert][visual] ``<Leader>b``: set current line a bulleted item,
   checkbox will be destroyed.

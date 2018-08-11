@@ -6,7 +6,14 @@ if &softtabstop == 0
     setlocal softtabstop=4
 endif
 
-if shiftwidth() == 8
+function! s:shiftwidth () " {{{
+    if exists('*shiftwidth')
+        return shiftwidth()
+    endif
+    return &shiftwidth
+endfunction " }}}
+
+if s:shiftwidth() == 8
     " user not setting &shiftwidth, set it to 4
     setlocal shiftwidth=4
 endif
@@ -49,29 +56,22 @@ endif
 
 call s:set_default_value('todo_highlighter_color', type(''), 'Yellow')
 
-if !s:value_ok('todo_loop_checkbox', type('')) &&
-        \!s:value_ok('todo_select_checkbox', type(''))
-    let g:todo_loop_checkbox = '<C-c>'
-    let g:todo_select_checkbox = ''
-else
-    call s:set_default_value('todo_loop_checkbox', type(''), '')
-    call s:set_default_value('todo_select_checkbox', type(''), '')
-endif
+call s:set_default_value('todo_next_checkbox', type(''), '<C-c>')
+call s:set_default_value('todo_select_checkbox', type(''), '')
 
 
 " -------- "
 " mappings "
 " -------- "
-if g:todo_loop_checkbox !=# ''
-    execute 'nnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
-    execute 'inoremap <buffer> <silent> '. g:todo_loop_checkbox .' <C-o>:call todo#switch_checkbox()<CR>'
-    execute 'vnoremap <buffer> <silent> '. g:todo_loop_checkbox .' :call todo#switch_checkbox()<CR>'
+if g:todo_next_checkbox !=# ''
+    execute 'nnoremap <buffer> <silent> '. g:todo_next_checkbox .' :call todo#switch_checkbox()<CR>'
+    execute 'inoremap <buffer> <silent> '. g:todo_next_checkbox .' <C-o>:call todo#switch_checkbox()<CR>'
+    execute 'vnoremap <buffer> <silent> '. g:todo_next_checkbox .' :call todo#switch_checkbox()<CR>'
 endif
 
 if g:todo_select_checkbox !=# ''
     execute 'nnoremap <buffer> <silent> '. g:todo_select_checkbox .' :call todo#checkbox_menu()<CR>'
-    execute 'inoremap <buffer> <silent> '. g:todo_select_checkbox .' <C-r>=todo#checkbox_menu()<CR>'
-    autocmd CompleteDone * call todo#recover_insert_mode()
+    execute 'inoremap <buffer> <silent> '. g:todo_select_checkbox .' <C-o>:call todo#checkbox_menu()<CR>'
 endif
 
 if g:todo_set_bullet !=# ''
