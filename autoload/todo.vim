@@ -186,6 +186,11 @@ endfunction " }}}
 
 function! todo#increase_indent () " {{{
     let l:plc = s:parse_line('.')
+
+    if l:plc['text'] == ''
+        return
+    endif
+
     let l:sw = s:shiftwidth()
     let l:prepend_len = l:sw - (strlen(l:plc['pspace']) % l:sw)
     let l:plc['pspace'] .= repeat(' ', l:prepend_len)
