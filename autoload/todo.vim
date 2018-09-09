@@ -187,7 +187,7 @@ endfunction " }}}
 function! todo#increase_indent () " {{{
     let l:plc = s:parse_line('.')
 
-    if l:plc['text'] == ''
+    if l:plc['text'] == '' && !has_key(l:plc, 'checkbox')
         return
     endif
 
