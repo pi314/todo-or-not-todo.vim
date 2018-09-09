@@ -381,7 +381,7 @@ function! todo#eraser () " {{{
     call setline('.', substitute(getline('.'), '\V'. g:todo_highlighter_start .'\v(.*)\V'. g:todo_highlighter_end, '\1', 'g'))
 endfunction " }}}
 
-function! todo#checkbox_menu () " {{{
+function! todo#checkbox_menu (mode) range " {{{
     try
         let l:checkbox_all = todo#checkbox#_all()
         call add(l:checkbox_all, ['>'. repeat(' ', s:shiftwidth() - 2), 'todo_bulleted_item', 'Bullet'])
@@ -441,5 +441,14 @@ function! todo#checkbox_menu () " {{{
         execute 'resize +'. len(l:checkbox_all)
     endtry
 
-    call todo#switch_checkbox(l:checkbox_all[(l:cursor)][0])
+    if a:mode ==# 'V'
+        let l:curpos = getcurpos()
+        for l:row in range(a:firstline, a:lastline)
+            call cursor(l:row, 1)
+            call todo#switch_checkbox(l:checkbox_all[(l:cursor)][0])
+        endfor
+        call cursor(l:curpos[1:])
+    else
+        call todo#switch_checkbox(l:checkbox_all[(l:cursor)][0])
+    endif
 endfunction " }}}

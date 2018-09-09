@@ -70,8 +70,9 @@ if g:todo_next_checkbox !=# ''
 endif
 
 if g:todo_select_checkbox !=# ''
-    execute 'nnoremap <buffer> <silent> '. g:todo_select_checkbox .' :call todo#checkbox_menu()<CR>'
-    execute 'inoremap <buffer> <silent> '. g:todo_select_checkbox .' <C-o>:call todo#checkbox_menu()<CR>'
+    execute 'nnoremap <buffer> <silent> '. g:todo_select_checkbox .' :call todo#checkbox_menu("n")<CR>'
+    execute 'inoremap <buffer> <silent> '. g:todo_select_checkbox .' <C-o>:call todo#checkbox_menu("i")<CR>'
+    execute 'vnoremap <buffer> <silent> '. g:todo_select_checkbox .' :call todo#checkbox_menu("V")<CR>'
 endif
 
 if g:todo_set_bullet !=# ''
